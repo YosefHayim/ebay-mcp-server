@@ -332,6 +332,24 @@ export interface BulkDeleteAdsByInventoryReferenceRequest {
   requests?: DeleteAdsByInventoryReferenceRequest[];
 }
 
+export interface UpdateCampaignIdentificationRequest {
+  campaignName?: string;
+  endDate?: string;
+  startDate?: string;
+}
+
+export interface AdGroupRequest {
+  adGroupId?: string;
+  adGroupStatus?: string;
+  defaultBid?: Amount;
+  name?: string;
+}
+
+export interface CloneAdGroupRequest {
+  adGroupStatus?: string;
+  name?: string;
+}
+
 export interface UpdateAdStatusRequest {
   adId?: string;
   adStatus?: string;

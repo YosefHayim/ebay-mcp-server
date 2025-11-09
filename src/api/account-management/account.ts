@@ -1,24 +1,36 @@
+import type { CustomPolicyCreateRequest } from "../../types/ebay/sell/accountManagement/accountV1/custom-policy/create-custom-policy.js";
 import type { CustomPolicyResponse } from "../../types/ebay/sell/accountManagement/accountV1/custom-policy/get-custom-policies.js";
 import type { CustomPolicy } from "../../types/ebay/sell/accountManagement/accountV1/custom-policy/get-custom-policy.js";
-import type { CustomPolicyCreateRequest } from "../../types/ebay/sell/accountManagement/accountV1/custom-policy/create-custom-policy.js";
+import type {
+  FulfillmentPolicyRequest,
+  SetFulfillmentPolicyResponse,
+} from "../../types/ebay/sell/accountManagement/accountV1/fulfillment-policy/create-fulfuillment-policy.js";
 import type { FulfillmentPolicyResponse } from "../../types/ebay/sell/accountManagement/accountV1/fulfillment-policy/get-fulfillment-policies.js";
 import type { FulfillmentPolicy } from "../../types/ebay/sell/accountManagement/accountV1/fulfillment-policy/get-fulfuillment-policy.js";
-import type { FulfillmentPolicyRequest, SetFulfillmentPolicyResponse } from "../../types/ebay/sell/accountManagement/accountV1/fulfillment-policy/create-fulfuillment-policy.js";
+import type { KycResponse } from "../../types/ebay/sell/accountManagement/accountV1/kyc/get-kyc.js";
+import type {
+  PaymentPolicyRequest,
+  SetPaymentPolicyResponse,
+} from "../../types/ebay/sell/accountManagement/accountV1/payment-policy/create-payment-policy.js";
 import type { GetPaymentPoliciesResponse } from "../../types/ebay/sell/accountManagement/accountV1/payment-policy/get-payment-policies.js";
 import type { PaymentPolicy } from "../../types/ebay/sell/accountManagement/accountV1/payment-policy/get-payment-policy.js";
-import type { PaymentPolicyRequest, SetPaymentPolicyResponse } from "../../types/ebay/sell/accountManagement/accountV1/payment-policy/create-payment-policy.js";
-import type { SellingPrivileges } from "../../types/ebay/sell/accountManagement/accountV1/privilege/get-privileges.js";
-import type { ReturnPolicyResponse } from "../../types/ebay/sell/accountManagement/accountV1/return-policy/get-return-policies.js";
-import type { ReturnPolicy } from "../../types/ebay/sell/accountManagement/accountV1/return-policy/get-return-policy.js";
-import type { ReturnPolicyRequest, SetReturnPolicyResponse } from "../../types/ebay/sell/accountManagement/accountV1/return-policy/create-return-policy.js";
-import type { KycResponse } from "../../types/ebay/sell/accountManagement/accountV1/kyc/get-kyc.js";
 import type { PaymentsProgramResponse } from "../../types/ebay/sell/accountManagement/accountV1/payments-program/get-payments-program.js";
-import type { RateTableResponse } from "../../types/ebay/sell/accountManagement/accountV1/rate-table/get-rate-tables.js";
-import type { SalesTaxes, SalesTax } from "../../types/ebay/sell/accountManagement/accountV1/sales-tax/get-sales-taxes.js";
-import type { SubscriptionResponse } from "../../types/ebay/sell/accountManagement/accountV1/subscription/get-subscription.js";
+import type { SellingPrivileges } from "../../types/ebay/sell/accountManagement/accountV1/privilege/get-privileges.js";
 import type { Programs } from "../../types/ebay/sell/accountManagement/accountV1/program/get-opted-in-programs.js";
 import type { OptInToProgramRequest } from "../../types/ebay/sell/accountManagement/accountV1/program/opt-in-to-program.js";
+import type { RateTableResponse } from "../../types/ebay/sell/accountManagement/accountV1/rate-table/get-rate-tables.js";
+import type {
+  ReturnPolicyRequest,
+  SetReturnPolicyResponse,
+} from "../../types/ebay/sell/accountManagement/accountV1/return-policy/create-return-policy.js";
+import type { ReturnPolicyResponse } from "../../types/ebay/sell/accountManagement/accountV1/return-policy/get-return-policies.js";
+import type { ReturnPolicy } from "../../types/ebay/sell/accountManagement/accountV1/return-policy/get-return-policy.js";
 import type { SalesTaxBase } from "../../types/ebay/sell/accountManagement/accountV1/sales-tax/create-or-replace-sales-tax.js";
+import type {
+  SalesTax,
+  SalesTaxes,
+} from "../../types/ebay/sell/accountManagement/accountV1/sales-tax/get-sales-taxes.js";
+import type { SubscriptionResponse } from "../../types/ebay/sell/accountManagement/accountV1/subscription/get-subscription.js";
 import type { EbayApiClient } from "../client.js";
 
 /**
@@ -45,7 +57,9 @@ export class AccountApi {
    * Get a specific custom policy
    */
   async getCustomPolicy(customPolicyId: string): Promise<CustomPolicy> {
-    return this.client.get<CustomPolicy>(`${this.basePath}/custom_policy/${customPolicyId}`);
+    return this.client.get<CustomPolicy>(
+      `${this.basePath}/custom_policy/${customPolicyId}`,
+    );
   }
 
   /**
@@ -157,7 +171,9 @@ export class AccountApi {
    * Delete a fulfillment policy
    */
   async deleteFulfillmentPolicy(fulfillmentPolicyId: string): Promise<void> {
-    return this.client.delete(`${this.basePath}/fulfillment_policy/${fulfillmentPolicyId}`);
+    return this.client.delete(
+      `${this.basePath}/fulfillment_policy/${fulfillmentPolicyId}`,
+    );
   }
 
   // ============================================================
@@ -215,7 +231,9 @@ export class AccountApi {
    * Delete a payment policy
    */
   async deletePaymentPolicy(paymentPolicyId: string): Promise<void> {
-    return this.client.delete(`${this.basePath}/payment_policy/${paymentPolicyId}`);
+    return this.client.delete(
+      `${this.basePath}/payment_policy/${paymentPolicyId}`,
+    );
   }
 
   // ============================================================
@@ -273,7 +291,9 @@ export class AccountApi {
    * Delete a return policy
    */
   async deleteReturnPolicy(returnPolicyId: string): Promise<void> {
-    return this.client.delete(`${this.basePath}/return_policy/${returnPolicyId}`);
+    return this.client.delete(
+      `${this.basePath}/return_policy/${returnPolicyId}`,
+    );
   }
 
   // ============================================================
@@ -309,7 +329,9 @@ export class AccountApi {
    * Delete a custom policy
    */
   async deleteCustomPolicy(customPolicyId: string): Promise<void> {
-    return this.client.delete(`${this.basePath}/custom_policy/${customPolicyId}`);
+    return this.client.delete(
+      `${this.basePath}/custom_policy/${customPolicyId}`,
+    );
   }
 
   // ============================================================
@@ -372,11 +394,13 @@ export class AccountApi {
   /**
    * Bulk create or replace sales tax tables
    */
-  async bulkCreateOrReplaceSalesTax(requests: Array<{
-    countryCode: string;
-    jurisdictionId: string;
-    salesTaxBase: SalesTaxBase;
-  }>): Promise<void> {
+  async bulkCreateOrReplaceSalesTax(
+    requests: Array<{
+      countryCode: string;
+      jurisdictionId: string;
+      salesTaxBase: SalesTaxBase;
+    }>,
+  ): Promise<void> {
     return this.client.post(
       `${this.basePath}/sales_tax/bulk_create_or_replace`,
       { requests },
@@ -386,7 +410,10 @@ export class AccountApi {
   /**
    * Delete sales tax table
    */
-  async deleteSalesTax(countryCode: string, jurisdictionId: string): Promise<void> {
+  async deleteSalesTax(
+    countryCode: string,
+    jurisdictionId: string,
+  ): Promise<void> {
     return this.client.delete(
       `${this.basePath}/sales_tax/${countryCode}/${jurisdictionId}`,
     );
@@ -395,7 +422,10 @@ export class AccountApi {
   /**
    * Get sales tax table
    */
-  async getSalesTax(countryCode: string, jurisdictionId: string): Promise<SalesTax> {
+  async getSalesTax(
+    countryCode: string,
+    jurisdictionId: string,
+  ): Promise<SalesTax> {
     return this.client.get<SalesTax>(
       `${this.basePath}/sales_tax/${countryCode}/${jurisdictionId}`,
     );
@@ -414,27 +444,24 @@ export class AccountApi {
    */
   async getSubscription(limitType?: string): Promise<SubscriptionResponse> {
     const params = limitType ? { limit: limitType } : undefined;
-    return this.client.get<SubscriptionResponse>(`${this.basePath}/subscription`, params);
+    return this.client.get<SubscriptionResponse>(
+      `${this.basePath}/subscription`,
+      params,
+    );
   }
 
   /**
    * Opt-in to a program
    */
   async optInToProgram(request: OptInToProgramRequest): Promise<void> {
-    return this.client.post(
-      `${this.basePath}/program/opt_in`,
-      request,
-    );
+    return this.client.post(`${this.basePath}/program/opt_in`, request);
   }
 
   /**
    * Opt-out of a program
    */
   async optOutOfProgram(request: OptInToProgramRequest): Promise<void> {
-    return this.client.post(
-      `${this.basePath}/program/opt_out`,
-      request,
-    );
+    return this.client.post(`${this.basePath}/program/opt_out`, request);
   }
 
   /**

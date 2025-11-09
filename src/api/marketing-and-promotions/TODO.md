@@ -15,9 +15,9 @@ The following endpoints are defined in the OpenAPI specification but are not yet
 - `POST /ad_campaign/{campaign_id}/bulk_delete_ads_by_inventory_reference` - **IMPLEMENTED**
 - `POST /ad_campaign/{campaign_id}/bulk_delete_ads_by_listing_id` - **IMPLEMENTED**
 - `POST /ad_campaign/{campaign_id}/bulk_update_ads_bid_by_inventory_reference` - **IMPLEMENTED**
-- `POST /ad_campaign/{campaign_id}/bulk_update_ads_bid_by_listing_id`
-- `POST /ad_campaign/{campaign_id}/bulk_update_ads_status`
-- `POST /ad_campaign/{campaign_id}/bulk_update_ads_status_by_listing_id`
+- `POST /ad_campaign/{campaign_id}/bulk_update_ads_bid_by_listing_id` - **IMPLEMENTED**
+- `POST /ad_campaign/{campaign_id}/bulk_update_ads_status` - **IMPLEMENTED**
+- `POST /ad_campaign/{campaign_id}/bulk_update_ads_status_by_listing_id` - **IMPLEMENTED**
 - `GET /ad_campaign/{campaign_id}/ad` - **IMPLEMENTED**
 - `POST /ad_campaign/{campaign_id}/ad` - **IMPLEMENTED**
 - `POST /ad_campaign/{campaign_id}/create_ads_by_inventory_reference` - **IMPLEMENTED**
@@ -30,13 +30,13 @@ The following endpoints are defined in the OpenAPI specification but are not yet
 - `POST /ad_campaign/{campaign_id}/clone` - **IMPLEMENTED**
 - `POST /ad_campaign/{campaign_id}/end` - **IMPLEMENTED**
 - `GET /ad_campaign/get_campaign_by_name` - **IMPLEMENTED**
-- `POST /ad_campaign/{campaign_id}/pause`
-- `POST /ad_campaign/{campaign_id}/resume`
-- `PUT /ad_campaign/{campaign_id}/update_campaign_identification`
-- `POST /ad_group`
-- `POST /ad_group/{ad_group_id}/clone_ad_group`
-- `GET /ad_group`
-- `GET /ad_group/{ad_group_id}`
+- `POST /ad_campaign/{campaign_id}/pause` - **IMPLEMENTED**
+- `POST /ad_campaign/{campaign_id}/resume` - **IMPLEMENTED**
+- `PUT /ad_campaign/{campaign_id}/update_campaign_identification` - **IMPLEMENTED**
+- `POST /ad_group` - **IMPLEMENTED**
+- `POST /ad_group/{ad_group_id}/clone_ad_group` - **IMPLEMENTED**
+- `GET /ad_group` - **IMPLEMENTED**
+- `GET /ad_group/{ad_group_id}` - **IMPLEMENTED**
 - `POST /ad_group/{ad_group_id}/suggest_bids`
 - `POST /ad_group/{ad_group_id}/update_ad_group_bids`
 - `POST /ad_group/{ad_group_id}/update_ad_group_keywords`

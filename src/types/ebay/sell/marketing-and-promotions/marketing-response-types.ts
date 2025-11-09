@@ -421,3 +421,21 @@ export interface AdStatusUpdateByListingIdResponse {
 export interface BulkAdUpdateStatusByListingIdResponse {
   responses?: AdStatusUpdateByListingIdResponse[];
 }
+
+export interface AdGroup {
+  adGroupId?: string;
+  adGroupStatus?: string;
+  campaignId?: string;
+  defaultBid?: Amount;
+  name?: string;
+}
+
+export interface AdGroupPagedCollection {
+  adGroups?: AdGroup[];
+  href?: string;
+  limit?: number;
+  next?: string;
+  offset?: number;
+  prev?: string;
+  total?: number;
+}

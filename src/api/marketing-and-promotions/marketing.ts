@@ -390,4 +390,72 @@ export class MarketingApi {
       {},
     );
   }
+
+  /**
+   * Update campaign identification
+   */
+  async updateCampaignIdentification(
+    campaignId: string,
+    body: UpdateCampaignIdentificationRequest,
+  ): Promise<void> {
+    return this.client.put<void>(
+      `${this.basePath}/ad_campaign/${campaignId}/update_campaign_identification`,
+      body,
+    );
+  }
+
+  /**
+   * Create an ad group
+   */
+  async createAdGroup(
+    campaignId: string,
+    body: AdGroupRequest,
+  ): Promise<BaseResponse> {
+    return this.client.post<BaseResponse>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group`,
+      body,
+    );
+  }
+
+  /**
+   * Clone an ad group
+   */
+  async cloneAdGroup(
+    campaignId: string,
+    adGroupId: string,
+    body: CloneAdGroupRequest,
+  ): Promise<BaseResponse> {
+    return this.client.post<BaseResponse>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/clone`,
+      body,
+    );
+  }
+
+  /**
+   * Get ad groups
+   */
+  async getAdGroups(
+    campaignId: string,
+    adGroupStatus?: string,
+    limit?: number,
+    offset?: number,
+  ): Promise<AdGroupPagedCollection> {
+    const params: Record<string, string | number> = {};
+    if (adGroupStatus) params.ad_group_status = adGroupStatus;
+    if (limit) params.limit = limit;
+    if (offset) params.offset = offset;
+    return this.client.get<AdGroupPagedCollection>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group`,
+      params,
+    );
+  }
+
+  /**
+   * Get an ad group
+   */
+  async getAdGroup(campaignId: string, adGroupId: string): Promise<AdGroup> {
+    return this.client.get<AdGroup>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}`,
+    );
+  }
 }
