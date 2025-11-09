@@ -439,3 +439,67 @@ export interface AdGroupPagedCollection {
   prev?: string;
   total?: number;
 }
+
+export interface SuggestedBids {
+  bids?: TargetedBid[];
+}
+
+export interface TargetedBid {
+  bid?: Amount;
+  matchType?: string;
+}
+
+export interface TargetedBids {
+  bids?: TargetedBid[];
+}
+
+export interface SuggestedKeywords {
+  keywords?: Keyword[];
+}
+
+export interface Keyword {
+  keywordId?: string;
+  keywordText?: string;
+  matchType?: string;
+  bid?: Amount;
+}
+
+export interface KeywordPagedCollection {
+  keywords?: Keyword[];
+  href?: string;
+  limit?: number;
+  next?: string;
+  offset?: number;
+  prev?: string;
+  total?: number;
+}
+
+export interface CreateKeywordResponse {
+  keywordId?: string;
+  errors?: Error[];
+  statusCode?: number;
+}
+
+export interface BulkCreateKeywordsResponse {
+  responses?: CreateKeywordResponse[];
+}
+
+export interface DeleteKeywordResponse {
+  keywordId?: string;
+  errors?: Error[];
+  statusCode?: number;
+}
+
+export interface BulkDeleteKeywordsResponse {
+  responses?: DeleteKeywordResponse[];
+}
+
+export interface UpdateKeywordBidResponse {
+  keywordId?: string;
+  errors?: Error[];
+  statusCode?: number;
+}
+
+export interface BulkUpdateKeywordBidsResponse {
+  responses?: UpdateKeywordBidResponse[];
+}

@@ -37,16 +37,16 @@ The following endpoints are defined in the OpenAPI specification but are not yet
 - `POST /ad_group/{ad_group_id}/clone_ad_group` - **IMPLEMENTED**
 - `GET /ad_group` - **IMPLEMENTED**
 - `GET /ad_group/{ad_group_id}` - **IMPLEMENTED**
-- `POST /ad_group/{ad_group_id}/suggest_bids`
-- `POST /ad_group/{ad_group_id}/update_ad_group_bids`
-- `POST /ad_group/{ad_group_id}/update_ad_group_keywords`
-- `POST /ad_group/{ad_group_id}/suggest_keywords`
-- `GET /ad_group/{ad_group_id}/keyword`
-- `POST /ad_group/{ad_group_id}/bulk_create_keywords`
-- `POST /ad_group/{ad_group_id}/bulk_delete_keywords`
-- `POST /ad_group/{ad_group_id}/bulk_update_keyword_bids`
-- `POST /ad_group/{ad_group_id}/create_keyword`
-- `GET /ad_group/{ad_group_id}/keyword/{keyword_id}`
+- `POST /ad_group/{ad_group_id}/suggest_bids` - **IMPLEMENTED**
+- `POST /ad_group/{ad_group_id}/update_ad_group_bids` - **IMPLEMENTED**
+- `POST /ad_group/{ad_group_id}/update_ad_group_keywords` - **IMPLEMENTED**
+- `POST /ad_group/{ad_group_id}/suggest_keywords` - **IMPLEMENTED**
+- `GET /ad_group/{ad_group_id}/keyword` - **IMPLEMENTED**
+- `POST /ad_group/{ad_group_id}/bulk_create_keywords` - **IMPLEMENTED**
+- `POST /ad_group/{ad_group_id}/bulk_delete_keywords` - **IMPLEMENTED**
+- `POST /ad_group/{ad_group_id}/bulk_update_keyword_bids` - **IMPLEMENTED**
+- `POST /ad_group/{ad_group_id}/create_keyword` - **IMPLEMENTED**
+- `GET /ad_group/{ad_group_id}/keyword/{keyword_id}` - **IMPLEMENTED**
 - `DELETE /ad_group/{ad_group_id}/keyword/{keyword_id}`
 - `POST /ad_group/{ad_group_id}/keyword/{keyword_id}/update_bid`
 - `GET /ad_report`

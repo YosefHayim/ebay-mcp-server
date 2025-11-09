@@ -1,20 +1,32 @@
 import type {
+  AdGroupRequest,
   BulkCreateAdRequest,
   BulkCreateAdsByInventoryReferenceRequest,
+  BulkCreateKeywordsRequest,
   BulkDeleteAdRequest,
   BulkDeleteAdsByInventoryReferenceRequest,
+  BulkDeleteKeywordsRequest,
   BulkUpdateAdStatusByListingIdRequest,
   BulkUpdateAdStatusRequest,
+  BulkUpdateKeywordBidsRequest,
+  CloneAdGroupRequest,
   CloneAdRequest,
   CloneCampaignRequest,
   CreateAdRequest,
   CreateAdsByInventoryReferenceRequest,
   CreateCampaignRequest,
+  CreateKeywordRequest,
   ItemPromotion,
+  SuggestKeywordsRequest,
+  UpdateAdGroupBidsRequest,
+  UpdateAdGroupKeywordsRequest,
   UpdateBidPercentageRequest,
+  UpdateCampaignIdentificationRequest,
 } from "../../types/ebay/sell/marketing-and-promotions/marketing-api-types.js";
 import type {
   Ad,
+  AdGroup,
+  AdGroupPagedCollection,
   AdPagedCollectionResponse,
   AdReferences,
   Ads,
@@ -24,12 +36,20 @@ import type {
   BulkAdUpdateStatusByListingIdResponse,
   BulkAdUpdateStatusResponse,
   BulkCreateAdsByInventoryReferenceResponse,
+  BulkCreateKeywordsResponse,
   BulkDeleteAdResponse,
   BulkDeleteAdsByInventoryReferenceResponse,
+  BulkDeleteKeywordsResponse,
   BulkUpdateAdsByInventoryReferenceResponse,
+  BulkUpdateKeywordBidsResponse,
   Campaign,
   CampaignPagedCollectionResponse,
+  CreateKeywordResponse,
   ItemPromotionsPagedCollection,
+  Keyword,
+  KeywordPagedCollection,
+  SuggestedBids,
+  SuggestedKeywords,
 } from "../../types/ebay/sell/marketing-and-promotions/marketing-response-types.js";
 import type { EbayApiClient } from "../client.js";
 
@@ -456,6 +476,150 @@ export class MarketingApi {
   async getAdGroup(campaignId: string, adGroupId: string): Promise<AdGroup> {
     return this.client.get<AdGroup>(
       `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}`,
+    );
+  }
+
+  /**
+   * Suggest bids for an ad group
+   */
+  async suggestBids(
+    campaignId: string,
+    adGroupId: string,
+  ): Promise<SuggestedBids> {
+    return this.client.post<SuggestedBids>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/suggest_bids`,
+      {},
+    );
+  }
+
+  /**
+   * Update ad group bids
+   */
+  async updateAdGroupBids(
+    campaignId: string,
+    adGroupId: string,
+    body: UpdateAdGroupBidsRequest,
+  ): Promise<void> {
+    return this.client.post<void>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/update_ad_group_bids`,
+      body,
+    );
+  }
+
+  /**
+   * Update ad group keywords
+   */
+  async updateAdGroupKeywords(
+    campaignId: string,
+    adGroupId: string,
+    body: UpdateAdGroupKeywordsRequest,
+  ): Promise<void> {
+    return this.client.post<void>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/update_ad_group_keywords`,
+      body,
+    );
+  }
+
+  /**
+   * Suggest keywords
+   */
+  async suggestKeywords(
+    campaignId: string,
+    adGroupId: string,
+    body: SuggestKeywordsRequest,
+  ): Promise<SuggestedKeywords> {
+    return this.client.post<SuggestedKeywords>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/suggest_keywords`,
+      body,
+    );
+  }
+
+  /**
+   * Get keywords
+   */
+  async getKeywords(
+    campaignId: string,
+    adGroupId: string,
+    keywordStatus?: string,
+    limit?: number,
+    offset?: number,
+  ): Promise<KeywordPagedCollection> {
+    const params: Record<string, string | number> = {};
+    if (keywordStatus) params.keyword_status = keywordStatus;
+    if (limit) params.limit = limit;
+    if (offset) params.offset = offset;
+    return this.client.get<KeywordPagedCollection>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/keyword`,
+      params,
+    );
+  }
+
+  /**
+   * Bulk create keywords
+   */
+  async bulkCreateKeywords(
+    campaignId: string,
+    adGroupId: string,
+    body: BulkCreateKeywordsRequest,
+  ): Promise<BulkCreateKeywordsResponse> {
+    return this.client.post<BulkCreateKeywordsResponse>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/bulk_create_keywords`,
+      body,
+    );
+  }
+
+  /**
+   * Bulk delete keywords
+   */
+  async bulkDeleteKeywords(
+    campaignId: string,
+    adGroupId: string,
+    body: BulkDeleteKeywordsRequest,
+  ): Promise<BulkDeleteKeywordsResponse> {
+    return this.client.post<BulkDeleteKeywordsResponse>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/bulk_delete_keywords`,
+      body,
+    );
+  }
+
+  /**
+   * Bulk update keyword bids
+   */
+  async bulkUpdateKeywordBids(
+    campaignId: string,
+    adGroupId: string,
+    body: BulkUpdateKeywordBidsRequest,
+  ): Promise<BulkUpdateKeywordBidsResponse> {
+    return this.client.post<BulkUpdateKeywordBidsResponse>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/bulk_update_keyword_bids`,
+      body,
+    );
+  }
+
+  /**
+   * Create a keyword
+   */
+  async createKeyword(
+    campaignId: string,
+    adGroupId: string,
+    body: CreateKeywordRequest,
+  ): Promise<CreateKeywordResponse> {
+    return this.client.post<CreateKeywordResponse>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/create_keyword`,
+      body,
+    );
+  }
+
+  /**
+   * Get a keyword
+   */
+  async getKeyword(
+    campaignId: string,
+    adGroupId: string,
+    keywordId: string,
+  ): Promise<Keyword> {
+    return this.client.get<Keyword>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/keyword/${keywordId}`,
     );
   }
 }

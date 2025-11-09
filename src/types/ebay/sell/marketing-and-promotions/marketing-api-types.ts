@@ -350,6 +350,49 @@ export interface CloneAdGroupRequest {
   name?: string;
 }
 
+export interface UpdateAdGroupBidsRequest {
+  bids?: TargetedBid[];
+}
+
+export interface UpdateAdGroupKeywordsRequest {
+  keywords?: KeywordRequest[];
+}
+
+export interface SuggestKeywordsRequest {
+  adGroupId?: string;
+  suggestionType?: string;
+}
+
+export interface KeywordRequest {
+  keywordText?: string;
+  matchType?: string;
+}
+
+export interface CreateKeywordRequest extends KeywordRequest {
+  bid?: Amount;
+}
+
+export interface BulkCreateKeywordsRequest {
+  keywords?: CreateKeywordRequest[];
+}
+
+export interface DeleteKeywordRequest {
+  keywordId?: string;
+}
+
+export interface BulkDeleteKeywordsRequest {
+  keywords?: DeleteKeywordRequest[];
+}
+
+export interface UpdateKeywordBidRequest {
+  keywordId?: string;
+  bid?: Amount;
+}
+
+export interface BulkUpdateKeywordBidsRequest {
+  keywords?: UpdateKeywordBidRequest[];
+}
+
 export interface UpdateAdStatusRequest {
   adId?: string;
   adStatus?: string;
