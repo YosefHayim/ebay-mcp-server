@@ -1,3 +1,4 @@
+import type { PagedListingRecommendationCollection } from '../../types/ebay/sell/marketing-and-promotions/recommendation-response-types.js';
 import { EbayApiClient } from '../client.js';
 
 /**
@@ -19,7 +20,7 @@ export class RecommendationApi {
     limit?: number,
     offset?: number,
     marketplaceId?: string
-  ): Promise<unknown> {
+  ): Promise<PagedListingRecommendationCollection> {
     const params: Record<string, string | number> = {};
     if (filter) params.filter = filter;
     if (limit) params.limit = limit;
@@ -30,7 +31,7 @@ export class RecommendationApi {
       headers['X-EBAY-C-MARKETPLACE-ID'] = marketplaceId;
     }
 
-    return this.client.post(
+    return this.client.post<PagedListingRecommendationCollection>(
       `${this.basePath}/find`,
       requestBody || {},
       {
