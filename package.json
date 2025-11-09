@@ -4,6 +4,7 @@
 	"description": "MCP server for eBay Sell APIs - provides access to eBay seller functionality through Model Context Protocol",
 	"type": "module",
 	"main": "build/index.js",
+	"types": "build/index.d.ts",
 	"bin": {
 		"ebay-mcp": "build/index.js"
 	},
@@ -25,6 +26,21 @@
 	],
 	"author": "",
 	"license": "MIT",
+	"files": [
+		"build",
+		"README.md",
+		"GEMINI.md",
+		"CLAUDE.md",
+		".mcp.json"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/user/ebay-api-mcp-server.git"
+	},
+	"homepage": "https://github.com/user/ebay-api-mcp-server#readme",
+	"bugs": {
+		"url": "https://github.com/user/ebay-api-mcp-server/issues"
+	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.0.4",
 		"axios": "^1.7.9",
