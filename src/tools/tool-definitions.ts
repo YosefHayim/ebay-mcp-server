@@ -1,23 +1,46 @@
-
-
-import type { ToolDefinition } from './tool-definitions.js';
-import { chatGptTools } from './chatgpt-tools.js';
-
-export {
-  ToolDefinition,
-  accountTools,
-  analyticsTools,
-  communicationTools,
-  fulfillmentTools,
-  inventoryTools,
-  marketingTools,
-  metadataTools,
-  otherApiTools,
-  taxonomyTools,
-  chatGptTools,
+export type ToolDefinition = {
+  name: string;
+  description: string;
+  inputSchema: {
+    type: string;
+    properties?: Record<string, unknown>;
+    required?: string[];
+  };
 };
 
-
+export const chatGptTools: ToolDefinition[] = [
+  {
+    name: 'search',
+    description: 'Search for eBay inventory items',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Search query'
+        },
+        limit: {
+          type: 'number',
+          description: 'Maximum number of results'
+        }
+      }
+    }
+  },
+  {
+    name: 'fetch',
+    description: 'Fetch a specific eBay inventory item by SKU',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string',
+          description: 'Item SKU'
+        }
+      },
+      required: ['id']
+    }
+  }
+];
 
 export const accountTools: ToolDefinition[] = [
   {
@@ -70,6 +93,491 @@ export const accountTools: ToolDefinition[] = [
           description: 'eBay marketplace ID (e.g., EBAY_US)'
         }
       }
+    }
+  },
+  // Fulfillment Policy CRUD
+  {
+    name: 'ebay_create_fulfillment_policy',
+    description: 'Create a new fulfillment policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        policy: {
+          type: 'object',
+          description: 'Fulfillment policy details'
+        }
+      },
+      required: ['policy']
+    }
+  },
+  {
+    name: 'ebay_get_fulfillment_policy',
+    description: 'Get a specific fulfillment policy by ID',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        fulfillmentPolicyId: {
+          type: 'string',
+          description: 'The fulfillment policy ID'
+        }
+      },
+      required: ['fulfillmentPolicyId']
+    }
+  },
+  {
+    name: 'ebay_get_fulfillment_policy_by_name',
+    description: 'Get a fulfillment policy by name',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        marketplaceId: {
+          type: 'string',
+          description: 'eBay marketplace ID (e.g., EBAY_US)'
+        },
+        name: {
+          type: 'string',
+          description: 'Policy name'
+        }
+      },
+      required: ['marketplaceId', 'name']
+    }
+  },
+  {
+    name: 'ebay_update_fulfillment_policy',
+    description: 'Update an existing fulfillment policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        fulfillmentPolicyId: {
+          type: 'string',
+          description: 'The fulfillment policy ID'
+        },
+        policy: {
+          type: 'object',
+          description: 'Updated fulfillment policy details'
+        }
+      },
+      required: ['fulfillmentPolicyId', 'policy']
+    }
+  },
+  {
+    name: 'ebay_delete_fulfillment_policy',
+    description: 'Delete a fulfillment policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        fulfillmentPolicyId: {
+          type: 'string',
+          description: 'The fulfillment policy ID'
+        }
+      },
+      required: ['fulfillmentPolicyId']
+    }
+  },
+  // Payment Policy CRUD
+  {
+    name: 'ebay_create_payment_policy',
+    description: 'Create a new payment policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        policy: {
+          type: 'object',
+          description: 'Payment policy details'
+        }
+      },
+      required: ['policy']
+    }
+  },
+  {
+    name: 'ebay_get_payment_policy',
+    description: 'Get a specific payment policy by ID',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        paymentPolicyId: {
+          type: 'string',
+          description: 'The payment policy ID'
+        }
+      },
+      required: ['paymentPolicyId']
+    }
+  },
+  {
+    name: 'ebay_get_payment_policy_by_name',
+    description: 'Get a payment policy by name',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        marketplaceId: {
+          type: 'string',
+          description: 'eBay marketplace ID (e.g., EBAY_US)'
+        },
+        name: {
+          type: 'string',
+          description: 'Policy name'
+        }
+      },
+      required: ['marketplaceId', 'name']
+    }
+  },
+  {
+    name: 'ebay_update_payment_policy',
+    description: 'Update an existing payment policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        paymentPolicyId: {
+          type: 'string',
+          description: 'The payment policy ID'
+        },
+        policy: {
+          type: 'object',
+          description: 'Updated payment policy details'
+        }
+      },
+      required: ['paymentPolicyId', 'policy']
+    }
+  },
+  {
+    name: 'ebay_delete_payment_policy',
+    description: 'Delete a payment policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        paymentPolicyId: {
+          type: 'string',
+          description: 'The payment policy ID'
+        }
+      },
+      required: ['paymentPolicyId']
+    }
+  },
+  // Return Policy CRUD
+  {
+    name: 'ebay_create_return_policy',
+    description: 'Create a new return policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        policy: {
+          type: 'object',
+          description: 'Return policy details'
+        }
+      },
+      required: ['policy']
+    }
+  },
+  {
+    name: 'ebay_get_return_policy',
+    description: 'Get a specific return policy by ID',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        returnPolicyId: {
+          type: 'string',
+          description: 'The return policy ID'
+        }
+      },
+      required: ['returnPolicyId']
+    }
+  },
+  {
+    name: 'ebay_get_return_policy_by_name',
+    description: 'Get a return policy by name',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        marketplaceId: {
+          type: 'string',
+          description: 'eBay marketplace ID (e.g., EBAY_US)'
+        },
+        name: {
+          type: 'string',
+          description: 'Policy name'
+        }
+      },
+      required: ['marketplaceId', 'name']
+    }
+  },
+  {
+    name: 'ebay_update_return_policy',
+    description: 'Update an existing return policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        returnPolicyId: {
+          type: 'string',
+          description: 'The return policy ID'
+        },
+        policy: {
+          type: 'object',
+          description: 'Updated return policy details'
+        }
+      },
+      required: ['returnPolicyId', 'policy']
+    }
+  },
+  {
+    name: 'ebay_delete_return_policy',
+    description: 'Delete a return policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        returnPolicyId: {
+          type: 'string',
+          description: 'The return policy ID'
+        }
+      },
+      required: ['returnPolicyId']
+    }
+  },
+  // Custom Policy CRUD
+  {
+    name: 'ebay_create_custom_policy',
+    description: 'Create a new custom policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        policy: {
+          type: 'object',
+          description: 'Custom policy details'
+        }
+      },
+      required: ['policy']
+    }
+  },
+  {
+    name: 'ebay_get_custom_policy',
+    description: 'Get a specific custom policy by ID',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        customPolicyId: {
+          type: 'string',
+          description: 'The custom policy ID'
+        }
+      },
+      required: ['customPolicyId']
+    }
+  },
+  {
+    name: 'ebay_update_custom_policy',
+    description: 'Update an existing custom policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        customPolicyId: {
+          type: 'string',
+          description: 'The custom policy ID'
+        },
+        policy: {
+          type: 'object',
+          description: 'Updated custom policy details'
+        }
+      },
+      required: ['customPolicyId', 'policy']
+    }
+  },
+  {
+    name: 'ebay_delete_custom_policy',
+    description: 'Delete a custom policy',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        customPolicyId: {
+          type: 'string',
+          description: 'The custom policy ID'
+        }
+      },
+      required: ['customPolicyId']
+    }
+  },
+  // KYC, Payments, Programs, Sales Tax, Subscription
+  {
+    name: 'ebay_get_kyc',
+    description: 'Get seller KYC (Know Your Customer) status',
+    inputSchema: {
+      type: 'object',
+      properties: {}
+    }
+  },
+  {
+    name: 'ebay_opt_in_to_payments_program',
+    description: 'Opt-in to a payments program',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        marketplaceId: {
+          type: 'string',
+          description: 'eBay marketplace ID (e.g., EBAY_US)'
+        },
+        paymentsProgramType: {
+          type: 'string',
+          description: 'Payments program type'
+        }
+      },
+      required: ['marketplaceId', 'paymentsProgramType']
+    }
+  },
+  {
+    name: 'ebay_get_payments_program_status',
+    description: 'Get payments program status',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        marketplaceId: {
+          type: 'string',
+          description: 'eBay marketplace ID (e.g., EBAY_US)'
+        },
+        paymentsProgramType: {
+          type: 'string',
+          description: 'Payments program type'
+        }
+      },
+      required: ['marketplaceId', 'paymentsProgramType']
+    }
+  },
+  {
+    name: 'ebay_get_rate_tables',
+    description: 'Get seller rate tables',
+    inputSchema: {
+      type: 'object',
+      properties: {}
+    }
+  },
+  {
+    name: 'ebay_create_or_replace_sales_tax',
+    description: 'Create or replace sales tax table for a jurisdiction',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        countryCode: {
+          type: 'string',
+          description: 'Two-letter ISO 3166 country code'
+        },
+        jurisdictionId: {
+          type: 'string',
+          description: 'Tax jurisdiction ID'
+        },
+        salesTaxBase: {
+          type: 'object',
+          description: 'Sales tax details'
+        }
+      },
+      required: ['countryCode', 'jurisdictionId', 'salesTaxBase']
+    }
+  },
+  {
+    name: 'ebay_bulk_create_or_replace_sales_tax',
+    description: 'Bulk create or replace sales tax tables',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        requests: {
+          type: 'array',
+          description: 'Array of sales tax requests'
+        }
+      },
+      required: ['requests']
+    }
+  },
+  {
+    name: 'ebay_delete_sales_tax',
+    description: 'Delete sales tax table for a jurisdiction',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        countryCode: {
+          type: 'string',
+          description: 'Two-letter ISO 3166 country code'
+        },
+        jurisdictionId: {
+          type: 'string',
+          description: 'Tax jurisdiction ID'
+        }
+      },
+      required: ['countryCode', 'jurisdictionId']
+    }
+  },
+  {
+    name: 'ebay_get_sales_tax',
+    description: 'Get sales tax table for a jurisdiction',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        countryCode: {
+          type: 'string',
+          description: 'Two-letter ISO 3166 country code'
+        },
+        jurisdictionId: {
+          type: 'string',
+          description: 'Tax jurisdiction ID'
+        }
+      },
+      required: ['countryCode', 'jurisdictionId']
+    }
+  },
+  {
+    name: 'ebay_get_sales_taxes',
+    description: 'Get all sales tax tables',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        countryCode: {
+          type: 'string',
+          description: 'Optional country code to filter by'
+        }
+      }
+    }
+  },
+  {
+    name: 'ebay_get_subscription',
+    description: 'Get seller subscription information',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        limitType: {
+          type: 'string',
+          description: 'Optional limit type filter'
+        }
+      }
+    }
+  },
+  {
+    name: 'ebay_opt_in_to_program',
+    description: 'Opt-in to a seller program',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        request: {
+          type: 'object',
+          description: 'Program opt-in request'
+        }
+      },
+      required: ['request']
+    }
+  },
+  {
+    name: 'ebay_opt_out_of_program',
+    description: 'Opt-out of a seller program',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        request: {
+          type: 'object',
+          description: 'Program opt-out request'
+        }
+      },
+      required: ['request']
+    }
+  },
+  {
+    name: 'ebay_get_opted_in_programs',
+    description: 'Get seller programs the account is opted into',
+    inputSchema: {
+      type: 'object',
+      properties: {}
     }
   }
 ];

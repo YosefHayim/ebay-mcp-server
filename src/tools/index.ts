@@ -50,12 +50,12 @@ export async function executeTool(
         (args.limit as number) || 10,
       );
       const results =
-        response.inventoryItems?.map((item) => ({
-          id: item.sku,
+        response.inventoryItems?.map((item, index) => ({
+          id: `item-${index}`,
           title: item.product?.title || "No Title",
           // The URL should be a canonical link to the item, which we don't have here.
           // We'll use a placeholder.
-          url: `https://www.ebay.com/itm/${item.sku}`, // Placeholder URL
+          url: `https://www.ebay.com/`, // Placeholder URL
         })) || [];
 
       // Format the response as required by the ChatGPT connector spec.
@@ -75,10 +75,10 @@ export async function executeTool(
 
       // Format the response as required by the ChatGPT connector spec.
       const result = {
-        id: item.sku,
+        id: sku,
         title: item.product?.title || "No Title",
         text: item.product?.description || "No description available.",
-        url: `https://www.ebay.com/itm/${item.sku}`, // Placeholder URL
+        url: `https://www.ebay.com/`, // Placeholder URL
         metadata: {
           source: "ebay_inventory",
           aspects: item.product?.aspects,
@@ -105,6 +105,117 @@ export async function executeTool(
       return api.account.getPaymentPolicies(args.marketplaceId as string);
     case "ebay_get_return_policies":
       return api.account.getReturnPolicies(args.marketplaceId as string);
+
+    // Fulfillment Policy CRUD
+    case "ebay_create_fulfillment_policy":
+      return api.account.createFulfillmentPolicy(args.policy as any);
+    case "ebay_get_fulfillment_policy":
+      return api.account.getFulfillmentPolicy(args.fulfillmentPolicyId as string);
+    case "ebay_get_fulfillment_policy_by_name":
+      return api.account.getFulfillmentPolicyByName(
+        args.marketplaceId as string,
+        args.name as string,
+      );
+    case "ebay_update_fulfillment_policy":
+      return api.account.updateFulfillmentPolicy(
+        args.fulfillmentPolicyId as string,
+        args.policy as any,
+      );
+    case "ebay_delete_fulfillment_policy":
+      return api.account.deleteFulfillmentPolicy(args.fulfillmentPolicyId as string);
+
+    // Payment Policy CRUD
+    case "ebay_create_payment_policy":
+      return api.account.createPaymentPolicy(args.policy as any);
+    case "ebay_get_payment_policy":
+      return api.account.getPaymentPolicy(args.paymentPolicyId as string);
+    case "ebay_get_payment_policy_by_name":
+      return api.account.getPaymentPolicyByName(
+        args.marketplaceId as string,
+        args.name as string,
+      );
+    case "ebay_update_payment_policy":
+      return api.account.updatePaymentPolicy(
+        args.paymentPolicyId as string,
+        args.policy as any,
+      );
+    case "ebay_delete_payment_policy":
+      return api.account.deletePaymentPolicy(args.paymentPolicyId as string);
+
+    // Return Policy CRUD
+    case "ebay_create_return_policy":
+      return api.account.createReturnPolicy(args.policy as any);
+    case "ebay_get_return_policy":
+      return api.account.getReturnPolicy(args.returnPolicyId as string);
+    case "ebay_get_return_policy_by_name":
+      return api.account.getReturnPolicyByName(
+        args.marketplaceId as string,
+        args.name as string,
+      );
+    case "ebay_update_return_policy":
+      return api.account.updateReturnPolicy(
+        args.returnPolicyId as string,
+        args.policy as any,
+      );
+    case "ebay_delete_return_policy":
+      return api.account.deleteReturnPolicy(args.returnPolicyId as string);
+
+    // Custom Policy CRUD
+    case "ebay_create_custom_policy":
+      return api.account.createCustomPolicy(args.policy as any);
+    case "ebay_get_custom_policy":
+      return api.account.getCustomPolicy(args.customPolicyId as string);
+    case "ebay_update_custom_policy":
+      return api.account.updateCustomPolicy(
+        args.customPolicyId as string,
+        args.policy as any,
+      );
+    case "ebay_delete_custom_policy":
+      return api.account.deleteCustomPolicy(args.customPolicyId as string);
+
+    // KYC, Payments, Programs, Sales Tax, Subscription
+    case "ebay_get_kyc":
+      return api.account.getKyc();
+    case "ebay_opt_in_to_payments_program":
+      return api.account.optInToPaymentsProgram(
+        args.marketplaceId as string,
+        args.paymentsProgramType as string,
+      );
+    case "ebay_get_payments_program_status":
+      return api.account.getPaymentsProgramStatus(
+        args.marketplaceId as string,
+        args.paymentsProgramType as string,
+      );
+    case "ebay_get_rate_tables":
+      return api.account.getRateTables();
+    case "ebay_create_or_replace_sales_tax":
+      return api.account.createOrReplaceSalesTax(
+        args.countryCode as string,
+        args.jurisdictionId as string,
+        args.salesTaxBase as any,
+      );
+    case "ebay_bulk_create_or_replace_sales_tax":
+      return api.account.bulkCreateOrReplaceSalesTax(args.requests as any);
+    case "ebay_delete_sales_tax":
+      return api.account.deleteSalesTax(
+        args.countryCode as string,
+        args.jurisdictionId as string,
+      );
+    case "ebay_get_sales_tax":
+      return api.account.getSalesTax(
+        args.countryCode as string,
+        args.jurisdictionId as string,
+      );
+    case "ebay_get_sales_taxes":
+      return api.account.getSalesTaxes(args.countryCode as string);
+    case "ebay_get_subscription":
+      return api.account.getSubscription(args.limitType as string);
+    case "ebay_opt_in_to_program":
+      return api.account.optInToProgram(args.request as any);
+    case "ebay_opt_out_of_program":
+      return api.account.optOutOfProgram(args.request as any);
+    case "ebay_get_opted_in_programs":
+      return api.account.getOptedInPrograms();
 
     // Inventory Management
     case "ebay_get_inventory_items":
