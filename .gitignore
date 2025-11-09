@@ -40,3 +40,7 @@ coverage/
 *.tmp
 tmp/
 temp/
+
+CLAUDE.md
+GEMINI.md
+.claude
