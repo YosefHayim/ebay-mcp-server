@@ -3,6 +3,7 @@ import {
   accountTools,
   analyticsTools,
   chatGptTools,
+  claudeTools, // Add claudeTools here
   communicationTools,
   fulfillmentTools,
   inventoryTools,
@@ -30,6 +31,7 @@ export function getToolDefinitions(): ToolDefinition[] {
     ...taxonomyTools,
     ...communicationTools,
     ...otherApiTools,
+    ...claudeTools, // Add claudeTools here
   ];
 }
 
@@ -110,7 +112,9 @@ export async function executeTool(
     case "ebay_create_fulfillment_policy":
       return api.account.createFulfillmentPolicy(args.policy as any);
     case "ebay_get_fulfillment_policy":
-      return api.account.getFulfillmentPolicy(args.fulfillmentPolicyId as string);
+      return api.account.getFulfillmentPolicy(
+        args.fulfillmentPolicyId as string,
+      );
     case "ebay_get_fulfillment_policy_by_name":
       return api.account.getFulfillmentPolicyByName(
         args.marketplaceId as string,
@@ -122,7 +126,9 @@ export async function executeTool(
         args.policy as any,
       );
     case "ebay_delete_fulfillment_policy":
-      return api.account.deleteFulfillmentPolicy(args.fulfillmentPolicyId as string);
+      return api.account.deleteFulfillmentPolicy(
+        args.fulfillmentPolicyId as string,
+      );
 
     // Payment Policy CRUD
     case "ebay_create_payment_policy":
@@ -233,7 +239,9 @@ export async function executeTool(
 
     // Bulk Operations
     case "ebay_bulk_create_or_replace_inventory_item":
-      return api.inventory.bulkCreateOrReplaceInventoryItem(args.requests as any);
+      return api.inventory.bulkCreateOrReplaceInventoryItem(
+        args.requests as any,
+      );
     case "ebay_bulk_get_inventory_item":
       return api.inventory.bulkGetInventoryItem(args.requests as any);
     case "ebay_bulk_update_price_quantity":
@@ -252,14 +260,18 @@ export async function executeTool(
 
     // Inventory Item Groups
     case "ebay_get_inventory_item_group":
-      return api.inventory.getInventoryItemGroup(args.inventoryItemGroupKey as string);
+      return api.inventory.getInventoryItemGroup(
+        args.inventoryItemGroupKey as string,
+      );
     case "ebay_create_or_replace_inventory_item_group":
       return api.inventory.createOrReplaceInventoryItemGroup(
         args.inventoryItemGroupKey as string,
         args.inventoryItemGroup as any,
       );
     case "ebay_delete_inventory_item_group":
-      return api.inventory.deleteInventoryItemGroup(args.inventoryItemGroupKey as string);
+      return api.inventory.deleteInventoryItemGroup(
+        args.inventoryItemGroupKey as string,
+      );
 
     // Location Management
     case "ebay_get_inventory_locations":
@@ -268,18 +280,26 @@ export async function executeTool(
         args.offset as number,
       );
     case "ebay_get_inventory_location":
-      return api.inventory.getInventoryLocation(args.merchantLocationKey as string);
+      return api.inventory.getInventoryLocation(
+        args.merchantLocationKey as string,
+      );
     case "ebay_create_or_replace_inventory_location":
       return api.inventory.createOrReplaceInventoryLocation(
         args.merchantLocationKey as string,
         args.location as any,
       );
     case "ebay_delete_inventory_location":
-      return api.inventory.deleteInventoryLocation(args.merchantLocationKey as string);
+      return api.inventory.deleteInventoryLocation(
+        args.merchantLocationKey as string,
+      );
     case "ebay_disable_inventory_location":
-      return api.inventory.disableInventoryLocation(args.merchantLocationKey as string);
+      return api.inventory.disableInventoryLocation(
+        args.merchantLocationKey as string,
+      );
     case "ebay_enable_inventory_location":
-      return api.inventory.enableInventoryLocation(args.merchantLocationKey as string);
+      return api.inventory.enableInventoryLocation(
+        args.merchantLocationKey as string,
+      );
     case "ebay_update_location_details":
       return api.inventory.updateLocationDetails(
         args.merchantLocationKey as string,
@@ -417,9 +437,7 @@ export async function executeTool(
         args.filter as string,
       );
     case "ebay_get_product_safety_labels":
-      return api.metadata.getProductSafetyLabels(
-        args.marketplaceId as string,
-      );
+      return api.metadata.getProductSafetyLabels(args.marketplaceId as string);
     case "ebay_get_regulatory_policies":
       return api.metadata.getRegulatoryPolicies(
         args.marketplaceId as string,
@@ -441,9 +459,7 @@ export async function executeTool(
         args.filter as string,
       );
     case "ebay_get_currencies":
-      return api.metadata.getCurrencies(
-        args.marketplaceId as string,
-      );
+      return api.metadata.getCurrencies(args.marketplaceId as string);
     case "ebay_get_listing_type_policies":
       return api.metadata.getListingTypePolicies(
         args.marketplaceId as string,
@@ -469,25 +485,15 @@ export async function executeTool(
         args.specification as any,
       );
     case "ebay_get_compatibility_property_names":
-      return api.metadata.getCompatibilityPropertyNames(
-        args.data as any,
-      );
+      return api.metadata.getCompatibilityPropertyNames(args.data as any);
     case "ebay_get_compatibility_property_values":
-      return api.metadata.getCompatibilityPropertyValues(
-        args.data as any,
-      );
+      return api.metadata.getCompatibilityPropertyValues(args.data as any);
     case "ebay_get_multi_compatibility_property_values":
-      return api.metadata.getMultiCompatibilityPropertyValues(
-        args.data as any,
-      );
+      return api.metadata.getMultiCompatibilityPropertyValues(args.data as any);
     case "ebay_get_product_compatibilities":
-      return api.metadata.getProductCompatibilities(
-        args.data as any,
-      );
+      return api.metadata.getProductCompatibilities(args.data as any);
     case "ebay_get_sales_tax_jurisdictions":
-      return api.metadata.getSalesTaxJurisdictions(
-        args.countryCode as string,
-      );
+      return api.metadata.getSalesTaxJurisdictions(args.countryCode as string);
 
     // Taxonomy
     case "ebay_get_default_category_tree_id":
@@ -604,6 +610,17 @@ export async function executeTool(
       );
     case "ebay_get_shipping_quote":
       return api.edelivery.getShippingQuote(args.shippingQuoteId as string);
+
+    case "SearchClaudeCodeDocs":
+      // Placeholder implementation for SearchClaudeCodeDocs
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Tool 'SearchClaudeCodeDocs' called with query: ${args.query}. This tool is not yet fully implemented.`,
+          },
+        ],
+      };
 
     default:
       throw new Error(`Unknown tool: ${toolName}`);
