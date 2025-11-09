@@ -393,6 +393,97 @@ export interface BulkUpdateKeywordBidsRequest {
   keywords?: UpdateKeywordBidRequest[];
 }
 
+export interface UpdateBidRequest {
+  bid?: Amount;
+}
+
+export interface CreateReportTask {
+  reportType?: string;
+  marketplaceId?: string;
+  listingIds?: string[];
+  dateFrom?: string;
+  dateTo?: string;
+  dimensions?: Dimension[];
+  metricKeys?: string[];
+}
+
+export interface Dimension {
+  dimensionKey?: string;
+  dimensionValues?: string[];
+}
+
+export interface ItemPromotionRequest {
+  name?: string;
+  startDate?: string;
+  endDate?: string;
+  marketplaceId?: string;
+  promotionStatus?: string;
+  promotionImageUrl?: string;
+  description?: string;
+  couponConfiguration?: CouponConfiguration;
+  discountRules?: DiscountRule[];
+  inventoryCriterion?: InventoryCriterion;
+  applyFreeShipping?: boolean;
+}
+
+export interface CouponConfiguration {
+  couponCode?: string;
+  couponType?: string;
+  maxCouponRedemptionPerUser?: number;
+  maxTotalCouponRedemption?: number;
+}
+
+export interface DiscountRule {
+  discountBenefit?: DiscountBenefit;
+  discountSpecification?: DiscountSpecification;
+  ruleOrder?: number;
+}
+
+export interface DiscountBenefit {
+  amountOffItem?: Amount;
+  amountOffOrder?: Amount;
+  percentageOffItem?: string;
+  percentageOffOrder?: string;
+}
+
+export interface DiscountSpecification {
+  minAmount?: Amount;
+  minQuantity?: number;
+  forEachQuantity?: number;
+  forEachAmount?: Amount;
+}
+
+export interface InventoryCriterion {
+  inventoryCriterionType?: string;
+  inventoryItems?: InventoryItem[];
+  listingIds?: string[];
+  ruleIds?: string[];
+}
+
+export interface InventoryItem {
+  inventoryReferenceId?: string;
+  inventoryReferenceType?: string;
+}
+
+export interface TargetingRequest {
+  autoTargeting?: AutoTargeting;
+  manualTargeting?: ManualTargeting;
+}
+
+export interface AutoTargeting {
+  bidPreference?: string;
+}
+
+export interface ManualTargeting {
+  bidPreference?: string;
+}
+
+export interface CreateNegativeKeywordRequest {
+  negativeKeywordText?: string;
+  negativeKeywordMatchType?: string;
+  negativeKeywordStatus?: string;
+}
+
 export interface UpdateAdStatusRequest {
   adId?: string;
   adStatus?: string;

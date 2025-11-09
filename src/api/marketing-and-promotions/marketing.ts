@@ -622,4 +622,76 @@ export class MarketingApi {
       `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/keyword/${keywordId}`,
     );
   }
+
+  /**
+   * Delete a keyword
+   */
+  async deleteKeyword(
+    campaignId: string,
+    adGroupId: string,
+    keywordId: string,
+  ): Promise<void> {
+    return this.client.delete<void>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/keyword/${keywordId}`,
+    );
+  }
+
+  /**
+   * Update a keyword's bid
+   */
+  async updateKeywordBid(
+    campaignId: string,
+    adGroupId: string,
+    keywordId: string,
+    body: UpdateBidRequest,
+  ): Promise<void> {
+    return this.client.post<void>(
+      `${this.basePath}/ad_campaign/${campaignId}/ad_group/${adGroupId}/keyword/${keywordId}/update_bid`,
+      body,
+    );
+  }
+
+  /**
+   * Get ad report
+   */
+  async getAdReport(
+    dimension: string,
+    metric: string,
+    startDate: string,
+    endDate: string,
+    sort?: string,
+    listingIds?: string,
+    marketplaceId?: string,
+  ): Promise<Report> {
+    const params: Record<string, string> = {
+      dimension,
+      metric,
+      start_date: startDate,
+      end_date: endDate,
+    };
+    if (sort) params.sort = sort;
+    if (listingIds) params.listing_ids = listingIds;
+    if (marketplaceId) params.marketplace_id = marketplaceId;
+    return this.client.get<Report>(`${this.basePath}/ad_report`, params);
+  }
+
+  /**
+   * Get ad report metadata
+   */
+  async getAdReportMetadata(): Promise<ReportMetadatas> {
+    return this.client.get<ReportMetadatas>(
+      `${this.basePath}/ad_report_metadata`,
+    );
+  }
+
+  /**
+   * Get ad report metadata for a report type
+   */
+  async getAdReportMetadataForReportType(
+    reportType: string,
+  ): Promise<ReportMetadata> {
+    return this.client.get<ReportMetadata>(
+      `${this.basePath}/ad_report_metadata/${reportType}`,
+    );
+  }
 }

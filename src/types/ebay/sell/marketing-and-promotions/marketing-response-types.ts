@@ -503,3 +503,156 @@ export interface UpdateKeywordBidResponse {
 export interface BulkUpdateKeywordBidsResponse {
   responses?: UpdateKeywordBidResponse[];
 }
+
+export interface ReportMetadata {
+  reportType?: string;
+  dimensionKeys?: DimensionMetadata[];
+  metricKeys?: MetricMetadata[];
+}
+
+export interface ReportMetadatas {
+  reportMetadata?: ReportMetadata[];
+}
+
+export interface DimensionMetadata {
+  dataType?: string;
+  dimensionKey?: string;
+  dimensionKeyDescription?: string;
+}
+
+export interface MetricMetadata {
+  dataType?: string;
+  metricKey?: string;
+  metricKeyDescription?: string;
+}
+
+export interface Report {
+  dimensionValues?: DimensionValue[];
+  header?: Header;
+  lastUpdatedDate?: string;
+  reportId?: string;
+  reportType?: string;
+  startDate?: string;
+  endDate?: string;
+  warnings?: Error[];
+  records?: Record[];
+}
+
+export interface Header {
+  dimensionKeys?: DimensionKey[];
+  metricKeys?: MetricKey[];
+}
+
+export interface DimensionKey {
+  dimensionKey?: string;
+  dimensionKeyDescription?: string;
+}
+
+export interface MetricKey {
+  metricKey?: string;
+  metricKeyDescription?: string;
+}
+
+export interface Record {
+  dimensionValues?: DimensionValue[];
+  metricValues?: MetricValue[];
+}
+
+export interface DimensionValue {
+  dimensionKey?: string;
+  value?: string;
+}
+
+export interface MetricValue {
+  metricKey?: string;
+  value?: string;
+}
+
+export interface ReportTask {
+  reportTaskId?: string;
+  reportType?: string;
+  reportFormat?: string;
+  status?: string;
+  statusMessage?: string;
+  marketplaceId?: string;
+  reportHref?: string;
+  creationDate?: string;
+  completionDate?: string;
+}
+
+export interface ReportTaskPagedCollection {
+  reportTasks?: ReportTask[];
+  href?: string;
+  next?: string;
+  limit?: number;
+  offset?: number;
+  total?: number;
+}
+
+export interface ItemPromotionResponse {
+  promotionId?: string;
+  name?: string;
+  startDate?: string;
+  endDate?: string;
+  marketplaceId?: string;
+  promotionStatus?: string;
+  promotionImageUrl?: string;
+  description?: string;
+  couponConfiguration?: CouponConfiguration;
+  discountRules?: DiscountRule[];
+  inventoryCriterion?: InventoryCriterion;
+  applyFreeShipping?: boolean;
+}
+
+export interface PromotionsReportPagedCollection {
+  promotions?: PromotionReportDetail[];
+  href?: string;
+  next?: string;
+  limit?: number;
+  offset?: number;
+  total?: number;
+}
+
+export interface PromotionReportDetail {
+  promotionId?: string;
+  promotionName?: string;
+  promotionType?: string;
+  promotionStatus?: string;
+  startDate?: string;
+  endDate?: string;
+  marketplaceId?: string;
+  averageItemDiscount?: Amount;
+  baseSale?: Amount;
+  itemsSoldQuantity?: number;
+  numberOfOrders?: number;
+  promotionSale?: Amount;
+  totalDiscount?: Amount;
+  totalSale?: Amount;
+}
+
+export interface SummaryReportResponse {
+  baseSale?: Amount;
+  promotionSale?: Amount;
+  totalSale?: Amount;
+}
+
+export interface TargetingResponse {
+  autoTargeting?: AutoTargeting;
+  manualTargeting?: ManualTargeting;
+}
+
+export interface NegativeKeyword {
+  negativeKeywordId?: string;
+  negativeKeywordText?: string;
+  negativeKeywordMatchType?: string;
+  negativeKeywordStatus?: string;
+}
+
+export interface NegativeKeywordPagedCollection {
+  negativeKeywords?: NegativeKeyword[];
+  href?: string;
+  next?: string;
+  limit?: number;
+  offset?: number;
+  total?: number;
+}
