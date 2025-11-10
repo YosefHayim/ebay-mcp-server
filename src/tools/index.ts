@@ -681,22 +681,22 @@ export async function executeTool(
       const validated = getOffersToBuyersSchema.parse(args);
       return api.negotiation.getOffersToBuyers(
         validated.filter,
-        validated.limit,
-        validated.offset,
+        validated.limit ? Number(validated.limit) : undefined,
+        validated.offset ? Number(validated.offset) : undefined,
       );
     }
     case "ebay_send_offer_to_interested_buyers": {
       const validated = sendOfferToInterestedBuyersSchema.parse(args);
       return api.negotiation.sendOfferToInterestedBuyers(
-        validated.offer_data,
+        validated as any,
       );
     }
     case "ebay_find_eligible_items": {
       const validated = findEligibleItemsSchema.parse(args);
       return api.negotiation.findEligibleItems(
-        validated.filter,
-        validated.limit,
-        validated.offset,
+        validated.marketplace_id,
+        validated.limit ? Number(validated.limit) : undefined,
+        validated.offset ? Number(validated.offset) : undefined,
       );
     }
 
@@ -704,9 +704,9 @@ export async function executeTool(
     case "ebay_search_messages": {
       const validated = getConversationsSchema.parse(args);
       return api.message.searchMessages(
-        validated.filter,
-        validated.limit,
-        validated.offset,
+        validated as any,
+        validated.limit ? Number(validated.limit) : undefined,
+        validated.offset ? Number(validated.offset) : undefined,
       );
     }
     case "ebay_get_message": {
@@ -715,7 +715,7 @@ export async function executeTool(
     }
     case "ebay_send_message": {
       const validated = sendMessageSchema.parse(args);
-      return api.message.sendMessage(validated.message_data);
+      return api.message.sendMessage(validated as any);
     }
     case "ebay_reply_to_message": {
       // This is a deprecated method that maps to sendMessage
@@ -731,9 +731,9 @@ export async function executeTool(
     case "ebay_get_conversations": {
       const validated = getConversationsSchema.parse(args);
       return api.message.getConversations(
-        validated.filter,
-        validated.limit,
-        validated.offset,
+        validated as any,
+        validated.limit ? Number(validated.limit) : undefined,
+        validated.offset ? Number(validated.offset) : undefined,
       );
     }
     case "ebay_get_conversation": {
@@ -742,11 +742,11 @@ export async function executeTool(
     }
     case "ebay_bulk_update_conversation": {
       const validated = bulkUpdateConversationSchema.parse(args);
-      return api.message.bulkUpdateConversation(validated.update_data);
+      return api.message.bulkUpdateConversation(validated as any);
     }
     case "ebay_update_conversation": {
       const validated = updateConversationSchema.parse(args);
-      return api.message.updateConversation(validated.update_data);
+      return api.message.updateConversation(validated as any);
     }
 
     // Communication - Notification
@@ -756,11 +756,11 @@ export async function executeTool(
     }
     case "ebay_update_notification_config": {
       const validated = updateConfigSchema.parse(args);
-      return api.notification.updateConfig(validated.config);
+      return api.notification.updateConfig(validated as any);
     }
     case "ebay_create_notification_destination": {
       const validated = createDestinationSchema.parse(args);
-      return api.notification.createDestination(validated.destination);
+      return api.notification.createDestination(validated as any);
     }
     case "ebay_get_notification_destination": {
       const validated = getDestinationSchema.parse(args);
@@ -770,7 +770,7 @@ export async function executeTool(
       const validated = updateDestinationSchema.parse(args);
       return api.notification.updateDestination(
         validated.destination_id,
-        validated.destination,
+        validated as any,
       );
     }
     case "ebay_delete_notification_destination": {
@@ -780,13 +780,13 @@ export async function executeTool(
     case "ebay_get_notification_subscriptions": {
       const validated = getSubscriptionsSchema.parse(args);
       return api.notification.getSubscriptions(
-        validated.limit,
+        validated.limit ? Number(validated.limit) : undefined,
         validated.continuation_token,
       );
     }
     case "ebay_create_notification_subscription": {
       const validated = createSubscriptionSchema.parse(args);
-      return api.notification.createSubscription(validated.subscription);
+      return api.notification.createSubscription(validated as any);
     }
     case "ebay_get_notification_subscription": {
       const validated = getSubscriptionSchema.parse(args);
@@ -796,7 +796,7 @@ export async function executeTool(
       const validated = updateSubscriptionSchema.parse(args);
       return api.notification.updateSubscription(
         validated.subscription_id,
-        validated.subscription,
+        validated as any,
       );
     }
     case "ebay_delete_notification_subscription": {
@@ -822,7 +822,7 @@ export async function executeTool(
     case "ebay_get_notification_topics": {
       const validated = getTopicsSchema.parse(args);
       return api.notification.getTopics(
-        validated.limit,
+        validated.limit ? Number(validated.limit) : undefined,
         validated.continuation_token,
       );
     }
@@ -830,7 +830,7 @@ export async function executeTool(
       const validated = createSubscriptionFilterSchema.parse(args);
       return api.notification.createSubscriptionFilter(
         validated.subscription_id,
-        validated.filter,
+        validated as any,
       );
     }
     case "ebay_get_notification_subscription_filter": {
@@ -855,11 +855,11 @@ export async function executeTool(
     // Communication - Feedback
     case "ebay_get_feedback": {
       const validated = getFeedbackSchema.parse(args);
-      return api.feedback.getFeedback(validated.transaction_id);
+      return api.feedback.getFeedback(validated.transaction_id || "");
     }
     case "ebay_leave_feedback_for_buyer": {
       const validated = leaveFeedbackForBuyerSchema.parse(args);
-      return api.feedback.leaveFeedbackForBuyer(validated.feedback_data);
+      return api.feedback.leaveFeedbackForBuyer(validated as any);
     }
     case "ebay_get_feedback_summary": {
       getFeedbackRatingSummarySchema.parse(args); // Validate empty args
@@ -869,15 +869,15 @@ export async function executeTool(
       const validated = getAwaitingFeedbackSchema.parse(args);
       return api.feedback.getAwaitingFeedback(
         validated.filter,
-        validated.limit,
-        validated.offset,
+        validated.limit ? Number(validated.limit) : undefined,
+        validated.offset ? Number(validated.offset) : undefined,
       );
     }
     case "ebay_respond_to_feedback": {
       const validated = respondToFeedbackSchema.parse(args);
       return api.feedback.respondToFeedback(
-        validated.feedback_id,
-        validated.response_text,
+        validated.feedback_id || "",
+        validated.response_text || "",
       );
     }
 

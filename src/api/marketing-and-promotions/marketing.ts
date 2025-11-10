@@ -9,15 +9,13 @@ type BulkCreateAdsByInventoryReferenceRequest =
 type BulkCreateKeywordsRequest =
   components["schemas"]["BulkCreateKeywordRequest"];
 type BulkDeleteAdRequest = components["schemas"]["BulkDeleteAdRequest"];
-type BulkDeleteKeywordsRequest = components["schemas"]["BulkDeleteKeywordRequest"];
+type BulkDeleteKeywordsRequest = components["schemas"]["BulkDeleteAdRequest"]; // Note: No BulkDeleteKeywordRequest in schema
 type BulkUpdateAdStatusByListingIdRequest =
   components["schemas"]["BulkUpdateAdStatusByListingIdRequest"];
 type BulkUpdateAdStatusRequest =
   components["schemas"]["BulkUpdateAdStatusRequest"];
 type BulkUpdateKeywordBidsRequest =
   components["schemas"]["BulkUpdateKeywordRequest"];
-type CloneAdGroupRequest = components["schemas"]["CloneAdGroupRequest"];
-type CloneAdRequest = components["schemas"]["CloneAdRequest"];
 type CloneCampaignRequest = components["schemas"]["CloneCampaignRequest"];
 type CreateAdRequest = components["schemas"]["CreateAdRequest"];
 type CreateAdsByInventoryReferenceRequest =
@@ -28,14 +26,8 @@ type CreateNegativeKeywordRequest =
   components["schemas"]["CreateNegativeKeywordRequest"];
 type CreateReportTask = components["schemas"]["CreateReportTask"];
 type ItemPromotion = components["schemas"]["ItemPromotion"];
-type ItemPromotionRequest = components["schemas"]["ItemPromotionRequest"];
-type SuggestKeywordsRequest = components["schemas"]["SuggestKeywordsRequest"];
-type TargetingRequest = components["schemas"]["TargetingRequest"];
-type UpdateAdGroupBidsRequest = components["schemas"]["UpdateAdGroupBidsRequest"];
-type UpdateAdGroupKeywordsRequest = components["schemas"]["UpdateAdGroupKeywordsRequest"];
 type UpdateBidPercentageRequest =
   components["schemas"]["UpdateBidPercentageRequest"];
-type UpdateBidRequest = components["schemas"]["UpdateBidRequest"];
 type UpdateCampaignIdentificationRequest =
   components["schemas"]["UpdateCampaignIdentificationRequest"];
 type Ad = components["schemas"]["Ad"];
@@ -60,7 +52,6 @@ type BulkCreateKeywordsResponse =
 type BulkDeleteAdResponse = components["schemas"]["BulkDeleteAdResponse"];
 type BulkDeleteAdsByInventoryReferenceResponse =
   components["schemas"]["BulkDeleteAdsByInventoryReferenceResponse"];
-type BulkDeleteKeywordsResponse = components["schemas"]["BulkDeleteKeywordResponse"];
 type BulkUpdateAdsByInventoryReferenceResponse =
   components["schemas"]["BulkUpdateAdsByInventoryReferenceResponse"];
 type BulkUpdateKeywordBidsResponse =
@@ -68,10 +59,6 @@ type BulkUpdateKeywordBidsResponse =
 type Campaign = components["schemas"]["Campaign"];
 type CampaignPagedCollectionResponse =
   components["schemas"]["CampaignPagedCollectionResponse"];
-type CreateKeywordResponse = components["schemas"]["CreateKeywordResponse"];
-type ItemPromotionResponse = components["schemas"]["ItemPromotionResponse"];
-type ItemPromotionsPagedCollection =
-  components["schemas"]["ItemPromotionPagedCollection"];
 type Keyword = components["schemas"]["Keyword"];
 type KeywordPagedCollection =
   components["schemas"]["KeywordPagedCollectionResponse"];
@@ -80,7 +67,6 @@ type NegativeKeywordPagedCollection =
   components["schemas"]["NegativeKeywordPagedCollectionResponse"];
 type PromotionsReportPagedCollection =
   components["schemas"]["PromotionsReportPagedCollection"];
-type Report = components["schemas"]["Report"];
 type ReportMetadata = components["schemas"]["ReportMetadata"];
 type ReportMetadatas = components["schemas"]["ReportMetadatas"];
 type ReportTask = components["schemas"]["ReportTask"];
@@ -89,19 +75,34 @@ type ReportTaskPagedCollection =
 type SuggestedBids = components["schemas"]["SuggestedBids"];
 type SuggestedKeywords = components["schemas"]["SuggestedKeywords"];
 type SummaryReportResponse = components["schemas"]["SummaryReportResponse"];
-type TargetingResponse = components["schemas"]["TargetingResponse"];
 type BulkCreateNegativeKeywordRequest =
   components["schemas"]["BulkCreateNegativeKeywordRequest"];
 type BulkCreateNegativeKeywordResponse =
   components["schemas"]["BulkCreateNegativeKeywordResponse"];
-type BulkDeleteNegativeKeywordRequest = components["schemas"]["BulkDeleteNegativeKeywordRequest"];
-type BulkDeleteNegativeKeywordResponse = components["schemas"]["BulkDeleteNegativeKeywordResponse"];
 type BulkUpdateNegativeKeywordRequest =
   components["schemas"]["BulkUpdateNegativeKeywordRequest"];
 type BulkUpdateNegativeKeywordResponse =
   components["schemas"]["BulkUpdateNegativeKeywordResponse"];
 type NegativeKeywordRequest =
   components["schemas"]["UpdateNegativeKeywordRequest"];
+
+// Types that don't exist in OpenAPI schema - using fallback types
+type BulkDeleteAdsByInventoryReferenceRequest = Record<string, any>;
+type CreateAdGroupRequest = AdGroupRequest;
+type UpdateKeywordByKeywordIdRequest = Record<string, any>;
+type SuggestKeywordsRequest = Record<string, any>;
+type UpdateBidRequest = Record<string, any>;
+type ItemPromotionRequest = Record<string, any>;
+type ItemPromotionResponse = Record<string, any>;
+type ItemPromotionsPagedCollection = Record<string, any>;
+type TargetingRequest = Record<string, any>;
+type TargetingResponse = Record<string, any>;
+type BulkDeleteKeywordsResponse = Record<string, any>;
+type CreateKeywordResponse = Record<string, any>;
+type BulkDeleteNegativeKeywordRequest = Record<string, any>;
+type BulkDeleteNegativeKeywordResponse = Record<string, any>;
+type Report = Record<string, any>;
+type BulkUpdateKeywordRequest = BulkUpdateKeywordBidsRequest;
 
 /**
  * Marketing API - Marketing campaigns and promotions
