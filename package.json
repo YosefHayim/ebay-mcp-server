@@ -17,7 +17,12 @@
 		"start:http": "node build/server-http.js",
 		"clean": "rm -rf build",
 		"prepare": "npm run build",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:ui": "vitest --ui",
+		"test:coverage": "vitest run --coverage",
+		"generate:types": "bash scripts/generate-types.sh"
 	},
 	"keywords": [
 		"mcp",
@@ -29,9 +34,9 @@
 		"llm",
 		"mcp",
 		"documentation",
-		"api", 
-		"ebay", 
-		"server", 
+		"api",
+		"ebay",
+		"server",
 		"backend"
 	],
 	"author": "Yosef Hayim Sabag",
@@ -66,10 +71,14 @@
 		"@types/express": "^5.0.5",
 		"@types/jsonwebtoken": "^9.0.10",
 		"@types/node": "^22.10.2",
+		"@vitest/coverage-v8": "^4.0.8",
+		"@vitest/ui": "^4.0.8",
+		"nock": "^14.0.10",
 		"openapi-typescript": "^7.10.1",
 		"tsx": "^4.19.2",
 		"types": "link:/node",
-		"typescript": "^5.9.3"
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.8"
 	},
 	"engines": {
 		"node": ">=18.0.0"

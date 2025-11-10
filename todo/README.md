@@ -135,7 +135,7 @@ No rate limiting protection. Users can easily exceed eBay's API limits:
 
 ## 🟡 Medium Priority - Quality of Life Improvements
 
-### 4. Bulk Operation Utilities
+### 3. Bulk Operation Utilities
 **Priority**: MEDIUM | **Effort**: Medium (3-4 days) | **Impact**: Medium
 
 **Current Issue**:
@@ -166,7 +166,7 @@ Many bulk operations exist but lack helper utilities for common patterns (batchi
 
 ---
 
-### 5. Tool Scope Requirements Documentation
+### 4. Tool Scope Requirements Documentation
 **Priority**: MEDIUM | **Effort**: Medium (2-3 days) | **Impact**: Medium
 
 **Current Issue**:
@@ -198,7 +198,7 @@ Tool descriptions mention required scopes but it's inconsistent. Users don't kno
 
 ---
 
-### 6. Testing Infrastructure
+### 5. Testing Infrastructure
 **Priority**: MEDIUM | **Effort**: Large (5-7 days) | **Impact**: High
 
 **Current Issue**:
@@ -243,7 +243,7 @@ No automated tests. Changes risk breaking existing functionality.
 
 ## 🟢 Low Priority - Nice to Have Features
 
-### 7. Webhook Support
+### 6. Webhook Support
 **Priority**: LOW | **Effort**: Large (7-10 days) | **Impact**: Medium
 
 **Description**:
@@ -258,7 +258,7 @@ Add support for eBay notification webhooks (order updates, inventory changes, me
 
 ---
 
-### 8. Multi-Account Management
+### 7. Multi-Account Management
 **Priority**: LOW | **Effort**: Large (7-10 days) | **Impact**: Low-Medium
 
 **Description**:
@@ -272,7 +272,7 @@ Support managing multiple eBay seller accounts from one server instance.
 
 ---
 
-### 9. Advanced Analytics Dashboard
+### 8. Advanced Analytics Dashboard
 **Priority**: LOW | **Effort**: Large (10-14 days) | **Impact**: Low
 
 **Description**:
@@ -287,7 +287,7 @@ Web-based analytics dashboard for eBay seller metrics.
 
 ---
 
-### 10. CLI Tool for Common Operations
+### 9. CLI Tool for Common Operations
 **Priority**: LOW | **Effort**: Medium (3-5 days) | **Impact**: Low-Medium
 
 **Description**:
@@ -323,9 +323,9 @@ Command-line interface for common operations (token management, quick queries, b
 ### Phase 2: Quality of Life & Developer Tools (Week 3-4)
 **Focus**: Making the server easier to use and more powerful
 
-1. Bulk Operation Utilities
-2. Tool Scope Requirements Documentation
-3. Testing Infrastructure (begin)
+1. Bulk Operation Utilities (#3)
+2. Tool Scope Requirements Documentation (#4)
+3. Testing Infrastructure (begin) (#5)
 
 **Expected Outcomes**:
 - Easier bulk operations
@@ -337,11 +337,11 @@ Command-line interface for common operations (token management, quick queries, b
 ### Phase 3: Advanced Features (Week 5+)
 **Focus**: Nice-to-have features based on user feedback
 
-1. Complete Testing Infrastructure
-2. Webhook Support
-3. Multi-Account Management
-4. CLI Tool
-5. Advanced Analytics Dashboard (if needed)
+1. Complete Testing Infrastructure (#5)
+2. Webhook Support (#6)
+3. Multi-Account Management (#7)
+4. CLI Tool (#9)
+5. Advanced Analytics Dashboard (if needed) (#8)
 
 **Expected Outcomes**:
 - Production-ready quality
@@ -402,7 +402,8 @@ Command-line interface for common operations (token management, quick queries, b
 
 ### Phase 1 Success Criteria
 - ✅ Zero `z.unknown()` instances in codebase (ACHIEVED)
-- [ ] All tools have proper scope requirements documented
+- ✅ Environment-specific scope validation implemented (ACHIEVED)
+- ✅ Scope documentation complete (ACHIEVED)
 - [ ] Error messages include actionable suggestions
 - [ ] Rate limiting prevents API limit violations
 - [ ] 90%+ of common errors have helpful messages
@@ -424,10 +425,10 @@ Command-line interface for common operations (token management, quick queries, b
 ## 🤝 Contributing
 
 We welcome contributions! Priority areas:
-1. **OAuth scope validation** (Critical)
-2. **Error handling improvements** (High)
-3. **Testing infrastructure** (High)
-4. **Documentation** (Medium)
+1. ~~**OAuth scope validation**~~ (✅ COMPLETED)
+2. **Error handling improvements** (High - NEXT)
+3. **Rate limiting** (High)
+4. **Testing infrastructure** (Medium)
 5. **Bulk operation utilities** (Medium)
 
 See individual tasks above for specific contribution opportunities.
@@ -443,5 +444,5 @@ See individual tasks above for specific contribution opportunities.
 ---
 
 **Last Updated**: 2025-11-11
-**Status**: Phase 1 in progress (Zod schemas completed, OAuth scopes next)
-**Next Milestone**: Complete OAuth scope validation by 2025-11-18
+**Status**: Phase 1 complete! (Zod schemas ✅, OAuth scopes ✅)
+**Next Milestone**: Enhanced Error Handling & Logging (#1 - Critical Priority)
