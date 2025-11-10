@@ -13,12 +13,23 @@ This MCP server provides comprehensive access to eBay Sell APIs:
 - **Order Management**: Process orders, create shipping fulfillments, issue refunds
 - **Marketing**: Manage marketing campaigns and promotions
 - **Analytics**: Access sales and traffic reports, seller standards profiles
+- **OAuth 2.1 Authorization**: Secure multi-user deployments with industry-standard OAuth
 - **And more**: See the "Available Tools" section below for a complete list.
+
+## Transport Modes
+
+This server supports two operation modes:
+
+1. **STDIO Transport** (default): For local desktop applications like Claude Desktop
+2. **HTTP Transport with OAuth 2.1**: For remote, multi-user deployments with secure authorization
+
+📚 **For OAuth setup instructions**, see [OAUTH-SETUP.md](./OAUTH-SETUP.md)
 
 ## Prerequisites
 
 - **Node.js 18 or higher**
 - **eBay Developer account** with API credentials from the [eBay Developer Portal](https://developer.ebay.com/my/keys)
+- **(Optional) OAuth Authorization Server** for HTTP mode with authorization (e.g., Keycloak, Auth0, Okta)
 
 ## Quick Start
 
@@ -56,12 +67,42 @@ For detailed instructions, see the [Manual Token Configuration guide](./docs/aut
 
 ### 3. Run the Server
 
+#### STDIO Mode (Local Desktop)
+
 ```bash
 # Development mode with hot reload
 npm run dev
 
 # Production mode
 npm start
+```
+
+#### HTTP Mode with OAuth (Remote Multi-User)
+
+See [OAUTH-SETUP.md](./OAUTH-SETUP.md) for detailed OAuth configuration instructions.
+
+```bash
+# Development mode
+npm run dev:http
+
+# Production mode
+npm run build
+npm run start:http
+```
+
+**Quick OAuth Test with Keycloak:**
+
+```bash
+# Terminal 1: Start Keycloak
+docker run -p 127.0.0.1:8080:8080 \
+  -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
+  -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
+  quay.io/keycloak/keycloak start-dev
+
+# Terminal 2: Configure .env and start server
+cp .env.example .env
+# Edit .env with your eBay and OAuth credentials
+npm run dev:http
 ```
 
 ## Available Tools
