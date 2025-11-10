@@ -1,5 +1,4 @@
 
-import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -27,5 +26,3 @@ export async function createTokenTemplateFileExecute(args: Record<string, unknow
     };
   }
 }
-
-export default createTokenTemplateFile;

@@ -192,7 +192,7 @@ export async function executeTool(
     }
 
     case "create_token_template_file":
-      return await createTokenTemplateFile.execute(args);
+      return await createTokenTemplateFileExecute(args);
 
 
     // Account Management
