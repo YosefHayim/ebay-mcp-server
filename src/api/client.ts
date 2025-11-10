@@ -52,12 +52,24 @@ export class EbayApiClient {
   }
 
   /**
+   * Validate that access token is available before making API request
+   */
+  private validateAccessToken(): void {
+    if (!this.authClient.hasUserTokens()) {
+      throw new Error(
+        'Access token is missing. Please provide your access token and refresh token by calling ebay_set_user_tokens tool in order to perform API requests.'
+      );
+    }
+  }
+
+  /**
    * Make a GET request to eBay API
    */
   async get<T = unknown>(
     endpoint: string,
     params?: Record<string, unknown>,
   ): Promise<T> {
+    this.validateAccessToken();
     const response = await this.httpClient.get<T>(endpoint, { params });
     return response.data;
   }
@@ -70,6 +82,7 @@ export class EbayApiClient {
     data?: unknown,
     config?: AxiosRequestConfig,
   ): Promise<T> {
+    this.validateAccessToken();
     const response = await this.httpClient.post<T>(endpoint, data, config);
     return response.data;
   }
@@ -78,6 +91,7 @@ export class EbayApiClient {
    * Make a PUT request to eBay API
    */
   async put<T = unknown>(endpoint: string, data?: unknown): Promise<T> {
+    this.validateAccessToken();
     const response = await this.httpClient.put<T>(endpoint, data);
     return response.data;
   }
@@ -86,6 +100,7 @@ export class EbayApiClient {
    * Make a DELETE request to eBay API
    */
   async delete<T = unknown>(endpoint: string): Promise<T> {
+    this.validateAccessToken();
     const response = await this.httpClient.delete<T>(endpoint);
     return response.data;
   }

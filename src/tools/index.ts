@@ -100,20 +100,27 @@ export async function executeTool(
     }
 
     case "ebay_get_oauth_url": {
-      // Need to get config from the api client to access clientId and environment
-      // Since we don't have direct access, we'll need to get from env
+      // Get config from environment
       const clientId = process.env.EBAY_CLIENT_ID || "";
       const environment = (process.env.EBAY_ENVIRONMENT || "sandbox") as
         | "production"
         | "sandbox";
+      const envRedirectUri = process.env.EBAY_REDIRECT_URI;
 
-      const redirectUri = args.redirectUri as string;
+      // Use redirectUri from args if provided, otherwise use from .env
+      const redirectUri = (args.redirectUri as string | undefined) || envRedirectUri;
       const scopes = args.scopes as string[] | undefined;
       const state = args.state as string | undefined;
 
       if (!clientId) {
         throw new Error(
           "EBAY_CLIENT_ID environment variable is required to generate OAuth URL",
+        );
+      }
+
+      if (!redirectUri) {
+        throw new Error(
+          "Redirect URI is required. Either provide it as a parameter or set EBAY_REDIRECT_URI in your .env file.",
         );
       }
 
@@ -127,6 +134,7 @@ export async function executeTool(
 
       return {
         authorizationUrl: authUrl,
+        redirectUri,
         instructions:
           "Open this URL in a browser to authorize the application. After authorization, you will be redirected to your redirect URI with an authorization code that can be exchanged for an access token.",
         environment,

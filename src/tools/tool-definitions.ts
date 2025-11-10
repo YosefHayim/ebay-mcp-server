@@ -42,13 +42,13 @@ export const chatGptTools: ToolDefinition[] = [
   },
   {
     name: 'ebay_get_oauth_url',
-    description: 'Generate the eBay OAuth authorization URL for user consent. The user should open this URL in a browser to grant permissions to the application. This supports the OAuth 2.0 Authorization Code grant flow.',
+    description: 'Generate the eBay OAuth authorization URL for user consent. The user should open this URL in a browser to grant permissions to the application. This supports the OAuth 2.0 Authorization Code grant flow. The redirect URI can be provided as a parameter or will be read from EBAY_REDIRECT_URI environment variable.',
     inputSchema: {
       type: 'object',
       properties: {
         redirectUri: {
           type: 'string',
-          description: 'The redirect URI registered with your eBay application (RuName)'
+          description: 'Optional redirect URI registered with your eBay application (RuName). If not provided, will use EBAY_REDIRECT_URI from .env file.'
         },
         scopes: {
           type: 'array',
@@ -62,7 +62,7 @@ export const chatGptTools: ToolDefinition[] = [
           description: 'Optional state parameter for CSRF protection'
         }
       },
-      required: ['redirectUri']
+      required: []
     }
   },
   {
