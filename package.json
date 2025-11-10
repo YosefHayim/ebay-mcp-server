@@ -12,7 +12,9 @@
 		"build": "tsc",
 		"watch": "tsc --watch",
 		"dev": "tsx src/index.ts",
+		"dev:http": "tsx src/server-http.ts",
 		"start": "node build/index.js",
+		"start:http": "node build/server-http.js",
 		"clean": "rm -rf build",
 		"prepare": "npm run build",
 		"typecheck": "tsc --noEmit"
