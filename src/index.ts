@@ -2,7 +2,6 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { ListToolsRequestSchema, CallToolRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { EbaySellerApi } from "./api/index.js";
 import { getEbayConfig } from "./config/environment.js";
 import { getToolDefinitions, executeTool } from "./tools/index.js";
@@ -47,47 +46,40 @@ class EbayMcpServer {
   private setupHandlers(): void {
     const tools = getToolDefinitions();
 
-    // Handle tools/list request
-    this.server.setRequestHandler(ListToolsRequestSchema, async () => {
-      return {
-        tools: tools.map((tool) => ({
-          name: tool.name,
-          description: tool.description,
-          inputSchema: tool.inputSchema,
-        })),
-      };
-    });
+    // Register each tool with the MCP server
+    for (const toolDef of tools) {
+      this.server.tool(
+        toolDef.name,
+        toolDef.description,
+        toolDef.inputSchema,
+        async (args: Record<string, unknown>) => {
+          try {
+            const result = await executeTool(this.api, toolDef.name, args);
+            return {
+              content: [
+                {
+                  type: "text" as const,
+                  text: JSON.stringify(result, null, 2),
+                },
+              ],
+            };
+          } catch (error) {
+            const errorMessage =
+              error instanceof Error ? error.message : "Unknown error";
 
-    // Handle tools/call request
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
-      const toolName = request.params.name;
-      const toolArgs = request.params.arguments || {};
-
-      try {
-        const result = await executeTool(this.api, toolName, toolArgs);
-        return {
-          content: [
-            {
-              type: "text" as const,
-              text: JSON.stringify(result, null, 2),
-            },
-          ],
-        };
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Unknown error";
-
-        return {
-          content: [
-            {
-              type: "text" as const,
-              text: JSON.stringify({ error: errorMessage }, null, 2),
-            },
-          ],
-          isError: true,
-        };
-      }
-    });
+            return {
+              content: [
+                {
+                  type: "text" as const,
+                  text: JSON.stringify({ error: errorMessage }, null, 2),
+                },
+              ],
+              isError: true,
+            };
+          }
+        }
+      );
+    }
   }
 
   private setupErrorHandling(): void {
