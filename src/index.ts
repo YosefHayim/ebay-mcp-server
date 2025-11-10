@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio";
-import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { ListToolsRequestSchema, CallToolRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { EbaySellerApi } from "./api/index.js";
 import { getEbayConfig } from "./config/environment.js";
-import { executeTool, getToolDefinitions } from "./tools/index";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import { getToolDefinitions, executeTool } from "./tools/index.js";
+
 
 /**
  * eBay API MCP Server
