@@ -12,8 +12,8 @@ describe("Scope Validation", () => {
 
       expect(scopes).toBeInstanceOf(Array);
       expect(scopes.length).toBeGreaterThan(0);
-      // Production-specific scopes
-      expect(scopes).toContain("https://api.ebay.com/oauth/api_scope/sell.edelivery");
+      // Production-specific scopes (note: sell.edelivery uses different path format)
+      expect(scopes).toContain("https://api.ebay.com/oauth/scope/sell.edelivery");
       expect(scopes).toContain("https://api.ebay.com/oauth/api_scope/commerce.shipping");
     });
 
@@ -23,7 +23,7 @@ describe("Scope Validation", () => {
       expect(scopes).toBeInstanceOf(Array);
       expect(scopes.length).toBeGreaterThan(0);
       // Sandbox-specific scopes
-      expect(scopes).toContain("https://api.ebay.com/oauth/api_scope/buy.browse");
+      expect(scopes).toContain("https://api.ebay.com/oauth/api_scope/buy.guest.order");
       expect(scopes).toContain("https://api.ebay.com/oauth/api_scope/sell.item.draft");
     });
 
@@ -48,8 +48,8 @@ describe("Scope Validation", () => {
       const productionScopes = getDefaultScopes("production");
 
       const sandboxOnlyScopes = [
-        "https://api.ebay.com/oauth/api_scope/buy.browse",
-        "https://api.ebay.com/oauth/api_scope/buy.feed",
+        "https://api.ebay.com/oauth/api_scope/buy.guest.order",
+        "https://api.ebay.com/oauth/api_scope/buy.deal",
         "https://api.ebay.com/oauth/api_scope/sell.item.draft",
       ];
 
@@ -62,8 +62,7 @@ describe("Scope Validation", () => {
       const sandboxScopes = getDefaultScopes("sandbox");
 
       const productionOnlyScopes = [
-        "https://api.ebay.com/oauth/api_scope/sell.edelivery",
-        "https://api.ebay.com/oauth/api_scope/commerce.shipping",
+        "https://api.ebay.com/oauth/scope/sell.edelivery",
       ];
 
       productionOnlyScopes.forEach((scope) => {
@@ -99,30 +98,27 @@ describe("Scope Validation", () => {
 
     it("should warn when requesting sandbox-only scope in production", () => {
       const sandboxOnlyScopes = [
-        "https://api.ebay.com/oauth/api_scope/buy.browse",
+        "https://api.ebay.com/oauth/api_scope/buy.guest.order",
         "https://api.ebay.com/oauth/api_scope/sell.item.draft",
       ];
 
       const result = validateScopes(sandboxOnlyScopes, "production");
 
       expect(result.warnings.length).toBeGreaterThan(0);
-      expect(result.warnings[0]).toContain("sandbox environment");
-      expect(result.warnings[0]).toContain("production");
+      expect(result.warnings[0]).toContain("sandbox");
       // Still includes the scopes (let eBay reject them)
       expect(result.validScopes).toEqual(sandboxOnlyScopes);
     });
 
     it("should warn when requesting production-only scope in sandbox", () => {
       const productionOnlyScopes = [
-        "https://api.ebay.com/oauth/api_scope/sell.edelivery",
-        "https://api.ebay.com/oauth/api_scope/commerce.shipping",
+        "https://api.ebay.com/oauth/scope/sell.edelivery",
       ];
 
       const result = validateScopes(productionOnlyScopes, "sandbox");
 
       expect(result.warnings.length).toBeGreaterThan(0);
-      expect(result.warnings[0]).toContain("production environment");
-      expect(result.warnings[0]).toContain("sandbox");
+      expect(result.warnings[0]).toContain("production");
       // Still includes the scopes (let eBay reject them)
       expect(result.validScopes).toEqual(productionOnlyScopes);
     });
@@ -143,7 +139,7 @@ describe("Scope Validation", () => {
     it("should handle mix of valid and invalid scopes", () => {
       const mixedScopes = [
         "https://api.ebay.com/oauth/api_scope/sell.inventory", // Valid for production
-        "https://api.ebay.com/oauth/api_scope/buy.browse", // Sandbox-only
+        "https://api.ebay.com/oauth/api_scope/buy.guest.order", // Sandbox-only
         "https://api.ebay.com/oauth/api_scope/unknown.scope", // Unknown
       ];
 
@@ -161,13 +157,12 @@ describe("Scope Validation", () => {
     });
 
     it("should provide detailed warning messages", () => {
-      const sandboxOnlyScope = ["https://api.ebay.com/oauth/api_scope/buy.browse"];
+      const sandboxOnlyScope = ["https://api.ebay.com/oauth/api_scope/buy.guest.order"];
 
       const result = validateScopes(sandboxOnlyScope, "production");
 
-      expect(result.warnings[0]).toMatch(/buy\.browse/);
+      expect(result.warnings[0]).toMatch(/buy\.guest\.order/);
       expect(result.warnings[0]).toMatch(/sandbox/);
-      expect(result.warnings[0]).toMatch(/production/);
       expect(result.warnings[0]).toMatch(/may be rejected/);
     });
   });

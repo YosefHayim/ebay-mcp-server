@@ -623,11 +623,6 @@ export async function executeTool(
         args.marketplaceId as string,
         args.filter as string,
       );
-    case "ebay_get_return_policies":
-      return api.metadata.getReturnPolicies(
-        args.marketplaceId as string,
-        args.filter as string,
-      );
     case "ebay_get_shipping_cost_type_policies":
       return api.metadata.getShippingCostTypePolicies(
         args.marketplaceId as string,
