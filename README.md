@@ -945,6 +945,6 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 **Made with ❤️ for the eBay seller community**
 
-[⭐ Star this project](https://github.com/yourusername/ebay-api-mcp-server) | [🐛 Report Bug](https://github.com/yourusername/ebay-api-mcp-server/issues) | [💡 Request Feature](https://github.com/yourusername/ebay-api-mcp-server/issues)
+[⭐ Star this project](https://github.com/YosefHayim/ebay-api-mcp-server) | [🐛 Report Bug](https://github.com/YosefHayim/ebay-api-mcp-server/issues) | [💡 Request Feature](https://github.com/YosefHayim/ebay-api-mcp-server/issues)
 
 </div>
