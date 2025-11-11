@@ -2,7 +2,7 @@ import { config } from "dotenv";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import type { EbayConfig } from "../types/ebay.js";
+import type { EbayConfig } from "@/types/ebay.js";
 
 config();
 

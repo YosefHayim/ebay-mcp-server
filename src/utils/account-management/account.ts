@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { operations, components } from "../../types/sell_account_v1_oas3.js";
+import type { operations, components } from "@/types/sell_account_v1_oas3.js";
 
 /**
  * Zod schemas for Account API input validation

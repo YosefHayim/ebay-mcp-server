@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { operations, components } from "../../types/commerce_feedback_v1_beta_oas3.js";
+import type { operations, components } from "@/types/commerce_feedback_v1_beta_oas3.js";
 
 /**
  * Zod schemas for Feedback API input validation

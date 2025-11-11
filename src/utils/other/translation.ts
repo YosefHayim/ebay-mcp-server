@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { operations, components } from "../../types/commerce_translation_v1_beta_oas3.js";
+import type { operations, components } from "@/types/commerce_translation_v1_beta_oas3.js";
 
 /**
  * Zod schemas for Translation API input validation

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { components } from "../../types/commerce_vero_v1_oas3.js";
+import type { components } from "@/types/commerce_vero_v1_oas3.js";
 
 /**
  * Zod schemas for VERO API input validation

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { operations, components } from "../../types/sell_negotiation_v1_oas3.js";
+import type { operations, components } from "@/types/sell_negotiation_v1_oas3.js";
 
 /**
  * Zod schemas for Negotiation API input validation

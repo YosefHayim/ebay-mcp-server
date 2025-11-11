@@ -131,11 +131,7 @@ describe('InventoryApi', () => {
       const mockResponse = { offers: [] };
       vi.mocked(client.get).mockResolvedValue(mockResponse);
 
-      await api.getOffers({
-        sku: 'TEST-SKU',
-        marketplaceId: 'EBAY_US',
-        limit: 10
-      });
+      await api.getOffers('TEST-SKU', 'EBAY_US', 10);
 
       expect(client.get).toHaveBeenCalledWith('/sell/inventory/v1/offer', {
         sku: 'TEST-SKU',
@@ -182,8 +178,7 @@ describe('InventoryApi', () => {
       await api.publishOffer('OFFER123');
 
       expect(client.post).toHaveBeenCalledWith(
-        '/sell/inventory/v1/offer/OFFER123/publish',
-        {}
+        '/sell/inventory/v1/offer/OFFER123/publish'
       );
     });
 
@@ -247,8 +242,8 @@ describe('InventoryApi', () => {
     });
   });
 
-  describe('createInventoryLocation', () => {
-    it('should create inventory location', async () => {
+  describe('createOrReplaceInventoryLocation', () => {
+    it('should create or replace inventory location', async () => {
       const location = {
         locationTypes: ['WAREHOUSE'],
         name: 'Main Warehouse',
@@ -264,7 +259,7 @@ describe('InventoryApi', () => {
       };
       vi.mocked(client.post).mockResolvedValue(undefined);
 
-      await api.createInventoryLocation('WAREHOUSE_1', location);
+      await api.createOrReplaceInventoryLocation('WAREHOUSE_1', location);
 
       expect(client.post).toHaveBeenCalledWith(
         '/sell/inventory/v1/location/WAREHOUSE_1',
@@ -273,14 +268,14 @@ describe('InventoryApi', () => {
     });
 
     it('should throw error when location key is missing', async () => {
-      await expect(api.createInventoryLocation('', {} as any)).rejects.toThrow(
+      await expect(api.createOrReplaceInventoryLocation('', {} as any)).rejects.toThrow(
         'merchantLocationKey is required'
       );
     });
 
     it('should throw error when location data is missing', async () => {
       await expect(
-        api.createInventoryLocation('WAREHOUSE_1', undefined as any)
+        api.createOrReplaceInventoryLocation('WAREHOUSE_1', undefined as any)
       ).rejects.toThrow('location is required');
     });
   });
@@ -331,7 +326,7 @@ describe('InventoryApi', () => {
     it('should throw error when requests are missing', async () => {
       await expect(
         api.bulkCreateOrReplaceInventoryItem(undefined as any)
-      ).rejects.toThrow('requests object is required');
+      ).rejects.toThrow('requests is required and must be an object');
     });
   });
 
@@ -362,7 +357,7 @@ describe('InventoryApi', () => {
     it('should throw error when requests are missing', async () => {
       await expect(
         api.bulkUpdatePriceQuantity(undefined as any)
-      ).rejects.toThrow('requests object is required');
+      ).rejects.toThrow('requests is required and must be an object');
     });
   });
 });

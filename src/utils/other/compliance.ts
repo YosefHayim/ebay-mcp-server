@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { operations } from "../../types/sell_compliance_v1_oas3.js";
+import type { operations } from "@/types/sell_compliance_v1_oas3.js";
 
 /**
  * Zod schemas for Compliance API input validation
