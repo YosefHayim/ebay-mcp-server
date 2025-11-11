@@ -24,6 +24,8 @@ jobs:
     permissions:
       actions: write # Required to delete workflow runs
       contents: read # Required to checkout the repo
+    env:
+    GH_TOKEN: ${{ github.token }}
 
     steps:
       - name: Checkout repository
