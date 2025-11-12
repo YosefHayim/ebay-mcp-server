@@ -212,6 +212,15 @@ export function getBaseUrl(environment: "production" | "sandbox"): string {
     : "https://api.sandbox.ebay.com";
 }
 
+/**
+ * Get base URL for Identity API (uses apiz subdomain)
+ */
+export function getIdentityBaseUrl(environment: "production" | "sandbox"): string {
+  return environment === "production"
+    ? "https://apiz.ebay.com"
+    : "https://apiz.sandbox.ebay.com";
+}
+
 export function getAuthUrl(environment: "production" | "sandbox"): string {
   return environment === "production"
     ? "https://api.ebay.com/identity/v1/oauth2/token"

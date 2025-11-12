@@ -45,8 +45,10 @@ export class EbayApiClient {
   private authClient: EbayOAuthClient;
   private baseUrl: string;
   private rateLimitTracker: RateLimitTracker;
+  private config: EbayConfig;
 
   constructor(config: EbayConfig) {
+    this.config = config;
     this.authClient = new EbayOAuthClient(config);
     this.baseUrl = getBaseUrl(config.environment);
     this.rateLimitTracker = new RateLimitTracker();
@@ -249,5 +251,50 @@ export class EbayApiClient {
    */
   getRateLimitStats() {
     return this.rateLimitTracker.getStats();
+  }
+
+  /**
+   * Get the config object (for accessing environment, etc.)
+   */
+  getConfig(): EbayConfig {
+    return this.config;
+  }
+
+  /**
+   * Make a GET request with a full URL (for APIs that use different base URLs)
+   * Used by Identity API which uses apiz subdomain
+   */
+  async getWithFullUrl<T = unknown>(
+    fullUrl: string,
+    params?: Record<string, unknown>,
+  ): Promise<T> {
+    this.validateAccessToken();
+
+    // Check rate limit
+    if (!this.rateLimitTracker.canMakeRequest()) {
+      const stats = this.rateLimitTracker.getStats();
+      throw new Error(
+        `Rate limit exceeded: ${stats.current}/${stats.max} requests in ${stats.windowMs}ms window. Please wait before making more requests.`
+      );
+    }
+
+    // Get auth token
+    const token = await this.authClient.getAccessToken();
+
+    // Record the request
+    this.rateLimitTracker.recordRequest();
+
+    // Make request with full URL
+    const response = await axios.get<T>(fullUrl, {
+      params,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      timeout: 30000,
+    });
+
+    return response.data;
   }
 }
