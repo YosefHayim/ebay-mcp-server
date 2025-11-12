@@ -15,7 +15,7 @@
 [![Coverage](https://img.shields.io/badge/coverage-99%25%2B-brightgreen)](tests/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A comprehensive [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that provides AI assistants with full access to eBay's Sell APIs through 170+ tools for inventory management, order fulfillment, marketing campaigns, analytics, and more.
+A comprehensive [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that provides AI assistants with full access to eBay's Sell APIs through 140 tools for inventory management, order fulfillment, marketing campaigns, analytics, and more.
 
 [Features](#-features) • [Quick Start](#-quick-start) • [Configuration](#-configuration) • [OAuth Setup](#-oauth-setup) • [Documentation](#-documentation) • [Community](#-community) • [Contributing](#-contributing)
 
@@ -48,7 +48,7 @@ A comprehensive [Model Context Protocol (MCP)](https://modelcontextprotocol.io) 
 
 ### Core Capabilities
 
-- **170+ eBay API Tools** - Comprehensive coverage of eBay Sell APIs across 9 categories
+- **140 eBay API Tools** - Comprehensive coverage of eBay Sell APIs across 8 categories
 - **Dual Transport Modes** - STDIO (local) and HTTP with OAuth 2.1 (remote multi-user)
 - **OAuth 2.0 Support** - Full user token management with automatic refresh
 - **Token Persistence** - Secure file-based storage across sessions with `.ebay-mcp-tokens.json`
@@ -386,7 +386,7 @@ The server supports two authentication modes:
 - `ebay_translate` - Translate listing text
 - `SearchClaudeCodeDocs` - Search Claude Code documentation
 
-For the complete list of 170+ tools, see [Tool Definitions](src/tools/tool-definitions.ts).
+For the complete list of 140 tools, see [Tool Definitions](src/tools/tool-definitions.ts).
 
 ---
 
@@ -447,7 +447,7 @@ ebay-api-mcp-server/
 │   │   ├── token-storage.ts    # File-based token persistence
 │   │   └── ...
 │   ├── tools/                  # MCP tool definitions
-│   │   ├── tool-definitions.ts # 170+ tool schemas
+│   │   ├── tool-definitions.ts # 140 tool schemas
 │   │   └── index.ts            # Tool dispatcher
 │   ├── types/                  # TypeScript types
 │   │   ├── ebay.ts             # Core types
