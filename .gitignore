@@ -15,6 +15,7 @@ dist/
 # OAuth tokens (sensitive)
 .ebay-tokens.json
 .ebay-mcp-tokens.json
+mcp-setup.json
 
 
 # Logs

@@ -424,11 +424,91 @@ Tokens are automatically:
 
 ### Manual Token Configuration
 
-You have **three methods** to configure OAuth tokens for development and testing. Choose based on your workflow:
+You have **four methods** to configure OAuth tokens for development and testing. Choose based on your workflow:
 
 ---
 
-#### Method 1: MCP Client Configuration (⚡ Fastest - Recommended)
+#### Method 1: Centralized Configuration (⚡ Fastest - Recommended)
+
+**Best for:** Multi-client setup, single source of truth, automatic token file generation
+
+Use the centralized `mcp-setup.json` workflow for automatic configuration:
+
+```bash
+# Step 1: Create configuration template
+./scripts/create-mcp-setup.sh
+
+# Step 2: Edit mcp-setup.json with credentials and tokens
+nano mcp-setup.json
+
+# Step 3: Auto-generate configs and token file
+./scripts/setup-mcp-clients.sh
+```
+
+**What this workflow does:**
+
+**Step 1** (`create-mcp-setup.sh`):
+- 📝 Creates `mcp-setup.json` template at project root
+- 🔧 Auto-detects build path
+- 📋 Includes all required and optional fields
+
+**Step 2** (Edit `mcp-setup.json`):
+- 🔑 Add your eBay credentials (clientId, clientSecret, environment)
+- 🎟️ Optionally add user tokens (accessToken, refreshToken)
+- ✅ Enable/disable MCP clients (Claude, Cline, Continue, Zed)
+
+**Step 3** (`setup-mcp-clients.sh`):
+- ✅ Reads configuration from `mcp-setup.json`
+- ✅ Auto-generates configs for enabled MCP clients
+- ✅ Creates `.ebay-mcp-tokens.json` if tokens provided
+- ✅ Backs up existing configs before modifying
+- ✅ Works on macOS, Linux, and Windows (WSL)
+
+**Benefits:**
+- ✅ One-time configuration for all MCP clients
+- ✅ Automatic token file generation with expiry times
+- ✅ Centralized credential management
+- ✅ Easy to update and maintain
+- ✅ Supports Claude Desktop, Cline, Continue, and Zed
+
+**Example mcp-setup.json:**
+```json
+{
+  "ebay": {
+    "credentials": {
+      "clientId": "your_client_id",
+      "clientSecret": "your_client_secret",
+      "environment": "sandbox",
+      "redirectUri": "https://your-app.com/callback"
+    },
+    "tokens": {
+      "accessToken": "v^1.1#i^1#...",
+      "refreshToken": "v^1.1#i^1#..."
+    }
+  },
+  "mcpServer": {
+    "buildPath": "/absolute/path/to/build/index.js",
+    "autoGenerateConfigs": true,
+    "clients": {
+      "claude": { "enabled": true },
+      "cline": { "enabled": false },
+      "continue": { "enabled": false },
+      "zed": { "enabled": false }
+    }
+  }
+}
+```
+
+**Security:**
+- ⚠️ **File:** `mcp-setup.json` (project root)
+- ⚠️ **Permissions:** Recommended `chmod 600 mcp-setup.json`
+- ⚠️ **Never commit to version control!** (add to `.gitignore`)
+
+**Note:** Token expiry times are estimated (2 hours for access, 18 months for refresh). For accurate expiry times, use the `ebay_set_user_tokens_with_expiry` tool after setup.
+
+---
+
+#### Method 2: MCP Client Configuration (⚡ Quick Setup)
 
 **Best for:** Production use, quick setup, avoiding manual file editing, all MCP clients
 
@@ -474,7 +554,7 @@ Parameters:
 
 ---
 
-#### Method 2: Shell Script Token Template (🚀 Quick Setup)
+#### Method 3: Shell Script Token Template (🚀 Quick Setup)
 
 **Best for:** Local development, quick testing, visual file management
 
@@ -525,7 +605,7 @@ The server automatically detects and loads tokens from `.ebay-mcp-tokens.json` o
 
 ---
 
-#### Method 3: MCP Tool Template Generation
+#### Method 4: MCP Tool Template Generation
 
 **Best for:** When already connected to MCP client, remote workflows
 

@@ -330,9 +330,33 @@ eBay API MCP Server running on stdio
 
 You have multiple ways to configure OAuth tokens for development:
 
-#### Option 1: MCP Client Configuration (⚡ Fastest - Recommended)
+#### Option 1: Centralized Configuration (⚡ Fastest - Recommended)
 
-Configure tokens directly in your MCP client config and use the `ebay_set_user_tokens` tool:
+Use the centralized `mcp-setup.json` configuration file:
+
+```bash
+# Step 1: Create mcp-setup.json template
+./scripts/create-mcp-setup.sh
+
+# Step 2: Edit mcp-setup.json with your credentials and tokens
+nano mcp-setup.json
+
+# Step 3: Auto-generate MCP client configs and token file
+./scripts/setup-mcp-clients.sh
+```
+
+This workflow:
+- ✅ Configures all enabled MCP clients automatically
+- ✅ Generates `.ebay-mcp-tokens.json` if tokens provided
+- ✅ Single source of truth for all credentials
+- ✅ Backs up existing configs before modifying
+- ✅ Works across Claude, Cline, Continue, and Zed
+
+**Note:** Token expiry times are estimated (2 hours for access, 18 months for refresh). For accurate expiry times, use the `ebay_set_user_tokens_with_expiry` tool after setup.
+
+#### Option 2: MCP Client Configuration + Tool
+
+Configure credentials in your MCP client config and use the `ebay_set_user_tokens` tool:
 
 **Claude Desktop** (`claude_desktop_config.json`):
 ```json
@@ -363,7 +387,7 @@ ebay_set_user_tokens with your access_token and refresh_token
 - ✅ Easy to update and rotate tokens
 - ✅ Works across all MCP clients
 
-#### Option 2: Token File Generation Script
+#### Option 3: Token File Generation Script
 
 Generate a token template file that you manually edit:
 
@@ -381,7 +405,7 @@ This creates `.ebay-mcp-tokens.json` in the project root with placeholder values
 - ✅ File-based token persistence
 - ✅ Good for testing and debugging
 
-#### Option 3: MCP Tool
+#### Option 4: MCP Tool
 
 Call the `create_token_template_file` tool through your MCP client to generate the template file, then edit it manually.
 
@@ -393,7 +417,9 @@ Call the `create_token_template_file` tool through your MCP client to generate t
 
 ### STDIO Mode (Local)
 
-**🎯 Recommended: Use the [automated setup script](#automated-setup-recommended) instead of manual configuration.**
+**🎯 Recommended: Use the [centralized configuration workflow](#automated-setup-recommended) instead of manual configuration.**
+
+The centralized `mcp-setup.json` approach automatically configures all enabled MCP clients (Claude, Cline, Continue, Zed) in a single step. See [Automated Setup](#automated-setup-recommended) above.
 
 If you need to manually configure your MCP client, follow the instructions below:
 
@@ -492,6 +518,89 @@ If you need to manually configure your MCP client, follow the instructions below
 **Note:** ChatGPT Desktop MCP support may vary. Check ChatGPT documentation for current MCP compatibility.
 
 3. Restart ChatGPT Desktop
+
+#### With Cline (VS Code Extension)
+
+1. Locate Cline MCP settings file:
+   - **macOS/Linux**: `~/.config/cline/mcp_settings.json`
+   - **Windows**: `%APPDATA%/cline/mcp_settings.json`
+
+2. Add server configuration:
+
+```json
+{
+  "mcpServers": {
+    "ebay": {
+      "command": "node",
+      "args": ["/absolute/path/to/ebay-api-mcp-server/build/index.js"],
+      "env": {
+        "EBAY_CLIENT_ID": "your_client_id",
+        "EBAY_CLIENT_SECRET": "your_client_secret",
+        "EBAY_ENVIRONMENT": "sandbox",
+        "EBAY_REDIRECT_URI": "https://your-app.com/callback"
+      }
+    }
+  }
+}
+```
+
+3. Restart VS Code or reload Cline extension
+
+#### With Continue (VS Code Extension)
+
+1. Locate Continue config file:
+   - **macOS/Linux**: `~/.continue/config.json`
+   - **Windows**: `%USERPROFILE%/.continue/config.json`
+
+2. Add server configuration:
+
+```json
+{
+  "mcpServers": {
+    "ebay": {
+      "command": "node",
+      "args": ["/absolute/path/to/ebay-api-mcp-server/build/index.js"],
+      "env": {
+        "EBAY_CLIENT_ID": "your_client_id",
+        "EBAY_CLIENT_SECRET": "your_client_secret",
+        "EBAY_ENVIRONMENT": "sandbox",
+        "EBAY_REDIRECT_URI": "https://your-app.com/callback"
+      }
+    }
+  }
+}
+```
+
+3. Restart VS Code or reload Continue extension
+
+#### With Zed
+
+1. Locate Zed settings file:
+   - **macOS/Linux**: `~/.config/zed/settings.json`
+   - **Windows**: `%APPDATA%/Zed/settings.json`
+
+2. Add server configuration (**Note:** Zed uses `context_servers` instead of `mcpServers`):
+
+```json
+{
+  "context_servers": {
+    "ebay": {
+      "command": {
+        "path": "node",
+        "args": ["/absolute/path/to/ebay-api-mcp-server/build/index.js"],
+        "env": {
+          "EBAY_CLIENT_ID": "your_client_id",
+          "EBAY_CLIENT_SECRET": "your_client_secret",
+          "EBAY_ENVIRONMENT": "sandbox",
+          "EBAY_REDIRECT_URI": "https://your-app.com/callback"
+        }
+      }
+    }
+  }
+}
+```
+
+3. Restart Zed
 
 </details>
 
