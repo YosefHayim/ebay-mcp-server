@@ -19,7 +19,7 @@ npm run auto-setup
 1. **Validates Environment**: Checks `.env` file for required eBay credentials
 2. **Detects MCP Clients**: Automatically finds installed MCP clients (Claude Desktop, Gemini, ChatGPT)
 3. **Generates Configurations**: Creates/updates MCP client config files with your credentials
-4. **Creates Token File**: Generates `.ebay-mcp-tokens.json` if user tokens are in `.env`
+4. **Validates Tokens**: Checks if user refresh token is present in `.env` for high rate limits
 
 #### Requirements
 
@@ -204,9 +204,9 @@ When adding a new script:
 ## Security
 
 - **Never commit `.env` files** - Already protected in `.gitignore`
-- **Never commit `.ebay-mcp-tokens.json`** - Already protected in `.gitignore`
-- **Set restrictive permissions**: `chmod 600 .env .ebay-mcp-tokens.json`
+- **Set restrictive permissions**: `chmod 600 .env`
 - **Rotate tokens regularly**, especially if exposed
+- **All tokens stored in .env only** - No separate token files created
 
 ---
 

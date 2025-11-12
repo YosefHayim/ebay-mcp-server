@@ -32,7 +32,7 @@ This document provides performance optimization strategies, benchmarks, and best
 1. **eBay API Rate Limits** - Primary constraint (see [Rate Limiting](#rate-limiting))
 2. **Network Latency** - eBay API response time (100-500ms typical)
 3. **Token Refresh** - OAuth token refresh adds ~1s every 2 hours
-4. **File I/O** - Token storage (.ebay-mcp-tokens.json) on every update
+4. **File I/O** - Token storage (.env (tokens stored as EBAY_USER_REFRESH_TOKEN)) on every update
 
 ---
 
@@ -98,7 +98,7 @@ if (error.response?.status === 429) {
 
 ### Token Caching
 
-**File-Based Token Cache** (`.ebay-mcp-tokens.json`):
+**File-Based Token Cache** (`.env (tokens stored as EBAY_USER_REFRESH_TOKEN)`):
 - **Write**: Only on token change (refresh, new user auth)
 - **Read**: Once on startup, then in-memory
 - **TTL**: Access token ~2 hours, refresh token ~18 months

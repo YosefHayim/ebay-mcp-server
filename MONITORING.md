@@ -480,7 +480,7 @@ app.get('/health/ready', async (req, res) => {
 
 async function checkTokenStorage() {
   try {
-    const tokenPath = '.ebay-mcp-tokens.json';
+    const tokenPath = '.env (tokens stored as EBAY_USER_REFRESH_TOKEN)';
     await fs.promises.access(tokenPath, fs.constants.R_OK | fs.constants.W_OK);
     return 'ok';
   } catch {

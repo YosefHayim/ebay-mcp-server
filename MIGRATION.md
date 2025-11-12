@@ -131,7 +131,7 @@ npm install ebay-api-mcp-server@^1.0.0
 npm run clean && npm run build
 ```
 
-Token files (`.ebay-mcp-tokens.json`) are forward and backward compatible.
+Token files (`.env (tokens stored as EBAY_USER_REFRESH_TOKEN)`) are forward and backward compatible.
 
 ---
 
@@ -157,7 +157,7 @@ Token files (`.ebay-mcp-tokens.json`) are forward and backward compatible.
    - Enhanced streaming support
 
 4. **Token Storage Format Change**
-   - Migration script: `.ebay-mcp-tokens.json` → `.ebay-mcp-tokens-v2.json`
+   - Migration script: `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)` → `.ebay-mcp-tokens-v2.json`
    - New fields: `tokenVersion`, `lastRefresh`, `scopeChangelog`
 
 5. **Environment Variable Renaming**
@@ -182,7 +182,7 @@ We will provide:
 #### Pre-Migration Checklist (v2.0)
 
 - [ ] Upgrade to latest v1.x (v1.1.7+) first
-- [ ] Backup `.ebay-mcp-tokens.json`
+- [ ] Backup `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)`
 - [ ] Review CHANGELOG.md for v2.0 breaking changes
 - [ ] Test in sandbox environment
 - [ ] Update CI/CD pipelines for Node.js 20+
@@ -211,7 +211,7 @@ We will provide:
 
 3. **Token Storage Location**
    - Old: `.ebay-tokens.json`
-   - New: `.ebay-mcp-tokens.json`
+   - New: `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)`
    - Migration: Rename file manually
 
 4. **Response Format Standardization**
@@ -300,7 +300,7 @@ New fields will be added:
 npx ebay-mcp migrate-tokens
 
 # Manual migration
-cp .ebay-mcp-tokens.json .ebay-mcp-tokens.json.backup
+cp .env (tokens stored as EBAY_USER_REFRESH_TOKEN) .env (tokens stored as EBAY_USER_REFRESH_TOKEN).backup
 node scripts/migrate-tokens-v2.js
 ```
 
@@ -409,7 +409,7 @@ npm run build
 **Solution**:
 ```bash
 # Re-authenticate
-rm .ebay-mcp-tokens.json
+rm .env (tokens stored as EBAY_USER_REFRESH_TOKEN)
 # Restart server and generate new OAuth URL
 npm run dev
 ```
@@ -444,7 +444,7 @@ npm run test
 
 1. Read [CHANGELOG.md](CHANGELOG.md) for detailed version history
 2. Check [GitHub Issues](https://github.com/YosefHayim/ebay-api-mcp-server/issues) for known migration issues
-3. Backup your `.ebay-mcp-tokens.json` and `mcp-setup.json`
+3. Backup your `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)` and `mcp-setup.json`
 
 ### During Migration
 

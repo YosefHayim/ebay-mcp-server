@@ -6,7 +6,7 @@
  * This script automatically:
  * 1. Detects installed MCP clients (Claude Desktop, Gemini, ChatGPT)
  * 2. Generates MCP client configurations from .env
- * 3. Creates .ebay-mcp-tokens.json from env tokens
+ * 3. Validates environment tokens configuration
  * 4. Validates the setup
  *
  * Usage: npm run auto-setup (or runs automatically after npm install)
@@ -190,46 +190,21 @@ function updateClientConfig(client: MCPClient, serverConfig: MCPServerConfig): b
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Token File Generation
+// Token Validation (Environment-based only)
 // ═══════════════════════════════════════════════════════════════════════════
 
-interface TokenFile {
-  userAccessToken?: string;
-  userRefreshToken?: string;
-  userAccessTokenExpiry?: number;
-  userRefreshTokenExpiry?: number;
-  scope?: string;
-  environment: string;
-}
+function validateTokens(): boolean {
+  // Check if user refresh token is provided in .env
+  const hasUserRefreshToken = process.env.EBAY_USER_REFRESH_TOKEN;
 
-function createTokenFile(): boolean {
-  const tokenFilePath = join(PROJECT_ROOT, '.ebay-mcp-tokens.json');
-
-  // Check if user tokens are provided in .env
-  const hasUserTokens =
-    process.env.EBAY_USER_ACCESS_TOKEN && process.env.EBAY_USER_REFRESH_TOKEN;
-
-  if (!hasUserTokens) {
-    printInfo('No user tokens in .env - will use app tokens (1k req/day)');
-    printInfo('For higher rate limits, add EBAY_USER_ACCESS_TOKEN and EBAY_USER_REFRESH_TOKEN');
+  if (!hasUserRefreshToken) {
+    printInfo('No EBAY_USER_REFRESH_TOKEN in .env - will use app tokens (1k req/day)');
+    printInfo('For higher rate limits (10k-50k req/day), add EBAY_USER_REFRESH_TOKEN to .env');
     return true; // Not an error, just informational
   }
 
-  try {
-    const tokenData: TokenFile = {
-      userAccessToken: process.env.EBAY_USER_ACCESS_TOKEN,
-      userRefreshToken: process.env.EBAY_USER_REFRESH_TOKEN,
-      environment: process.env.EBAY_ENVIRONMENT || 'sandbox',
-    };
-
-    // Create token file
-    writeFileSync(tokenFilePath, JSON.stringify(tokenData, null, 2));
-    printSuccess('Created .ebay-mcp-tokens.json with user tokens');
-    return true;
-  } catch (error) {
-    printError(`Failed to create token file: ${error}`);
-    return false;
-  }
+  printSuccess('User refresh token found in .env - high rate limits enabled');
+  return true;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -338,9 +313,9 @@ async function main(): Promise<void> {
     print('\nStep 3/4: Skipping config generation (no clients detected)');
   }
 
-  // Step 4: Create token file
-  print('\nStep 4/4: Setting up token persistence...');
-  createTokenFile();
+  // Step 4: Validate tokens
+  print('\nStep 4/4: Validating token configuration...');
+  validateTokens();
 
   // Final summary
   printHeader('Setup Complete! 🎉');

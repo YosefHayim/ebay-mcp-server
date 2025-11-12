@@ -20,9 +20,8 @@ eslint.config.js
 .env.*
 .env.example
 
-# OAuth tokens (sensitive)
+# OAuth tokens (sensitive, but stored in .env only)
 .ebay-tokens.json
-.ebay-mcp-tokens.json
 
 # Build artifacts to exclude
 build/**/*.map

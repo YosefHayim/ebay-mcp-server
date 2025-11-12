@@ -47,7 +47,7 @@ For each detected client, the script:
 
 ### 4. Token File Creation
 
-If user tokens are present in `.env`, the script creates `.ebay-mcp-tokens.json`:
+If user tokens are present in `.env`, the script creates `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)`:
 
 ```json
 {
@@ -105,7 +105,7 @@ npm run auto-setup
 }
 ```
 
-### Token File (.ebay-mcp-tokens.json)
+### Token File (.env (tokens stored as EBAY_USER_REFRESH_TOKEN))
 
 ```json
 {
@@ -228,7 +228,7 @@ build/
   scripts/
     auto-setup.js          # Compiled script
 .env                       # User configuration
-.ebay-mcp-tokens.json      # Auto-generated token file
+.env (tokens stored as EBAY_USER_REFRESH_TOKEN)      # Auto-generated token file
 ```
 
 ### Dependencies

@@ -246,7 +246,7 @@ use_mcp_tool("ebay_set_user_tokens_with_expiry", {
 }
 ```
 
-The tokens are now stored in `.ebay-mcp-tokens.json` and will be used for all API calls.
+The tokens are now stored in `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)` and will be used for all API calls.
 
 #### 3.5 Verify Token Status
 
@@ -301,13 +301,13 @@ The server **automatically refreshes** access tokens when they expire:
 2. Server calls eBay's refresh token endpoint
 3. New access token is obtained
 4. Request is retried with new token
-5. New token is saved to `.ebay-mcp-tokens.json`
+5. New token is saved to `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)`
 
 **You don't need to do anything!** Refresh happens transparently in the background.
 
 ### Token Storage Location
 
-Tokens are stored in `.ebay-mcp-tokens.json` in the project root:
+Tokens are stored in `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)` in the project root:
 
 ```json
 {
@@ -322,7 +322,7 @@ Tokens are stored in `.ebay-mcp-tokens.json` in the project root:
 
 **Security Best Practices**:
 - ✅ File is in `.gitignore` (already configured)
-- ✅ Set restrictive permissions: `chmod 600 .ebay-mcp-tokens.json`
+- ✅ Set restrictive permissions: `chmod 600 .env (tokens stored as EBAY_USER_REFRESH_TOKEN)`
 - ✅ Never commit to version control
 - ✅ Back up securely (encrypted backups only)
 
@@ -422,7 +422,7 @@ For full API access, use:
 **Cause**: Refresh token expired or invalid.
 
 **Solution**:
-1. Delete `.ebay-mcp-tokens.json`
+1. Delete `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)`
 2. Repeat [User Token Flow](#3-user-token-flow-recommended) to get new tokens
 3. Refresh tokens expire after ~18 months, requiring re-authorization
 
@@ -448,13 +448,13 @@ For full API access, use:
 
 ```bash
 # View token file contents
-cat .ebay-mcp-tokens.json | jq
+cat .env (tokens stored as EBAY_USER_REFRESH_TOKEN) | jq
 
 # Check token file permissions (should be 600)
-ls -l .ebay-mcp-tokens.json
+ls -l .env (tokens stored as EBAY_USER_REFRESH_TOKEN)
 
 # Set correct permissions
-chmod 600 .ebay-mcp-tokens.json
+chmod 600 .env (tokens stored as EBAY_USER_REFRESH_TOKEN)
 ```
 
 ### Enable Debug Logging

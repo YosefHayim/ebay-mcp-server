@@ -1,5 +1,4 @@
 import type { EbaySellerApi } from '@/api/index.js';
-import { TokenStorage } from '@/auth/token-storage.js';
 import { getOAuthAuthorizationUrl, validateScopes } from '@/config/environment.js';
 import {
   accountTools,
@@ -317,36 +316,25 @@ export async function executeTool(
         // Set tokens (will use defaults if expiry times not provided)
         await api.setUserTokens(accessToken, refreshToken, accessExpiry, refreshExpiry);
 
-        // Load stored tokens to check expiry status
-        const storedTokens = await TokenStorage.loadTokens();
-
-        // If autoRefresh is enabled and access token is expired but refresh token is valid
-        if (
-          autoRefresh &&
-          storedTokens &&
-          TokenStorage.isUserAccessTokenExpired(storedTokens) &&
-          !TokenStorage.isUserRefreshTokenExpired(storedTokens)
-        ) {
+        // If autoRefresh is enabled, attempt to get a fresh access token
+        // (The OAuth client will handle refresh internally if needed)
+        if (autoRefresh) {
           try {
-            // Force a refresh by calling getAccessToken
             const authClient = api.getAuthClient().getOAuthClient();
             await authClient.getAccessToken();
-
-            // Get updated token info
-            const updatedTokenInfo = api.getTokenInfo();
 
             return {
               success: true,
               message:
-                'User tokens stored successfully. Access token was expired, so it was automatically refreshed.',
-              tokenInfo: updatedTokenInfo,
+                'User tokens stored successfully in memory. Access token validated and refreshed if needed. To persist tokens, update EBAY_USER_REFRESH_TOKEN in .env file.',
+              tokenInfo: api.getTokenInfo(),
               refreshed: true,
             };
           } catch (refreshError) {
             return {
               success: true,
               message:
-                'User tokens stored, but failed to refresh expired access token. You may need to re-authorize.',
+                'User tokens stored, but failed to validate/refresh access token. You may need to re-authorize.',
               tokenInfo: api.getTokenInfo(),
               refreshed: false,
               refreshError: refreshError instanceof Error ? refreshError.message : 'Unknown error',
@@ -357,7 +345,7 @@ export async function executeTool(
         return {
           success: true,
           message:
-            'User tokens successfully stored. These tokens will be used for all subsequent API requests and will be automatically refreshed when needed.',
+            'User tokens successfully stored in memory. These tokens will be used for all subsequent API requests and will be automatically refreshed when needed. To persist tokens, update EBAY_USER_REFRESH_TOKEN in .env file.',
           tokenInfo: api.getTokenInfo(),
           refreshed: false,
         };

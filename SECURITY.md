@@ -48,16 +48,16 @@ Security vulnerabilities we consider in-scope:
 
 ### Token Security
 
-#### `.ebay-mcp-tokens.json` File
+#### `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)` File
 
 This file contains sensitive OAuth tokens and **MUST** be protected:
 
 ```bash
 # Set restrictive permissions (Unix/Linux/macOS)
-chmod 600 .ebay-mcp-tokens.json
+chmod 600 .env (tokens stored as EBAY_USER_REFRESH_TOKEN)
 
 # Verify permissions
-ls -l .ebay-mcp-tokens.json
+ls -l .env (tokens stored as EBAY_USER_REFRESH_TOKEN)
 # Should show: -rw------- (owner read/write only)
 ```
 

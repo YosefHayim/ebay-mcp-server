@@ -418,7 +418,7 @@ await use_mcp_tool("ebay_set_user_tokens", {
 ```
 
 Tokens are automatically:
-- Stored in `.ebay-mcp-tokens.json` (project root directory)
+- Stored in `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)` (project root directory)
 - Loaded on server startup
 - Refreshed when access token expires
 
@@ -453,7 +453,7 @@ npm run auto-setup
 **Step 2** (`npm run auto-setup`):
 - ✅ Detects installed MCP clients (Claude Desktop, Gemini, ChatGPT)
 - ✅ Auto-generates configs for detected clients
-- ✅ Creates `.ebay-mcp-tokens.json` if user tokens provided
+- ✅ Creates `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)` if user tokens provided
 - ✅ Backs up existing configs before modifying
 - ✅ Works on macOS, Linux, and Windows
 
@@ -493,7 +493,7 @@ For more details, see [AUTO-SETUP.md](../AUTO-SETUP.md).
 **How it works:**
 1. Configure eBay credentials in your MCP client config (e.g., `claude_desktop_config.json`)
 2. Use the `ebay_set_user_tokens` tool to save tokens
-3. Tokens automatically persist to `.ebay-mcp-tokens.json`
+3. Tokens automatically persist to `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)`
 
 **Example Configuration:**
 
@@ -535,7 +535,7 @@ Parameters:
 #### Token File Location & Security
 
 **File Location:**
-- Path: `.ebay-mcp-tokens.json` (project root directory, same folder as `package.json`)
+- Path: `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)` (project root directory, same folder as `package.json`)
 - Generated automatically by `npm run auto-setup` if tokens are provided in `.env`
 - Can also be created by `ebay_set_user_tokens` or `ebay_set_user_tokens_with_expiry` tools
 
@@ -543,7 +543,7 @@ Parameters:
 - ✅ Already protected in `.gitignore` (line 17) - won't be committed to git
 - ⚠️ **Recommended:** Set file permissions to user-only (600):
   ```bash
-  chmod 600 .ebay-mcp-tokens.json
+  chmod 600 .env (tokens stored as EBAY_USER_REFRESH_TOKEN)
   ```
 - ⚠️ **Never commit actual tokens to version control**
 - ⚠️ **Rotate tokens regularly** (especially if exposed)
@@ -554,13 +554,13 @@ Parameters:
 
 The server checks for tokens in this order:
 
-1. **Token File** (`.ebay-mcp-tokens.json`) - Highest priority
+1. **Token File** (`.env (tokens stored as EBAY_USER_REFRESH_TOKEN)`) - Highest priority
    - If file exists with valid tokens, use these
    - Loaded automatically on server startup
 
 2. **Runtime Token Setting** - Via `ebay_set_user_tokens` tool
    - If no file exists or tokens expired
-   - Automatically creates/updates `.ebay-mcp-tokens.json`
+   - Automatically creates/updates `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)`
 
 3. **Client Credentials** - Fallback (lowest priority)
    - Only if no user tokens available
@@ -1023,7 +1023,7 @@ Use this systematic checklist to diagnose issues:
   - [ ] `EBAY_CLIENT_SECRET` set?
   - [ ] `EBAY_ENVIRONMENT` correct (matches credentials)?
   - [ ] `EBAY_REDIRECT_URI` set (if using OAuth flow)?
-- [ ] Check token file: `cat .ebay-mcp-tokens.json` (in project root)
+- [ ] Check token file: `cat .env (tokens stored as EBAY_USER_REFRESH_TOKEN)` (in project root)
   - [ ] File exists?
   - [ ] `accessToken` present?
   - [ ] `refreshToken` present?
@@ -1053,7 +1053,7 @@ Re-authorize when:
 #### Check Token File Directly
 
 ```bash
-cat .ebay-mcp-tokens.json
+cat .env (tokens stored as EBAY_USER_REFRESH_TOKEN)
 ```
 
 (File is located in the project root directory)
@@ -1144,7 +1144,7 @@ If none of these solutions work:
 3. **Monitor Token Status** - Use `ebay_get_token_status` to check validity
 4. **Handle Refresh Gracefully** - Server auto-refreshes, but handle expiry in your app
 5. **Test in Sandbox First** - Always test scope changes in sandbox before production
-6. **Store Tokens Securely** - Protect `.ebay-mcp-tokens.json` file (in project root)
+6. **Store Tokens Securely** - Protect `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)` file (in project root)
 7. **Rotate Tokens Regularly** - Re-authorize periodically for security
 
 ### Environment-Specific Best Practices
@@ -1276,7 +1276,7 @@ await use_mcp_tool("ebay_set_user_tokens", {
 });
 ```
 
-Tokens are persisted to `.ebay-mcp-tokens.json` (project root) and auto-refreshed.
+Tokens are persisted to `.env (tokens stored as EBAY_USER_REFRESH_TOKEN)` (project root) and auto-refreshed.
 
 ### ebay_clear_tokens
 
