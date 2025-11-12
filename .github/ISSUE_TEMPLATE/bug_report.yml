@@ -1,0 +1,175 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out this form as completely as possible.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm the following before submitting
+      options:
+        - label: I have searched existing issues to avoid duplicates
+          required: true
+        - label: I have reviewed the [documentation](https://github.com/YosefHayim/ebay-api-mcp-server#readme)
+          required: true
+        - label: I am using the latest version of the package
+          required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Package Version
+      description: What version of ebay-api-mcp-server are you using?
+      placeholder: "e.g., 1.1.4"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: eBay Environment
+      description: Which eBay environment are you using?
+      options:
+        - Sandbox
+        - Production
+        - Both
+    validations:
+      required: true
+
+  - type: dropdown
+    id: transport
+    attributes:
+      label: Transport Mode
+      description: Which transport mode are you using?
+      options:
+        - STDIO (Claude Desktop, local)
+        - HTTP (with OAuth 2.1)
+        - Both
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version
+      description: Output of `node --version`
+      placeholder: "e.g., v18.17.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What OS are you using?
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - Windows (WSL)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the bug
+      placeholder: What went wrong?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the behavior
+      placeholder: |
+        1. Set up environment with...
+        2. Call tool '...'
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe the expected outcome
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe what actually occurred
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Paste any relevant error messages or logs
+      placeholder: |
+        Error: ...
+        Stack trace: ...
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Configuration
+      description: Your configuration (redact secrets!)
+      placeholder: |
+        Environment variables (redacted):
+        EBAY_ENVIRONMENT=sandbox
+        EBAY_CLIENT_ID=***redacted***
+
+        Or relevant portions of mcp-setup.json (redacted)
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Additional Context
+      description: Add screenshots or any other context about the problem
+      placeholder: Drag and drop images here or paste links
+    validations:
+      required: false
+
+  - type: dropdown
+    id: workaround
+    attributes:
+      label: Have you found a workaround?
+      description: Is there a temporary solution you've discovered?
+      options:
+        - "Yes (will describe in comments)"
+        - "No"
+        - "Not sure"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Would you like to contribute a fix?
+      description: We welcome pull requests! See CONTRIBUTING.md for guidelines.
+      options:
+        - label: "Yes, I'd like to submit a PR for this issue"
+          required: false

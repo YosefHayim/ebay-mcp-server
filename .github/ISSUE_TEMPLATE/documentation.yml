@@ -1,0 +1,164 @@
+name: 📝 Documentation
+description: Report missing, unclear, or incorrect documentation
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation! Clear docs make the project accessible to everyone.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm the following before submitting
+      options:
+        - label: I have searched existing issues for similar documentation requests
+          required: true
+        - label: I have checked all relevant documentation files (README, CLAUDE.md, etc.)
+          required: true
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation issue is this?
+      options:
+        - Missing documentation
+        - Incorrect/outdated information
+        - Unclear/confusing explanation
+        - Broken links
+        - Code examples needed
+        - Typo/grammar issue
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: location
+    attributes:
+      label: Affected Documentation
+      description: Which documentation file(s) are affected?
+      multiple: true
+      options:
+        - README.md
+        - CLAUDE.md
+        - GEMINI.md
+        - OAUTH-SETUP.md
+        - CONTRIBUTING.md
+        - SECURITY.md
+        - CHANGELOG.md
+        - ENUMS_ANALYSIS.md
+        - docs/ directory
+        - Code comments / JSDoc
+        - API tool descriptions
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Current Documentation
+      description: What does the current documentation say? (paste the relevant section or provide a link)
+      placeholder: |
+        File: README.md, line 123
+        Current text: "..."
+
+        Or provide a link to the specific section
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue Description
+      description: What's wrong, missing, or unclear about the current documentation?
+      placeholder: |
+        The current documentation doesn't explain...
+        This section is confusing because...
+        The example is outdated and uses...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Improvement
+      description: How would you improve this documentation?
+      placeholder: |
+        I suggest updating the section to explain...
+        Adding an example showing...
+        Clarifying that...
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Proposed Documentation (Optional)
+      description: If you have a specific wording or example in mind, provide it here
+      placeholder: |
+        ## Section Title
+
+        Updated text or code example...
+
+        ```typescript
+        // Example code
+        ```
+      render: markdown
+    validations:
+      required: false
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Target Audience
+      description: Who would benefit most from this documentation improvement?
+      multiple: true
+      options:
+        - New users / Getting started
+        - Developers / Contributors
+        - MCP client developers
+        - Production deployment
+        - Troubleshooting / Debugging
+        - Advanced users
+        - All users
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: How does this documentation issue affect users?
+      placeholder: |
+        Users can't...
+        This causes confusion when...
+        Without this information, users might...
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information, screenshots, or related issues
+      placeholder: |
+        Screenshot showing the confusing part...
+        Related to issue #123...
+        Similar to how other projects document this...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Would you like to contribute the fix?
+      description: We welcome documentation PRs! See CONTRIBUTING.md for guidelines.
+      options:
+        - label: "Yes, I'd like to submit a PR for this documentation change"
+          required: false

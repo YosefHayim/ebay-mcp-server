@@ -2,14 +2,17 @@
 
 <div align="center">
 
+[![npm version](https://img.shields.io/npm/v/ebay-api-mcp-server)](https://www.npmjs.com/package/ebay-api-mcp-server)
 [![MCP](https://img.shields.io/badge/MCP-1.21.1-blue)](https://modelcontextprotocol.io)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)](https://nodejs.org/)
+[![Tests](https://img.shields.io/badge/tests-870%20passing-brightgreen)](tests/)
+[![Coverage](https://img.shields.io/badge/coverage-99%25%2B-brightgreen)](tests/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A comprehensive [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that provides AI assistants with full access to eBay's Sell APIs through 170+ tools for inventory management, order fulfillment, marketing campaigns, analytics, and more.
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Configuration](#-configuration) • [OAuth Setup](#-oauth-setup) • [Documentation](#-documentation) • [Contributing](#-contributing)
+[Features](#-features) • [Quick Start](#-quick-start) • [Configuration](#-configuration) • [OAuth Setup](#-oauth-setup) • [Documentation](#-documentation) • [Community](#-community) • [Contributing](#-contributing)
 
 </div>
 
@@ -30,6 +33,7 @@ A comprehensive [Model Context Protocol (MCP)](https://modelcontextprotocol.io) 
 - [Development](#-development)
 - [Testing](#-testing)
 - [Troubleshooting](#-troubleshooting)
+- [Community](#-community)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -39,13 +43,14 @@ A comprehensive [Model Context Protocol (MCP)](https://modelcontextprotocol.io) 
 
 ### Core Capabilities
 
-- **170+ eBay API Tools** - Comprehensive coverage of eBay Sell APIs
+- **170+ eBay API Tools** - Comprehensive coverage of eBay Sell APIs across 9 categories
 - **Dual Transport Modes** - STDIO (local) and HTTP with OAuth 2.1 (remote multi-user)
 - **OAuth 2.0 Support** - Full user token management with automatic refresh
-- **Token Persistence** - Secure file-based storage across sessions
-- **Type Safety** - Built with TypeScript, Zod validation, and OpenAPI-generated types
-- **Smart Authentication** - Automatic fallback from user tokens to client credentials
-- **Centralized Configuration** - Single source of truth with `mcp-setup.json`
+- **Token Persistence** - Secure file-based storage across sessions with `.ebay-mcp-tokens.json`
+- **Type Safety** - Built with TypeScript, Zod validation, OpenAPI-generated types, and 33+ native enums
+- **Smart Authentication** - Automatic fallback from user tokens (10k-50k req/day) to client credentials (1k req/day)
+- **Centralized Configuration** - Single source of truth with `mcp-setup.json` and automated setup scripts
+- **Comprehensive Testing** - 870+ tests with 99%+ function coverage and 85%+ line coverage
 
 ### API Coverage
 
@@ -401,12 +406,17 @@ This server is compatible with the following MCP clients:
 
 ### Development
 - [Architecture Guide](CLAUDE.md) - Project structure and design patterns
+- [Contributing Guide](CONTRIBUTING.md) - How to contribute to this project
+- [Security Policy](SECURITY.md) - Vulnerability reporting and security best practices
 - [API Documentation](docs/) - OpenAPI specifications for all eBay APIs
+- [Enum Types Documentation](docs/ENUMS_ANALYSIS.md) - Comprehensive enum catalog and migration guide
 - [Scripts Documentation](scripts/README.md) - Build and setup scripts
+- [Changelog](CHANGELOG.md) - Version history and release notes
 
 ### Resources
 - [eBay Developer Portal](https://developer.ebay.com/) - API documentation and keys
 - [MCP Documentation](https://modelcontextprotocol.io/) - Model Context Protocol spec
+- [GitHub Discussions](https://github.com/YosefHayim/ebay-api-mcp-server/discussions) - Community discussions and Q&A
 - [Issue Tracker](https://github.com/YosefHayim/ebay-api-mcp-server/issues) - Report bugs and request features
 
 ---
@@ -593,25 +603,83 @@ EBAY_DEBUG=true
 
 ---
 
+## 👥 Community
+
+### Getting Help
+
+We have multiple channels for getting help and engaging with the community:
+
+- **[GitHub Discussions](https://github.com/YosefHayim/ebay-api-mcp-server/discussions)** - Ask questions, share ideas, and discuss with the community
+- **[Issue Tracker](https://github.com/YosefHayim/ebay-api-mcp-server/issues)** - Report bugs or request features using our templates
+- **[Documentation](https://github.com/YosefHayim/ebay-api-mcp-server#readme)** - Comprehensive guides and API references
+
+### Reporting Issues
+
+We use structured issue templates to help us resolve problems quickly:
+
+- **[🐛 Bug Report](.github/ISSUE_TEMPLATE/bug_report.yml)** - Report unexpected behavior or errors
+- **[✨ Feature Request](.github/ISSUE_TEMPLATE/feature_request.yml)** - Suggest new features or enhancements
+- **[📝 Documentation](.github/ISSUE_TEMPLATE/documentation.yml)** - Report missing or unclear documentation
+
+Before opening an issue, please:
+1. Search existing issues to avoid duplicates
+2. Review the [documentation](https://github.com/YosefHayim/ebay-api-mcp-server#readme)
+3. Use the appropriate template for your issue type
+
+### Security Vulnerabilities
+
+**Please DO NOT report security vulnerabilities through public GitHub issues.**
+
+Instead, use one of these secure channels:
+- **[GitHub Security Advisories](https://github.com/YosefHayim/ebay-api-mcp-server/security/advisories/new)** (recommended) - Private vulnerability reporting
+- **Email**: See [SECURITY.md](SECURITY.md) for contact details
+
+For more information, see our [Security Policy](SECURITY.md).
+
+---
+
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
+We welcome contributions of all kinds! Whether you're fixing bugs, adding features, improving documentation, or helping with tests, your contributions are valued.
 
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
-3. **Make your changes**
-4. **Run tests** (`npm run test`)
-5. **Commit your changes** (`git commit -m 'feat: add amazing feature'`)
-6. **Push to branch** (`git push origin feature/amazing-feature`)
-7. **Open a Pull Request**
+### Quick Start for Contributors
+
+1. **Read the guidelines** - Review [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions
+2. **Fork the repository** - Create your own copy of the project
+3. **Create a feature branch** - `git checkout -b feature/amazing-feature`
+4. **Make your changes** - Follow our coding standards
+5. **Run tests** - `npm run test` (ensure 90%+ coverage)
+6. **Commit your changes** - Use [Conventional Commits](https://www.conventionalcommits.org/): `git commit -m 'feat: add amazing feature'`
+7. **Push to your fork** - `git push origin feature/amazing-feature`
+8. **Open a Pull Request** - Use our [PR template](.github/pull_request_template.md)
 
 ### Development Guidelines
 
-- Follow TypeScript best practices
-- Add tests for new features
-- Update documentation
-- Use conventional commits
-- Ensure all checks pass (`npm run check`)
+Before submitting your pull request, ensure:
+
+- ✅ Code follows TypeScript best practices and project style
+- ✅ All tests pass (`npm run test`)
+- ✅ Test coverage meets thresholds (90%+ on critical paths)
+- ✅ Code is properly formatted (`npm run format`)
+- ✅ Linting passes (`npm run lint`)
+- ✅ Type checking passes (`npm run typecheck`)
+- ✅ Documentation is updated (README, JSDoc comments, etc.)
+- ✅ Commits follow [Conventional Commits](https://www.conventionalcommits.org/) specification
+- ✅ CHANGELOG.md is updated (if applicable)
+
+### Types of Contributions
+
+We welcome these types of contributions:
+
+- 🐛 **Bug Fixes** - Fix issues and improve reliability
+- ✨ **New Features** - Add new eBay API tools or MCP capabilities
+- 📝 **Documentation** - Improve guides, examples, or API references
+- 🧪 **Tests** - Increase test coverage or improve test quality
+- 🎨 **Code Quality** - Refactoring, performance improvements, or style fixes
+- 🌐 **Translations** - Help translate documentation
+- 💡 **Ideas** - Share suggestions in [Discussions](https://github.com/YosefHayim/ebay-api-mcp-server/discussions)
+
+For detailed guidelines, code examples, and testing requirements, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 

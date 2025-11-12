@@ -1,0 +1,164 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! We appreciate your input in making this project better.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm the following before submitting
+      options:
+        - label: I have searched existing issues and discussions for similar requests
+          required: true
+        - label: This is a feature request, not a bug report (use bug template for bugs)
+          required: true
+        - label: I have reviewed the [documentation](https://github.com/YosefHayim/ebay-api-mcp-server#readme) and this feature doesn't exist
+          required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: Which area does this feature relate to?
+      options:
+        - New eBay API Tool
+        - API Enhancement (existing tool)
+        - Authentication / OAuth
+        - Configuration / Setup
+        - Performance / Optimization
+        - Testing / Quality
+        - Documentation
+        - Developer Experience
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: |
+        I'm frustrated when...
+        Currently, it's difficult to...
+        There's no way to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like to see
+      placeholder: |
+        I'd like to have...
+        It should work by...
+        This would help by...
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: How would this feature be used? Provide specific examples.
+      placeholder: |
+        Example scenario:
+        1. User wants to...
+        2. They would use this feature to...
+        3. The result would be...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What alternative solutions or features have you considered?
+      placeholder: |
+        I considered...
+        Another approach could be...
+        Currently, the workaround is...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - "Critical - Blocking my use case"
+        - "High - Important for my workflow"
+        - "Medium - Would be nice to have"
+        - "Low - Small improvement"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: breaking
+    attributes:
+      label: Breaking Changes
+      description: Would this require breaking changes to the API?
+      options:
+        - "No - Backwards compatible"
+        - "Maybe - Needs discussion"
+        - "Yes - Breaking change required"
+        - "Not sure"
+    validations:
+      required: false
+
+  - type: textarea
+    id: api-reference
+    attributes:
+      label: eBay API Reference (if applicable)
+      description: If this relates to an eBay API, provide links to eBay's documentation
+      placeholder: |
+        https://developer.ebay.com/api-docs/sell/...
+    validations:
+      required: false
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Code Examples / Mockups
+      description: Show how you envision using this feature (code snippets, screenshots, etc.)
+      placeholder: |
+        ```typescript
+        // Example usage
+        await api.newFeature({
+          param: 'value'
+        });
+        ```
+      render: typescript
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or references
+      placeholder: Links to similar implementations, screenshots, related issues, etc.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: implementation
+    attributes:
+      label: Implementation
+      description: Are you willing to contribute to this feature?
+      options:
+        - label: "I'd like to implement this feature myself and submit a PR"
+          required: false
+        - label: "I can help review/test the implementation"
+          required: false
+        - label: "I can provide additional information/clarification as needed"
+          required: false
