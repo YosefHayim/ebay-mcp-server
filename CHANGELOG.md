@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2025-01-13
+
 ### Added
 - **Interactive Setup Wizard**: Beautiful CLI tool for easy configuration
   - eBay-branded ASCII logo with brand colors (red, blue, yellow, green)
