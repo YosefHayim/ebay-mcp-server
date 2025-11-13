@@ -464,8 +464,8 @@ async function main() {
       });
     }
 
-  } catch (error: any) {
-    if (error.message === 'User force closed the prompt') {
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === 'User force closed the prompt') {
       console.log(chalk.gray('\n\nSetup cancelled by user.\n'));
       process.exit(0);
     }

@@ -57,7 +57,7 @@ export interface StoredTokenData {
   scope?: string;
 }
 
-export interface EbayApiResponse<T = any> {
+export interface EbayApiResponse<T = unknown> {
   data: T;
   warnings?: {
     category: string;

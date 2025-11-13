@@ -3,6 +3,12 @@ import { getBaseUrl } from '@/config/environment.js';
 import type { EbayApiError, EbayConfig } from '@/types/ebay.js';
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios';
 
+// Extended Axios config with retry tracking
+interface AxiosConfigWithRetry extends AxiosRequestConfig {
+  __authRetryCount?: number;
+  __retryCount?: number;
+}
+
 /**
  * Rate limit tracking
  */
@@ -99,15 +105,15 @@ export class EbayApiClient {
       },
       async (error: AxiosError) => {
         const axiosError = error;
-        const config = axiosError.config;
+        const config = axiosError.config as AxiosConfigWithRetry | undefined;
 
         // Handle authentication errors (401 Unauthorized)
         if (axiosError.response?.status === 401) {
-          const retryCount = (config as any).__authRetryCount || 0;
+          const retryCount = config?.__authRetryCount || 0;
 
           // Only retry once to avoid infinite loops
-          if (retryCount === 0) {
-            (config as any).__authRetryCount = 1;
+          if (retryCount === 0 && config) {
+            config.__authRetryCount = 1;
 
             console.error(
               'eBay API authentication error (401). Attempting to refresh user token...'
@@ -170,11 +176,11 @@ export class EbayApiClient {
         }
 
         // Handle server errors with retry suggestion (500, 502, 503, 504)
-        if (axiosError.response?.status && axiosError.response.status >= 500) {
-          const retryCount = (config as any).__retryCount || 0;
+        if (axiosError.response?.status && axiosError.response.status >= 500 && config) {
+          const retryCount = config.__retryCount || 0;
 
           if (retryCount < 3) {
-            (config as any).__retryCount = retryCount + 1;
+            config.__retryCount = retryCount + 1;
             const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff
 
             console.error(

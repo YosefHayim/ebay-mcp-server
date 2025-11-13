@@ -11,6 +11,7 @@ export interface OAuthServerMetadata {
   token_endpoint: string;
   registration_endpoint?: string;
   jwks_uri?: string;
+  introspection_endpoint?: string;
   response_types_supported: string[];
   grant_types_supported?: string[];
   token_endpoint_auth_methods_supported?: string[];

@@ -187,7 +187,9 @@ async function createApp(): Promise<express.Application> {
         toolDef.name,
         {
           description: toolDef.description,
-          inputSchema: toolDef.inputSchema as any,
+          // ToolDefinition uses Zod schemas internally, but MCP SDK accepts various schema formats
+          // The type assertion here bridges the gap between our Zod-based definitions and MCP's flexible schema type
+          inputSchema: toolDef.inputSchema as Record<string, unknown>,
         },
         async (args: Record<string, unknown>) => {
           try {

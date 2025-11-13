@@ -372,4 +372,28 @@ export class EbayOAuthClient {
 
     return info;
   }
+
+  /**
+   * Get internal user tokens (for debugging/status tools)
+   * @internal
+   */
+  getUserTokens(): StoredTokenData | null {
+    return this.userTokens;
+  }
+
+  /**
+   * Get internal app access token cached value (for debugging/status tools)
+   * @internal
+   */
+  getCachedAppAccessToken(): string | null {
+    return this.appAccessToken;
+  }
+
+  /**
+   * Get internal app access token expiry (for debugging/status tools)
+   * @internal
+   */
+  getCachedAppAccessTokenExpiry(): number {
+    return this.appAccessTokenExpiry;
+  }
 }

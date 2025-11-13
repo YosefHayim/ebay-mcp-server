@@ -375,7 +375,9 @@ export async function executeTool(
       };
 
       // Get internal token details from the auth client
-      const internalTokens = (authClient as any).userTokens;
+      const internalTokens = authClient.getUserTokens();
+      const appToken = authClient.getCachedAppAccessToken();
+      const appTokenExpiry = authClient.getCachedAppAccessTokenExpiry();
 
       return {
         credentials: {
@@ -403,14 +405,12 @@ export async function executeTool(
               expired: Date.now() >= internalTokens.userRefreshTokenExpiry,
             }
             : 'Not available',
-          appToken: (authClient as any).appAccessToken
-            ? maskToken((authClient as any).appAccessToken)
-            : 'Not cached',
-          appTokenExpiry: (authClient as any).appAccessTokenExpiry
+          appToken: appToken ? maskToken(appToken) : 'Not cached',
+          appTokenExpiry: appTokenExpiry
             ? {
-              timestamp: (authClient as any).appAccessTokenExpiry,
-              date: new Date((authClient as any).appAccessTokenExpiry).toISOString(),
-              expired: Date.now() >= (authClient as any).appAccessTokenExpiry,
+              timestamp: appTokenExpiry,
+              date: new Date(appTokenExpiry).toISOString(),
+              expired: Date.now() >= appTokenExpiry,
             }
             : 'Not available',
         },
@@ -443,7 +443,7 @@ export async function executeTool(
         await authClient.refreshUserToken();
 
         // Get updated token info
-        const internalTokens = (authClient as any).userTokens;
+        const internalTokens = authClient.getUserTokens();
 
         return {
           success: true,

@@ -95,7 +95,7 @@ export class TokenVerifier {
     }
 
     // Check if introspection endpoint is available
-    const introspectionEndpoint = (this.metadata as any).introspection_endpoint;
+    const introspectionEndpoint = this.metadata.introspection_endpoint;
     if (!introspectionEndpoint) {
       throw new Error('Introspection endpoint not available in OAuth server metadata');
     }
