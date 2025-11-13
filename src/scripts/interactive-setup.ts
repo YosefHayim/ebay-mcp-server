@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Interactive Setup for eBay API MCP Server
  *
@@ -20,10 +19,10 @@
 
 import prompts from 'prompts';
 import chalk from 'chalk';
-import { readFileSync, writeFileSync, existsSync, copyFileSync, unlinkSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { detectLLMClients, configureLLMClient, type LLMClient } from '../utils/llm-client-detector.js';
+import { detectLLMClients, configureLLMClient, } from '../utils/llm-client-detector.js';
 import { validateSetup, displayRecommendations } from '../utils/setup-validator.js';
 import { EbaySellerApi } from '../api/index.js';
 import type { EbayConfig } from '../types/ebay.js';
@@ -42,12 +41,6 @@ const ebayColors = {
   yellow: chalk.hex('#F5AF02'),
   green: chalk.hex('#85B716'),
 };
-
-// Rotate through eBay colors for questions
-function getQuestionColor(index: number): chalk.Chalk {
-  const colors = [ebayColors.red, ebayColors.blue, ebayColors.yellow, ebayColors.green];
-  return colors[index % colors.length];
-}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CLI Arguments
