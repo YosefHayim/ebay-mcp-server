@@ -1,6 +1,7 @@
 /**
  * eBay API MCP Server with HTTP Transport and OAuth 2.1 Authorization
  *
+ *
  * This server implements:
  * - HTTP transport using Express
  * - OAuth 2.1 authorization (RFC 8414, RFC 9728)
@@ -9,6 +10,7 @@
  */
 
 import express from 'express';
+// import helmet from 'helmet';
 import cors from 'cors';
 import { randomUUID } from 'crypto';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -79,6 +81,9 @@ async function createApp(): Promise<express.Application> {
   // Enable CORS
   app.use(
     cors({
+      // TODO: Restrict origin to known clients in production
+      // For development, allow all origins
+      // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
       origin: '*',
       exposedHeaders: ['Mcp-Session-Id'],
     })
@@ -86,6 +91,9 @@ async function createApp(): Promise<express.Application> {
 
   // Parse JSON bodies
   app.use(express.json());
+
+  // Add security best practices (disable X-Powered-By header)
+  // app.use(helmet({ xPoweredBy: false }));
 
   // Request logging
   app.use((req, res, next) => {

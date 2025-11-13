@@ -4,6 +4,15 @@ This document provides a structured overview and direct links to the official eB
 
 ---
 
+## ⚙️ Application Settings and Insights
+
+These APIs are for managing your developer application, keys, and viewing analytics related to your API usage.
+
+- **Analytics API**: [Overview](https://developer.ebay.com/api-docs/developer/analytics/static/overview.html)
+- **Key Management API**: [Overview](https://developer.ebay.com/api-docs/developer/key-management/overview.html)
+- **Client Registration API**: [Overview](https://developer.ebay.com/api-docs/developer/client-registration/overview.html)
+
+
 ## 🚀 Selling Apps APIs
 
 These APIs are designed for sellers to manage their listings, orders, marketing, and account settings on eBay.
