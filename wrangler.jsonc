@@ -19,14 +19,26 @@
   ],
 
   // Secrets (set via: wrangler secret put <NAME>)
+  // eBay API Credentials:
   // - EBAY_CLIENT_ID
   // - EBAY_CLIENT_SECRET
   // - EBAY_REDIRECT_URI
-  // - EBAY_USER_REFRESH_TOKEN (optional)
-  // - OAUTH_CLIENT_ID (for MCP OAuth)
-  // - OAUTH_CLIENT_SECRET (for MCP OAuth)
-  // - OAUTH_AUTH_SERVER_URL
-  // - COOKIE_ENCRYPTION_KEY
+  // - EBAY_USER_REFRESH_TOKEN (optional, for high rate limits)
+  //
+  // OAuth 2.1 Configuration (optional, see docs/OAUTH_SETUP.md):
+  // - OAUTH_AUTH_SERVER_URL (required to enable OAuth)
+  // - OAUTH_CLIENT_ID (optional, for custom auth server)
+  // - OAUTH_CLIENT_SECRET (optional, for custom auth server)
+  // - OAUTH_REQUIRED_SCOPES (optional, defaults to "mcp:tools")
+  // - OAUTH_ENABLED (optional, set to "false" to disable)
+  //
+  // Quick Enable OAuth:
+  //   npx wrangler secret put OAUTH_AUTH_SERVER_URL
+  //   # Enter: https://claude.ai/api/oauth (for Claude Desktop)
+  //   npx wrangler deploy
+  //
+  // Other Secrets:
+  // - COOKIE_ENCRYPTION_KEY (optional, for session encryption)
 
   "observability": {
     "enabled": true
