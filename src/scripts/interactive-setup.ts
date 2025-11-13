@@ -25,6 +25,8 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { detectLLMClients, configureLLMClient, type LLMClient } from '../utils/llm-client-detector.js';
 import { validateSetup, displayRecommendations } from '../utils/setup-validator.js';
+import { EbaySellerApi } from '../api/index.js';
+import type { EbayConfig } from '../types/ebay.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -234,6 +236,92 @@ LOG_LEVEL=${config.LOG_LEVEL || 'info'}
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+// User Identity Verification
+// ═══════════════════════════════════════════════════════════════════════════
+
+async function verifyUserIdentity(config: Record<string, string>): Promise<void> {
+  // Only verify if user refresh token is configured
+  if (!config.EBAY_USER_REFRESH_TOKEN || config.EBAY_USER_REFRESH_TOKEN.trim() === '') {
+    console.log(chalk.yellow('\n⚠️  Skipping identity verification (no user token configured)\n'));
+    console.log(chalk.gray('   To verify your identity later, configure a user refresh token'));
+    console.log(chalk.gray('   and use the ebay_get_user tool.\n'));
+    return;
+  }
+
+  console.log(chalk.bold.cyan('\n🔐 Verifying User Identity...\n'));
+
+  try {
+    // Create API client with config
+    const ebayConfig: EbayConfig = {
+      clientId: config.EBAY_CLIENT_ID,
+      clientSecret: config.EBAY_CLIENT_SECRET,
+      redirectUri: config.EBAY_REDIRECT_URI,
+      environment: (config.EBAY_ENVIRONMENT || 'sandbox') as 'sandbox' | 'production',
+    };
+
+    const api = new EbaySellerApi(ebayConfig);
+    await api.initialize();
+
+    // Try to get user information
+    const userInfo = await api.identity.getUser();
+
+    // Display user information
+    console.log(chalk.green('✓ Successfully authenticated!\n'));
+    console.log(chalk.bold.white('📋 Your eBay Account Information:\n'));
+
+    if (userInfo && typeof userInfo === 'object') {
+      const user = userInfo as Record<string, unknown>;
+
+      if (user.username) {
+        console.log(`  ${chalk.cyan('Username:')} ${chalk.white(user.username)}`);
+      }
+      if (user.userId) {
+        console.log(`  ${chalk.cyan('User ID:')} ${chalk.white(user.userId)}`);
+      }
+      if (user.email) {
+        console.log(`  ${chalk.cyan('Email:')} ${chalk.white(user.email)}`);
+      }
+      if (user.registrationMarketplaceId) {
+        console.log(`  ${chalk.cyan('Marketplace:')} ${chalk.white(user.registrationMarketplaceId)}`);
+      }
+      if (user.accountType) {
+        console.log(`  ${chalk.cyan('Account Type:')} ${chalk.white(user.accountType)}`);
+      }
+
+      console.log('');
+      console.log(chalk.green('✨ Your eBay API credentials are working correctly!\n'));
+    } else {
+      console.log(chalk.yellow('  ⚠️  Received unexpected response format\n'));
+    }
+  } catch (error) {
+    console.log(chalk.red('✗ Failed to verify user identity\n'));
+
+    if (error instanceof Error) {
+      console.log(chalk.yellow(`  Error: ${error.message}\n`));
+
+      // Provide helpful hints based on error
+      if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+        console.log(chalk.gray('  Possible causes:'));
+        console.log(chalk.gray('    • Invalid or expired refresh token'));
+        console.log(chalk.gray('    • Token from different environment (sandbox vs production)'));
+        console.log(chalk.gray('    • Incorrect client credentials\n'));
+      } else if (error.message.includes('403') || error.message.includes('Forbidden')) {
+        console.log(chalk.gray('  Possible causes:'));
+        console.log(chalk.gray('    • Missing required OAuth scopes'));
+        console.log(chalk.gray('    • Token does not have permission for this API\n'));
+      } else if (error.message.includes('network') || error.message.includes('ENOTFOUND')) {
+        console.log(chalk.gray('  Possible causes:'));
+        console.log(chalk.gray('    • No internet connection'));
+        console.log(chalk.gray('    • eBay API servers are down\n'));
+      }
+    }
+
+    console.log(chalk.yellow('  💡 You can continue using the MCP server for other operations.'));
+    console.log(chalk.gray('     Fix the token issue and verify later with: ebay_get_user\n'));
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // LLM Client Detection and Configuration
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -395,6 +483,9 @@ async function runInteractiveSetup() {
 
   // Display recommendations
   displayRecommendations(summary);
+
+  // Verify user identity with real API call (if user token is configured)
+  await verifyUserIdentity(config);
 
   console.log(chalk.bold.green('✅ Setup complete!\n'));
   console.log(chalk.gray('Next steps:'));
