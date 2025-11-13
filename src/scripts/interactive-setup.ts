@@ -163,8 +163,12 @@ function validateRequired(value: string): boolean | string {
 
 function validateToken(value: string): boolean | string {
   if (!value) return true; // Optional field
-  if (!value.startsWith('v^1.1#')) {
-    return 'Token should start with "v^1.1#"';
+
+  // Strip surrounding quotes if present (user might paste with quotes)
+  const cleanValue = value.trim().replace(/^["']|["']$/g, '');
+
+  if (!cleanValue.startsWith('v^1.1#')) {
+    return 'Token should start with "v^1.1#" (quotes will be automatically removed)';
   }
   return true;
 }
@@ -346,6 +350,10 @@ async function runInteractiveSetup() {
       message: 'User Refresh Token (optional):',
       initial: existingConfig.EBAY_USER_REFRESH_TOKEN || '',
       validate: validateToken,
+      format: (value: string) => {
+        // Auto-strip quotes if user pastes token with quotes
+        return value.trim().replace(/^["']|["']$/g, '');
+      },
     },
   ]);
 
