@@ -42,9 +42,9 @@ export interface EbayAppAccessTokenResponse {
 export interface EbayUserToken {
   access_token: string;
   refresh_token: string;
-  tokenType: string;
-  expiresIn: number;
-  refreshTokenExpiresIn: number;
+  token_type: string;
+  expires_in: number;
+  refresh_token_expires_in: number;
   scope?: string;
 }
 

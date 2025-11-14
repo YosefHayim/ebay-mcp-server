@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAuthUrl, getBaseUrl, getDefaultScopes, validateScopes } from '@/config/environment.js';
+import { getAuthUrl, getBaseUrl, getDefaultScopes } from '@/config/environment.js';
 import type {
   EbayAppAccessTokenResponse,
   EbayConfig,
@@ -17,7 +17,7 @@ export class EbayOAuthClient {
   private appAccessTokenExpiry = 0;
   private userTokens: StoredTokenData | null = null;
 
-  constructor(private config: EbayConfig) {}
+  constructor(private config: EbayConfig) { }
 
   /**
    * Initialize user tokens from environment variables only
@@ -129,12 +129,12 @@ export class EbayOAuthClient {
    * Note: Tokens are loaded from .env and stored in memory only
    * To persist tokens, update the .env file with EBAY_USER_REFRESH_TOKEN
    */
-  async setUserTokens(
+  setUserTokens(
     accessToken: string,
     refreshToken: string,
     accessTokenExpiry?: number,
     refreshTokenExpiry?: number
-  ): Promise<void> {
+  ): void {
     // Store tokens in memory with default expiry
     // Access tokens typically expire in 2 hours (7200 seconds)
     // Refresh tokens typically expire in 18 months
@@ -242,9 +242,9 @@ export class EbayOAuthClient {
       };
 
       // Inform user to save refresh token to .env
-      console.error('\n✅ Token exchange successful!');
-      console.error('📝 To persist your authentication, add this to your .env file:');
-      console.error(`EBAY_USER_REFRESH_TOKEN="${tokenData.refresh_token}"\n`);
+      console.log('\nToken exchange successful!');
+      console.log('To persist your authentication, add this to your .env file:');
+      console.log(`EBAY_USER_REFRESH_TOKEN="${tokenData.refresh_token}"\n`);
 
       return tokenData;
     } catch (error) {
@@ -308,8 +308,8 @@ export class EbayOAuthClient {
         tokenData.refresh_token &&
         tokenData.refresh_token !== process.env.EBAY_USER_REFRESH_TOKEN
       ) {
-        console.error('\n⚠️  eBay issued a new refresh token!');
-        console.error('📝 Please update your .env file with:');
+        console.error('\neBay issued a new refresh token!');
+        console.error('Please update your .env file with:');
         console.error(`EBAY_USER_REFRESH_TOKEN="${tokenData.refresh_token}"\n`);
       }
     } catch (error) {
