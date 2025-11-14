@@ -1,5 +1,5 @@
 import type { EbayApiClient } from '@/api/client.js';
-import type { components } from '@/types/sell_account_v1_oas3.js';
+import type { components } from '../../types/sell-apps/account-management/sellAccountV1Oas3.js';
 
 type CustomPolicyCreateRequest = components['schemas']['CustomPolicyCreateRequest'];
 type CustomPolicyResponse = components['schemas']['CustomPolicyResponse'];
@@ -37,7 +37,7 @@ type SubscriptionResponse = components['schemas']['SubscriptionResponse'];
 export class AccountApi {
   private readonly basePath = '/sell/account/v1';
 
-  constructor(private client: EbayApiClient) {}
+  constructor(private client: EbayApiClient) { }
 
   /**
    * Get custom policies for the seller

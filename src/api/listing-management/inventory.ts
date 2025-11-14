@@ -1,4 +1,4 @@
-import type { components } from '../../types/sell-apps/listing-management/sell_inventory_v1_oas3.ts';
+import type { components } from '../../types/sell-apps/listing-management/sellInventoryV1Oas3.js';
 import type { EbayApiClient } from '../client.js';
 
 type EbayOfferDetailsWithKeys = components['schemas']['EbayOfferDetailsWithKeys'];
