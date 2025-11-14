@@ -7,7 +7,7 @@ on:
     branches: [main]
 jobs:
   install-dependencies:
-    name: ESLint & Prettier Check
+    name: Install dependencies
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -43,7 +43,7 @@ jobs:
 
   test-with-coverage:
     name: Test with coverage on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }} 
+    runs-on: ${{ matrix.os }}
     needs: install-dependencies
     strategy:
       matrix:
