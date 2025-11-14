@@ -15,15 +15,40 @@ class EbayMcpServer {
   constructor() {
     this.server = new McpServer(
       {
-        name: 'ebay-api-mcp-server',
-        version: '1.0.0',
-        title: 'eBay API MCP Server',
+        name: 'eBay API Model Context Protocol Server',
+        version: '1.4.0',
+        title: 'eBay API Model Context Protocol Server',
+        description: 'Access eBay APIs to manage listings, orders, and inventory.',
+        websiteUrl: 'https://github.com/ebay/ebay-mcp-server',
+        icons: [
+          {
+            src: './48x48.png',
+            mimeType: 'image/png',
+            sizes: ['48x48']
+          },
+          {
+            src: './128x128.png',
+            mimeType: 'image/png',
+            sizes: ['128x128']
+          },
+          {
+            src: './256x256.png',
+            mimeType: 'image/png',
+            sizes: ['256x256']
+          },
+          {
+            src: './512x512.png',
+            mimeType: 'image/png',
+            sizes: ['512x512']
+          },
+          {
+            src: './1024x1024.png',
+            mimeType: 'image/png',
+            sizes: ['1024x1024']
+          }
+        ]
       },
-      {
-        capabilities: {
-          tools: {},
-        },
-      }
+
     );
 
     // Initialize eBay API client

@@ -32,7 +32,6 @@ function getProductionScopes(): string[] {
         uniqueScopes.add(item.Scope);
       }
     });
-
     return Array.from(uniqueScopes);
   } catch (error) {
     console.error('Failed to load production scopes:', error);
@@ -179,7 +178,7 @@ export function validateEnvironmentConfig(): {
 export function getEbayConfig(): EbayConfig {
   const clientId = process.env.EBAY_CLIENT_ID;
   const clientSecret = process.env.EBAY_CLIENT_SECRET;
-  const environment = (process.env.EBAY_ENVIRONMENT || 'sandbox') as 'production' | 'sandbox';
+  const environment = (process.env.EBAY_ENVIRONMENT || 'sandbox') as 'production' | 'sandbox'
 
   if (!clientId || !clientSecret) {
     console.error(
@@ -218,6 +217,8 @@ export function getAuthUrl(environment: 'production' | 'sandbox'): string {
     : 'https://api.sandbox.ebay.com/identity/v1/oauth2/token';
 }
 
+
+// fix the fn below i am attaching example from other project that is working properly with the genreate oauth
 /**
  * Generate the OAuth authorization URL for user consent
  * This URL should be opened in a browser for the user to grant permissions
@@ -227,7 +228,7 @@ export function getOAuthAuthorizationUrl(
   redirectUri: string,
   environment: 'production' | 'sandbox',
   scopes?: string[],
-  state?: string
+  state?: string,
 ): string {
   // Use environment-specific scopes if no custom scopes provided
   const defaultScopes = getDefaultScopes(environment);
