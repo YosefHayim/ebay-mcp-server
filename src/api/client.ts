@@ -145,8 +145,8 @@ export class EbayApiClient {
 
               throw new Error(
                 `${originalError}. ` +
-                  `Token refresh failed: ${refreshError instanceof Error ? refreshError.message : 'Unknown error'}. ` +
-                  `Please use the ebay_set_user_tokens_with_expiry tool to provide valid tokens.`
+                `Token refresh failed: ${refreshError instanceof Error ? refreshError.message : 'Unknown error'}. ` +
+                `Please use the ebay_set_user_tokens_with_expiry tool to provide valid tokens.`
               );
             }
           }
@@ -160,7 +160,7 @@ export class EbayApiClient {
 
           throw new Error(
             `${errorMessage}. ` +
-              `Automatic token refresh failed. Please use the ebay_set_user_tokens_with_expiry tool to provide valid tokens.`
+            `Automatic token refresh failed. Please use the ebay_set_user_tokens_with_expiry tool to provide valid tokens.`
           );
         }
 
@@ -171,7 +171,7 @@ export class EbayApiClient {
 
           throw new Error(
             `eBay API rate limit exceeded. Retry after ${waitTime / 1000} seconds. ` +
-              `Consider reducing request frequency or upgrading to user tokens for higher limits.`
+            `Consider reducing request frequency or upgrading to user tokens for higher limits.`
           );
         }
 
@@ -185,7 +185,7 @@ export class EbayApiClient {
 
             console.error(
               `eBay API server error (${axiosError.response.status}). ` +
-                `Retrying in ${delay}ms (attempt ${retryCount + 1}/3)...`
+              `Retrying in ${delay}ms (attempt ${retryCount + 1}/3)...`
             );
 
             await new Promise((resolve) => setTimeout(resolve, Math.min(delay, 5000)));
@@ -294,14 +294,10 @@ export class EbayApiClient {
   async setUserTokens(
     accessToken: string,
     refreshToken: string,
-    accessTokenExpiry?: number,
-    refreshTokenExpiry?: number
   ): Promise<void> {
     await this.authClient.setUserTokens(
       accessToken,
       refreshToken,
-      accessTokenExpiry,
-      refreshTokenExpiry
     );
   }
 
@@ -374,7 +370,6 @@ export class EbayApiClient {
         },
         timeout: 30000,
       });
-
       return response.data;
     } catch (error) {
       // Handle 401 authentication errors with automatic token refresh
@@ -413,8 +408,8 @@ export class EbayApiClient {
 
           throw new Error(
             `${originalError}. ` +
-              `Token refresh failed: ${refreshError instanceof Error ? refreshError.message : 'Unknown error'}. ` +
-              `Please use the ebay_set_user_tokens_with_expiry tool to provide valid tokens.`
+            `Token refresh failed: ${refreshError instanceof Error ? refreshError.message : 'Unknown error'}. ` +
+            `Please use the ebay_set_user_tokens_with_expiry tool to provide valid tokens.`
           );
         }
       }

@@ -178,6 +178,7 @@ function generateEnvFile(config: Record<string, string>): void {
 # ═══════════════════════════════════════════════════════════════════
 # eBay App Credentials (Required)
 # ═══════════════════════════════════════════════════════════════════
+
 EBAY_CLIENT_ID=${config.EBAY_CLIENT_ID || 'your_client_id_here'}
 EBAY_CLIENT_SECRET=${config.EBAY_CLIENT_SECRET || 'your_client_secret_here'}
 EBAY_REDIRECT_URI=${config.EBAY_REDIRECT_URI || 'your_redirect_uri_here'}
@@ -185,6 +186,7 @@ EBAY_REDIRECT_URI=${config.EBAY_REDIRECT_URI || 'your_redirect_uri_here'}
 # ═══════════════════════════════════════════════════════════════════
 # Environment (sandbox or production)
 # ═══════════════════════════════════════════════════════════════════
+
 EBAY_ENVIRONMENT=${config.EBAY_ENVIRONMENT || 'sandbox'}
 
 # ═══════════════════════════════════════════════════════════════════
@@ -195,7 +197,10 @@ EBAY_ENVIRONMENT=${config.EBAY_ENVIRONMENT || 'sandbox'}
 # 2. Visit the URL and authorize
 # 3. Decode the callback URL to extract tokens
 # 4. Add your refresh token below
-EBAY_USER_REFRESH_TOKEN=${config.EBAY_USER_REFRESH_TOKEN || ''}
+
+EBAY_USER_REFRESH_TOKEN=${config.EBAY_USER_REFRESH_TOKEN || 'Your refresh token here (this is enough to get a new access token)'}
+EBAY_USER_ACCESS_TOKEN=${config.EBAY_USER_ACCESS_TOKEN || 'Your access token here (will automatic refresh when it is expired)'}
+EBAY_APP_ACCESS_TOKEN=${config.EBAY_APP_ACCESS_TOKEN || 'Your app access token here same infrastructure as the user access token.'}
 
 # ═══════════════════════════════════════════════════════════════════
 # Logging (Optional)
@@ -419,6 +424,26 @@ async function runInteractiveSetup() {
         return value.trim().replace(/^|$/g, '');
       },
     },
+    {
+      type: 'text',
+      name: 'EBAY_USER_ACCESS_TOKEN',
+      message: 'User Access Token (optional):',
+      initial: existingConfig.EBAY_USER_ACCESS_TOKEN || '',
+      validate: validateToken,
+      format: (value: string) => {
+        return value.trim().replace(/^|$/g, '');
+      },
+    },
+    {
+      type: 'text',
+      name: 'EBAY_APP_ACCESS_TOKEN',
+      message: 'App Access Token (optional):',
+      initial: existingConfig.EBAY_APP_ACCESS_TOKEN || '',
+      validate: validateToken,
+      format: (value: string) => {
+        return value.trim().replace(/^|$/g, '');
+      },
+    },
   ]);
 
   // Check if user cancelled
@@ -433,9 +458,9 @@ async function runInteractiveSetup() {
   console.log(`  ${chalk.gray('Client Secret:')} ${'*'.repeat(config.EBAY_CLIENT_SECRET.length)}`);
   console.log(`  ${chalk.gray('Redirect URI:')} ${config.EBAY_REDIRECT_URI}`);
   console.log(`  ${chalk.gray('Environment:')} ${config.EBAY_ENVIRONMENT}`);
-  console.log(
-    `  ${chalk.gray('User Token:')} ${config.EBAY_USER_REFRESH_TOKEN ? '✓ Configured' : '✗ Not set'}\n`
-  );
+  console.log(`  ${chalk.gray('User Refresh Token:')} ${config.EBAY_USER_REFRESH_TOKEN ? '✓ Configured' : '✗ Not set'}`);
+  console.log(`  ${chalk.gray('User Access Token:')} ${config.EBAY_USER_ACCESS_TOKEN ? '✓ Configured' : '✗ Not set'}`);
+  console.log(`  ${chalk.gray('App Access Token:')} ${config.EBAY_APP_ACCESS_TOKEN ? '✓ Configured' : '✗ Not set'}\n`);
 
   const confirmation = await prompts({
     type: 'confirm',

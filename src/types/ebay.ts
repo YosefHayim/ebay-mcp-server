@@ -55,8 +55,8 @@ export interface StoredTokenData {
   userAccessToken: string;
   userRefreshToken: string;
   tokenType: string;
-  userAccessTokenExpiry: number; // Unix timestamp in milliseconds
-  userRefreshTokenExpiry: number; // Unix timestamp in milliseconds
+  userAccessTokenExpiry?: number; // Unix timestamp in milliseconds
+  userRefreshTokenExpiry?: number; // Unix timestamp in milliseconds
   scope?: string;
 }
 
