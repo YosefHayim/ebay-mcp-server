@@ -41,6 +41,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
+      target-branch: "dev"
       interval: "weekly"
       day: "monday"
       time: "09:00"
