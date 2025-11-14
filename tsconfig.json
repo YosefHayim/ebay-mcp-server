@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    // to allow baseUrl field to work.
+    "ignoreDeprecations": "6.0",
     "target": "ES2022",
     "module": "Node16",
     "moduleResolution": "Node16",
@@ -12,9 +14,8 @@
     "declaration": true,
     "declarationMap": false,
     "sourceMap": false,
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "paths": { "@/*": ["./src/*"] },
+    "baseUrl": "."
   },
 	"include": ["src/**/*", "src/scripts/auto-setup.ts", "src/scripts/interactive-setup.ts", "src/scripts/test-endpoints.ts"],
 	"exclude": [
