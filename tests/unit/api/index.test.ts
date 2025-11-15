@@ -10,6 +10,7 @@ const mockOAuthClient = {
   initialize: vi.fn(),
   getTokenInfo: vi.fn(),
   isAuthenticated: vi.fn(),
+  getUserTokens: vi.fn(), // Add mock for getUserTokens
 };
 
 vi.mock('@/auth/oauth.js', () => ({

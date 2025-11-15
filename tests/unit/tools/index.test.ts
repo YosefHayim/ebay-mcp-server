@@ -391,10 +391,10 @@ describe('Tools Layer', () => {
       process.env.EBAY_USER_REFRESH_TOKEN = 'test-refresh-token-789';
 
       // Mock the OAuth client with internal tokens
-      const mockOAuthClient = mockApi.getAuthClient().getOAuthClient();
-      (mockOAuthClient as any).userTokens = {
+      const mockAuthClient = mockApi.getAuthClient();
+      vi.mocked(mockAuthClient.getUserTokens).mockReturnValue({
         userAccessToken: 'test-access-token-abc123',
-        userRefreshToken: 'test-refresh-token-def456',
+        refreshToken: 'test-refresh-token-def456',
         userAccessTokenExpiry: Date.now() + 3600000, // 1 hour from now
         userRefreshTokenExpiry: Date.now() + 18 * 30 * 24 * 60 * 60 * 1000, // 18 months
         scope: 'https://api.ebay.com/oauth/api_scope/sell.inventory',
@@ -448,9 +448,9 @@ describe('Tools Layer', () => {
       delete process.env.EBAY_USER_REFRESH_TOKEN;
 
       // Mock the OAuth client with no tokens
-      const mockOAuthClient = mockApi.getAuthClient().getOAuthClient();
-      (mockOAuthClient as any).userTokens = null;
-      (mockOAuthClient as any).appAccessToken = null;
+      const mockAuthClient = mockApi.getAuthClient();
+      vi.mocked(mockAuthClient.getUserTokens).mockReturnValue(null);
+      vi.mocked(mockAuthClient.getCachedAppAccessToken).mockReturnValue(null);
 
       vi.mocked(mockApi.getTokenInfo()).mockReturnValue({
         hasUserToken: false,
@@ -474,14 +474,14 @@ describe('Tools Layer', () => {
       // Mock that user tokens exist
       vi.mocked(mockApi.hasUserTokens()).mockReturnValue(true);
 
-      const mockOAuthClient = mockApi.getAuthClient().getOAuthClient();
+      const mockAuthClient = mockApi.getAuthClient();
       const mockRefreshToken = vi.fn().mockResolvedValue(undefined);
-      (mockOAuthClient as any).refreshUserToken = mockRefreshToken;
+      vi.mocked(mockAuthClient.getOAuthClient().refreshUserToken).mockImplementation(mockRefreshToken);
 
       // Set up post-refresh token state
-      (mockOAuthClient as any).userTokens = {
+      vi.mocked(mockAuthClient.getUserTokens).mockReturnValue({
         userAccessToken: 'new-access-token-123456',
-        userRefreshToken: 'test-refresh-token-def456',
+        refreshToken: 'test-refresh-token-def456',
         userAccessTokenExpiry: Date.now() + 7200000, // 2 hours
         userRefreshTokenExpiry: Date.now() + 18 * 30 * 24 * 60 * 60 * 1000,
       };
@@ -527,11 +527,11 @@ describe('Tools Layer', () => {
     it('should handle refresh token errors', async () => {
       vi.mocked(mockApi.hasUserTokens()).mockReturnValue(true);
 
-      const mockOAuthClient = mockApi.getAuthClient().getOAuthClient();
+      const mockAuthClient = mockApi.getAuthClient();
       const mockRefreshToken = vi
         .fn()
         .mockRejectedValue(new Error('Refresh token expired or invalid'));
-      (mockOAuthClient as any).refreshUserToken = mockRefreshToken;
+      vi.mocked(mockAuthClient.getOAuthClient().refreshUserToken).mockImplementation(mockRefreshToken);
 
       await expect(executeTool(mockApi, 'ebay_refresh_access_token', {})).rejects.toThrow(
         'Failed to refresh access token: Refresh token expired or invalid'
