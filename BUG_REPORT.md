@@ -154,12 +154,17 @@ Should only report tokens as "found" if they are:
 All API endpoint calls fail with HTTP 503 (Service Unavailable) when using test credentials.
 
 **Test Credentials Used:**
+
+Initial test used placeholder credentials, then retested with real sandbox credentials:
 ```bash
-EBAY_CLIENT_ID=test_client_id_12345
-EBAY_CLIENT_SECRET=test_client_secret_67890
-EBAY_REDIRECT_URI=Yosef_Hayim_Sabag-YosefHayi-eBayAP-nbhthpckx
+EBAY_CLIENT_ID='yosefsab-***-SBX-***-***6064'
+EBAY_CLIENT_SECRET='SBX-***-***-***-be1c'
+EBAY_REDIRECT_URI='yosef_sabag-***-saasds-***'
 EBAY_ENVIRONMENT=sandbox
+# Plus real user tokens (EBAY_USER_REFRESH_TOKEN, EBAY_USER_ACCESS_TOKEN, EBAY_APP_ACCESS_TOKEN)
 ```
+
+**Result:** Real credentials produced identical 503 errors, confirming these are real bugs, not credential issues.
 
 **Affected Endpoints (Sample):**
 - `GET /sell/inventory/v1/inventory_item` → 503
@@ -177,10 +182,10 @@ eBay API server error (503). Retrying in 4000ms (attempt 3/3)...
 ```
 
 **Possible Causes:**
-1. Test credentials are invalid for sandbox environment
-2. Sandbox requires valid app credentials from eBay Developer portal
-3. Missing authentication headers
-4. Sandbox environment might be down (less likely - all endpoints failing)
+1. ~~Test credentials are invalid for sandbox environment~~ **RULED OUT** - Tested with real sandbox credentials, same results
+2. User access tokens in .env may be expired (they don't auto-refresh due to Bug #1)
+3. Sandbox environment having widespread issues (less likely - consistent across all endpoints)
+4. API calls require valid, non-expired user tokens but token refresh is broken (most likely)
 
 **Note for README:**
 The README should clarify:
