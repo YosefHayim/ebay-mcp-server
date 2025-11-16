@@ -398,7 +398,7 @@ describe('Tools Layer', () => {
         userAccessTokenExpiry: Date.now() + 3600000, // 1 hour from now
         userRefreshTokenExpiry: Date.now() + 18 * 30 * 24 * 60 * 60 * 1000, // 18 months
         scope: 'https://api.ebay.com/oauth/api_scope/sell.inventory',
-      };
+      });
       (mockOAuthClient as any).appAccessToken = 'test-app-token-xyz';
       (mockOAuthClient as any).appAccessTokenExpiry = Date.now() + 7200000; // 2 hours
 
@@ -484,7 +484,7 @@ describe('Tools Layer', () => {
         refreshToken: 'test-refresh-token-def456',
         userAccessTokenExpiry: Date.now() + 7200000, // 2 hours
         userRefreshTokenExpiry: Date.now() + 18 * 30 * 24 * 60 * 60 * 1000,
-      };
+      });
 
       vi.mocked(mockApi.getTokenInfo).mockReturnValue({
         hasUserToken: true,
