@@ -30,10 +30,28 @@ import {
   veroReportDataSchema,
 } from './schemas.js';
 
+export interface OutputArgs {
+  type: 'object';
+  properties?: Record<string, object>;
+  required?: string[];
+}
+
+export interface ToolAnnotations {
+  title?: string;
+  readOnlyHint?: boolean;
+  destructiveHint?: boolean;
+  idempotentHint?: boolean;
+  openWorldHint?: boolean;
+}
+
 export interface ToolDefinition {
   name: string;
   description: string;
   inputSchema: Record<string, z.ZodTypeAny>;
+  title?: string;
+  outputSchema?: OutputArgs;
+  annotations?: ToolAnnotations;
+  _meta?: Record<string, unknown>;
 }
 
 export const chatGptTools: ToolDefinition[] = [
