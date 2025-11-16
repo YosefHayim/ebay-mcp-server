@@ -3,29 +3,13 @@ import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import { compatibilityDataSchema, compatibilitySpecificationSchema } from '../schemas.js';
 
-export interface OutputArgs {
-  [x: string]: unknown;
-  type: 'object';
-  properties?: Record<string, object>;
-  required?: string[];
-}
-
-export interface ToolAnnotations {
-  [x: string]: unknown;
-  title?: string;
-  readOnlyHint?: boolean;
-  destructiveHint?: boolean;
-  idempotentHint?: boolean;
-  openWorldHint?: boolean;
-}
-
 export interface ToolDefinition {
   name: string;
   description: string;
   inputSchema: Record<string, z.ZodTypeAny>;
   title?: string;
-  outputSchema?: OutputArgs;
-  annotations?: ToolAnnotations;
+  outputSchema?: z.ZodTypeAny;
+  annotations?: McpToolAnnotations;
   _meta?: Record<string, unknown>;
 }
 export const metadataTools: ToolDefinition[] = [

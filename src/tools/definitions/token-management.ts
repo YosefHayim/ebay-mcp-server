@@ -22,8 +22,8 @@ export interface ToolDefinition {
   description: string;
   inputSchema: Record<string, z.ZodTypeAny>;
   title?: string;
-  outputSchema?: OutputArgs;
-  annotations?: ToolAnnotations;
+  outputSchema?: z.ZodTypeAny;
+  annotations?: McpToolAnnotations;
   _meta?: Record<string, unknown>;
 }
 
