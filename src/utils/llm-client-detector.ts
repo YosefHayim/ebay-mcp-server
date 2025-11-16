@@ -344,3 +344,67 @@ Add this to ${getContinueConfigPath()}:
       return 'Manual configuration instructions not available for this client.';
   }
 }
+
+/**
+ * Verify client configuration is correct
+ */
+export function verifyClientConfiguration(clientName: string, projectRoot: string): boolean {
+  try {
+    switch (clientName) {
+      case 'claude': {
+        const configPath = getClaudeConfigPath();
+        if (!existsSync(configPath)) return false;
+
+        const config = readJSONConfig(configPath);
+        const mcpServers = config.mcpServers as Record<string, MCPServerConfig> | undefined;
+
+        return !!mcpServers?.['ebay-mcp-server'];
+      }
+
+      case 'cline': {
+        const configPath = getClineConfigPath();
+        if (!existsSync(configPath)) return false;
+
+        const config = readJSONConfig(configPath);
+        const mcpServers = config.mcpServers as Record<string, MCPServerConfig> | undefined;
+
+        return !!mcpServers?.['ebay-mcp-server'];
+      }
+
+      case 'continue': {
+        const configPath = getContinueConfigPath();
+        if (!existsSync(configPath)) return false;
+
+        const config = readJSONConfig(configPath);
+        const experimental = config.experimental as Record<string, unknown> | undefined;
+        const mcpServers = experimental?.modelContextProtocolServers as
+          | MCPServerConfig[]
+          | undefined;
+
+        return !!mcpServers?.some((server) => server.args?.[0]?.includes('ebay-mcp-server'));
+      }
+
+      default:
+        return false;
+    }
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Get all LLM clients (detected and undetected)
+ */
+export function getAllSupportedClients(): string[] {
+  return ['claude', 'cline', 'continue'];
+}
+
+/**
+ * Check if client supports MCP protocol
+ */
+export function supportsNativeMCP(clientName: string): boolean {
+  // Currently, MCP is supported by Anthropic's Claude Desktop and compatible clients
+  // Gemini and ChatGPT do not have native MCP support as of now
+  const supportedClients = ['claude', 'cline', 'continue'];
+  return supportedClients.includes(clientName.toLowerCase());
+}
