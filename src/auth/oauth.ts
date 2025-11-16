@@ -282,7 +282,8 @@ export class EbayOAuthClient {
       throw new Error('No user tokens available to refresh');
     }
 
-    const authUrl = getAuthUrl(this.config.clientId, this.config.redirectUri, this.config.environment, this.config.locale, 'login', 'code');
+    // Use the token endpoint, not the authorization endpoint
+    const authUrl = `${getBaseUrl(this.config.environment)}/identity/v1/oauth2/token`;
     const credentials = Buffer.from(`${this.config.clientId}:${this.config.clientSecret}`).toString(
       'base64'
     );
