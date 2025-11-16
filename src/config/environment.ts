@@ -226,40 +226,68 @@ export function getAuthUrl(environment: 'production' | 'sandbox'): string {
     : 'https://api.sandbox.ebay.com/identity/v1/oauth2/token';
 }
 
-// fix the fn below i am attaching example from other project that is working properly with the genreate oauth
 /**
  * Generate the OAuth authorization URL for user consent
  * This URL should be opened in a browser for the user to grant permissions
+ *
+ * IMPORTANT - eBay RuName Requirement:
+ * The redirectUri parameter MUST be your eBay RuName, NOT a traditional URL.
+ *
+ * What is a RuName?
+ * - RuName format: "YourName-AppName-xxxxx-xxxxxx" (e.g., "yosef_sabag-yosefsab-saasds-eduelsdtr")
+ * - It's a special identifier that eBay generates for your application
+ * - Each application has separate RuNames for Sandbox and Production environments
+ *
+ * How to get your RuName:
+ * 1. Log in to eBay Developer Portal (developer.ebay.com)
+ * 2. Navigate to: Application Keys > User Token
+ * 3. Click the "User Tokens" link next to your Client ID
+ * 4. Your RuName will be displayed (copy it exactly)
+ *
+ * Common Error:
+ * If you see "unauthorized_client" error, you're likely using a URL instead of RuName
+ *
+ * Scopes:
+ * - Scopes are optional - eBay automatically grants appropriate scopes based on your keyset
+ * - You can specify custom scopes if needed
  */
 export function getOAuthAuthorizationUrl(
   clientId: string,
-  redirectUri: string,
+  redirectUri: string, // MUST be eBay RuName, NOT a URL
   environment: 'production' | 'sandbox',
   scopes?: string[],
   locale?: string,
   state?: string
 ): string {
-  // Use environment-specific scopes if no custom scopes provided
-  const defaultScopes = getDefaultScopes(environment);
-  const scopesList = scopes && scopes.length > 0 ? scopes : defaultScopes;
-  const scopeParam = scopesList.join(' ');
-
-  // Build the authorize URL
+  // Build the authorize URL using auth2 endpoint (correct eBay OAuth endpoint)
   const authDomain =
-    environment === 'production' ? 'https://auth.ebay.com' : 'https://auth.sandbox.ebay.com';
+    environment === 'production' ? 'https://auth2.ebay.com' : 'https://auth2.sandbox.ebay.com';
 
   const authorizeEndpoint = `${authDomain}/oauth2/authorize`;
 
+  // Build query parameters for the authorize endpoint
   const params = new URLSearchParams({
     client_id: clientId,
-    redirect_uri: redirectUri,
-    response_type: 'code',
-    scope: scopeParam,
+    redirect_uri: redirectUri, // This MUST be your eBay RuName
   });
 
-  if (state) {
-    params.append('state', state);
+  // Add scopes only if provided (optional - eBay handles automatically if not specified)
+  if (scopes && scopes.length > 0) {
+    params.append('scope', scopes.join(' '));
+  } else {
+    // Use default scopes for the environment if no scopes are specified
+    const defaultScopes = getDefaultScopes(environment);
+    params.append('scope', defaultScopes.join(' '));
   }
+
+  // Always add state parameter (empty if not provided)
+  params.append('state', state || '');
+
+  // Add response_type
+  params.append('response_type', 'code');
+
+  // Add hd parameter (required by eBay)
+  params.append('hd', '');
 
   // Build the signin URL that redirects to authorize
   const signinDomain =
@@ -272,9 +300,8 @@ export function getOAuthAuthorizationUrl(
 
 export const mcpConfig: Implementation = {
   name: 'eBay API Model Context Protocol Server',
-  version: '1.4.0',
+  version: '1.4.2',
   title: 'eBay API Model Context Protocol Server',
-  description: 'Access eBay APIs to manage listings, orders, and inventory.',
   websiteUrl: 'https://github.com/ebay/ebay-mcp-server',
   icons: [
     {

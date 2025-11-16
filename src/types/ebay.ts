@@ -5,7 +5,7 @@
 export interface EbayConfig {
   clientId: string;
   clientSecret: string;
-  redirectUri?: string;
+  redirectUri?: string; // eBay RuName (e.g., "YourName-AppName-xxxxx") - NOT a traditional URL
   environment: 'production' | 'sandbox';
   accessToken?: string;
   refreshToken?: string;
