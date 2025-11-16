@@ -504,9 +504,9 @@ class EndpointTester {
   }
 
   async testInventoryApis(): Promise<void> {
-    console.log('\n📦 Inventory APIs (20 endpoints)');
+    console.log('\n📦 Inventory APIs (36 endpoints - Full CRUD)');
 
-    // Inventory Items (6 endpoints)
+    // Inventory Items (6 endpoints: GET list, GET, PUT, DELETE, 2x POST bulk)
     await this.testEndpoint(
       'Inventory',
       'getInventoryItems',
@@ -515,26 +515,151 @@ class EndpointTester {
       { limit: 5, offset: 0 }
     );
 
-    // Test specific inventory item if we have a SKU
+    // Test CREATE, UPDATE, DELETE flow with test data
+    const testSku = `TEST-SKU-${Date.now()}`;
+    const testInventoryItem = {
+      availability: {
+        shipToLocationAvailability: {
+          quantity: 10,
+        },
+      },
+      condition: 'NEW' as const,
+      product: {
+        title: 'Test Product',
+        description: 'Test Description',
+        aspects: {
+          Brand: ['Test Brand'],
+        },
+        imageUrls: ['https://example.com/image.jpg'],
+      },
+    };
+
+    // CREATE inventory item
+    await this.testEndpoint(
+      'Inventory',
+      'createOrReplaceInventoryItem',
+      'PUT /sell/inventory/v1/inventory_item/{sku}',
+      () => this.api.inventory.createOrReplaceInventoryItem(testSku, testInventoryItem),
+      { sku: testSku }
+    );
+
+    // READ created item
+    await this.testEndpoint(
+      'Inventory',
+      'getInventoryItem (created)',
+      'GET /sell/inventory/v1/inventory_item/{sku}',
+      () => this.api.inventory.getInventoryItem(testSku),
+      { sku: testSku }
+    );
+
+    // UPDATE inventory item
+    await this.testEndpoint(
+      'Inventory',
+      'updateInventoryItem',
+      'PUT /sell/inventory/v1/inventory_item/{sku} (update)',
+      () =>
+        this.api.inventory.createOrReplaceInventoryItem(testSku, {
+          ...testInventoryItem,
+          availability: { shipToLocationAvailability: { quantity: 20 } },
+        }),
+      { sku: testSku, quantity: 20 }
+    );
+
+    // Bulk operations
+    await this.testEndpoint(
+      'Inventory',
+      'bulkCreateOrReplaceInventoryItem',
+      'POST /sell/inventory/v1/bulk_create_or_replace_inventory_item',
+      () => this.api.inventory.bulkCreateOrReplaceInventoryItem({ requests: [] }),
+      { requests: [] }
+    );
+
+    await this.testEndpoint(
+      'Inventory',
+      'bulkGetInventoryItem',
+      'POST /sell/inventory/v1/bulk_get_inventory_item',
+      () => this.api.inventory.bulkGetInventoryItem({ requests: [] }),
+      { requests: [] }
+    );
+
+    await this.testEndpoint(
+      'Inventory',
+      'bulkUpdatePriceQuantity',
+      'POST /sell/inventory/v1/bulk_update_price_quantity',
+      () => this.api.inventory.bulkUpdatePriceQuantity({ requests: [] }),
+      { requests: [] }
+    );
+
+    // Product Compatibility (3 endpoints)
+    await this.testEndpoint(
+      'Inventory',
+      'getProductCompatibility',
+      'GET /sell/inventory/v1/inventory_item/{sku}/product_compatibility',
+      () => this.api.inventory.getProductCompatibility(testSku),
+      { sku: testSku }
+    );
+
+    await this.testEndpoint(
+      'Inventory',
+      'createOrReplaceProductCompatibility',
+      'PUT /sell/inventory/v1/inventory_item/{sku}/product_compatibility',
+      () =>
+        this.api.inventory.createOrReplaceProductCompatibility(testSku, {
+          compatibleProducts: [],
+        }),
+      { sku: testSku }
+    );
+
+    await this.testEndpoint(
+      'Inventory',
+      'deleteProductCompatibility',
+      'DELETE /sell/inventory/v1/inventory_item/{sku}/product_compatibility',
+      () => this.api.inventory.deleteProductCompatibility(testSku),
+      { sku: testSku }
+    );
+
+    // Inventory Item Groups (3 endpoints)
+    const testGroupKey = `TEST-GROUP-${Date.now()}`;
+    await this.testEndpoint(
+      'Inventory',
+      'createOrReplaceInventoryItemGroup',
+      'PUT /sell/inventory/v1/inventory_item_group/{inventoryItemGroupKey}',
+      () =>
+        this.api.inventory.createOrReplaceInventoryItemGroup(testGroupKey, {
+          title: 'Test Group',
+          variantSKUs: [testSku],
+        }),
+      { inventoryItemGroupKey: testGroupKey }
+    );
+
+    await this.testEndpoint(
+      'Inventory',
+      'getInventoryItemGroup',
+      'GET /sell/inventory/v1/inventory_item_group/{inventoryItemGroupKey}',
+      () => this.api.inventory.getInventoryItemGroup(testGroupKey),
+      { inventoryItemGroupKey: testGroupKey }
+    );
+
+    await this.testEndpoint(
+      'Inventory',
+      'deleteInventoryItemGroup',
+      'DELETE /sell/inventory/v1/inventory_item_group/{inventoryItemGroupKey}',
+      () => this.api.inventory.deleteInventoryItemGroup(testGroupKey),
+      { inventoryItemGroupKey: testGroupKey }
+    );
+
+    // Test with collected SKU if available
     if (this.collectedIds.inventoryItemSku) {
       await this.testEndpoint(
         'Inventory',
-        'getInventoryItem',
+        'getInventoryItem (existing)',
         'GET /sell/inventory/v1/inventory_item/{sku}',
         () => this.api.inventory.getInventoryItem(this.collectedIds.inventoryItemSku!),
         { sku: this.collectedIds.inventoryItemSku }
       );
-
-      await this.testEndpoint(
-        'Inventory',
-        'getProductCompatibility',
-        'GET /sell/inventory/v1/inventory_item/{sku}/product_compatibility',
-        () => this.api.inventory.getProductCompatibility(this.collectedIds.inventoryItemSku!),
-        { sku: this.collectedIds.inventoryItemSku }
-      );
     }
 
-    // Inventory Locations (4 endpoints)
+    // Inventory Locations (8 endpoints: GET list, GET, POST, DELETE, disable, enable, update)
     await this.testEndpoint(
       'Inventory',
       'getInventoryLocations',
@@ -543,19 +668,91 @@ class EndpointTester {
       { limit: 5, offset: 0 }
     );
 
-    // Test specific inventory location if we have a key
+    const testLocationKey = `TEST-LOC-${Date.now()}`;
+    const testLocation = {
+      name: 'Test Warehouse',
+      locationTypes: ['WAREHOUSE'],
+      location: {
+        address: {
+          addressLine1: '123 Test St',
+          city: 'Test City',
+          stateOrProvince: 'CA',
+          postalCode: '90001',
+          country: 'US',
+        },
+      },
+      merchantLocationStatus: 'ENABLED',
+    };
+
+    // CREATE location
+    await this.testEndpoint(
+      'Inventory',
+      'createOrReplaceInventoryLocation',
+      'POST /sell/inventory/v1/location/{merchantLocationKey}',
+      () => this.api.inventory.createOrReplaceInventoryLocation(testLocationKey, testLocation),
+      { merchantLocationKey: testLocationKey }
+    );
+
+    // READ location
+    await this.testEndpoint(
+      'Inventory',
+      'getInventoryLocation (created)',
+      'GET /sell/inventory/v1/location/{merchantLocationKey}',
+      () => this.api.inventory.getInventoryLocation(testLocationKey),
+      { merchantLocationKey: testLocationKey }
+    );
+
+    // UPDATE location details
+    await this.testEndpoint(
+      'Inventory',
+      'updateLocationDetails',
+      'POST /sell/inventory/v1/location/{merchantLocationKey}/update_location_details',
+      () =>
+        this.api.inventory.updateLocationDetails(testLocationKey, {
+          name: 'Updated Test Warehouse',
+        }),
+      { merchantLocationKey: testLocationKey }
+    );
+
+    // DISABLE location
+    await this.testEndpoint(
+      'Inventory',
+      'disableInventoryLocation',
+      'POST /sell/inventory/v1/location/{merchantLocationKey}/disable',
+      () => this.api.inventory.disableInventoryLocation(testLocationKey),
+      { merchantLocationKey: testLocationKey }
+    );
+
+    // ENABLE location
+    await this.testEndpoint(
+      'Inventory',
+      'enableInventoryLocation',
+      'POST /sell/inventory/v1/location/{merchantLocationKey}/enable',
+      () => this.api.inventory.enableInventoryLocation(testLocationKey),
+      { merchantLocationKey: testLocationKey }
+    );
+
+    // DELETE location
+    await this.testEndpoint(
+      'Inventory',
+      'deleteInventoryLocation',
+      'DELETE /sell/inventory/v1/location/{merchantLocationKey}',
+      () => this.api.inventory.deleteInventoryLocation(testLocationKey),
+      { merchantLocationKey: testLocationKey }
+    );
+
+    // Test with collected location if available
     if (this.collectedIds.inventoryLocationKey) {
       await this.testEndpoint(
         'Inventory',
-        'getInventoryLocation',
+        'getInventoryLocation (existing)',
         'GET /sell/inventory/v1/location/{merchantLocationKey}',
         () => this.api.inventory.getInventoryLocation(this.collectedIds.inventoryLocationKey!),
         { merchantLocationKey: this.collectedIds.inventoryLocationKey }
       );
     }
 
-    // Offers (7 endpoints)
-    // Note: Passing undefined for optional parameters to test they are properly omitted
+    // Offers (14 endpoints: GET list, GET, POST, PUT, DELETE, publish, withdraw, bulk ops, fees, etc.)
     await this.testEndpoint(
       'Inventory',
       'getOffers',
@@ -564,27 +761,181 @@ class EndpointTester {
       { marketplaceId: 'EBAY_US', limit: 5 }
     );
 
-    // Test specific offer if we have an ID
+    // Test CREATE offer (requires policy IDs from account)
+    if (this.collectedIds.fulfillmentPolicyId && this.collectedIds.paymentPolicyId && this.collectedIds.returnPolicyId) {
+      const testOffer = {
+        sku: testSku,
+        marketplaceId: 'EBAY_US',
+        format: 'FIXED_PRICE',
+        listingPolicies: {
+          fulfillmentPolicyId: this.collectedIds.fulfillmentPolicyId,
+          paymentPolicyId: this.collectedIds.paymentPolicyId,
+          returnPolicyId: this.collectedIds.returnPolicyId,
+        },
+        pricingSummary: {
+          price: {
+            value: '9.99',
+            currency: 'USD',
+          },
+        },
+        categoryId: '1',
+        merchantLocationKey: testLocationKey,
+      };
+
+      let createdOfferId: string | undefined;
+      await this.testEndpoint(
+        'Inventory',
+        'createOffer',
+        'POST /sell/inventory/v1/offer',
+        async () => {
+          const result = await this.api.inventory.createOffer(testOffer as any);
+          createdOfferId = result.offerId;
+          return result;
+        },
+        testOffer
+      );
+
+      // UPDATE offer if created
+      if (createdOfferId) {
+        await this.testEndpoint(
+          'Inventory',
+          'updateOffer',
+          'PUT /sell/inventory/v1/offer/{offerId}',
+          () =>
+            this.api.inventory.updateOffer(createdOfferId!, {
+              ...testOffer,
+              pricingSummary: { price: { value: '19.99', currency: 'USD' } },
+            }),
+          { offerId: createdOfferId, newPrice: '19.99' }
+        );
+
+        // GET created offer
+        await this.testEndpoint(
+          'Inventory',
+          'getOffer (created)',
+          'GET /sell/inventory/v1/offer/{offerId}',
+          () => this.api.inventory.getOffer(createdOfferId!),
+          { offerId: createdOfferId }
+        );
+
+        // PUBLISH offer
+        await this.testEndpoint(
+          'Inventory',
+          'publishOffer',
+          'POST /sell/inventory/v1/offer/{offerId}/publish',
+          () => this.api.inventory.publishOffer(createdOfferId!),
+          { offerId: createdOfferId }
+        );
+
+        // WITHDRAW offer
+        await this.testEndpoint(
+          'Inventory',
+          'withdrawOffer',
+          'POST /sell/inventory/v1/offer/{offerId}/withdraw',
+          () => this.api.inventory.withdrawOffer(createdOfferId!),
+          { offerId: createdOfferId }
+        );
+
+        // GET listing fees
+        await this.testEndpoint(
+          'Inventory',
+          'getListingFees',
+          'POST /sell/inventory/v1/offer/get_listing_fees',
+          () => this.api.inventory.getListingFees([createdOfferId!]),
+          { offerIds: [createdOfferId] }
+        );
+
+        // DELETE offer
+        await this.testEndpoint(
+          'Inventory',
+          'deleteOffer',
+          'DELETE /sell/inventory/v1/offer/{offerId}',
+          () => this.api.inventory.deleteOffer(createdOfferId!),
+          { offerId: createdOfferId }
+        );
+      }
+    }
+
+    // Bulk offer operations
+    await this.testEndpoint(
+      'Inventory',
+      'bulkCreateOffer',
+      'POST /sell/inventory/v1/bulk_create_offer',
+      () => this.api.inventory.bulkCreateOffer({ requests: [] }),
+      { requests: [] }
+    );
+
+    await this.testEndpoint(
+      'Inventory',
+      'bulkPublishOffer',
+      'POST /sell/inventory/v1/bulk_publish_offer',
+      () => this.api.inventory.bulkPublishOffer({ requests: [] }),
+      { requests: [] }
+    );
+
+    await this.testEndpoint(
+      'Inventory',
+      'publishOfferByInventoryItemGroup',
+      'POST /sell/inventory/v1/offer/publish_by_inventory_item_group',
+      () =>
+        this.api.inventory.publishOfferByInventoryItemGroup({
+          inventoryItemGroupKey: testGroupKey,
+          marketplaceId: 'EBAY_US',
+        }),
+      { inventoryItemGroupKey: testGroupKey }
+    );
+
+    await this.testEndpoint(
+      'Inventory',
+      'withdrawOfferByInventoryItemGroup',
+      'POST /sell/inventory/v1/offer/withdraw_by_inventory_item_group',
+      () =>
+        this.api.inventory.withdrawOfferByInventoryItemGroup({
+          inventoryItemGroupKey: testGroupKey,
+          marketplaceId: 'EBAY_US',
+        }),
+      { inventoryItemGroupKey: testGroupKey }
+    );
+
+    // Bulk migrate listing
+    await this.testEndpoint(
+      'Inventory',
+      'bulkMigrateListing',
+      'POST /sell/inventory/v1/bulk_migrate_listing',
+      () => this.api.inventory.bulkMigrateListing({ requests: [] }),
+      { requests: [] }
+    );
+
+    // Listing locations
+    if (this.collectedIds.inventoryItemSku) {
+      await this.testEndpoint(
+        'Inventory',
+        'getListingLocations',
+        'GET /sell/inventory/v1/listing/{listingId}/sku/{sku}/locations',
+        () => this.api.inventory.getListingLocations('test-listing-id', this.collectedIds.inventoryItemSku!),
+        { listingId: 'test-listing-id', sku: this.collectedIds.inventoryItemSku }
+      );
+    }
+
+    // Test with collected offer if available
     if (this.collectedIds.offerId) {
       await this.testEndpoint(
         'Inventory',
-        'getOffer',
+        'getOffer (existing)',
         'GET /sell/inventory/v1/offer/{offerId}',
         () => this.api.inventory.getOffer(this.collectedIds.offerId!),
         { offerId: this.collectedIds.offerId }
       );
-
-      await this.testEndpoint(
-        'Inventory',
-        'getListingFees',
-        'POST /sell/inventory/v1/offer/get_listing_fees',
-        () => this.api.inventory.getListingFees([this.collectedIds.offerId!]),
-        { offerIds: [this.collectedIds.offerId] }
-      );
     }
 
-    // Note: GET /listing endpoint doesn't exist in eBay Inventory API
-    // Listings are managed through offers. Use getOffers() instead.
+    // CLEANUP: Delete test inventory item
+    await this.testEndpoint(
+      'Inventory',
+      'deleteInventoryItem (cleanup)',
+      'DELETE /sell/inventory/v1/inventory_item/{sku}',
+      () => this.api.inventory.deleteInventoryItem(testSku),
+      { sku: testSku }
+    );
 
     console.log('');
   }
