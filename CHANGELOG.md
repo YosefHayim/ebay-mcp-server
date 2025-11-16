@@ -532,10 +532,10 @@ This is a **minor version update** with no breaking changes. All existing functi
 
 ```bash
 # Using npm
-npm install ebay-api-mcp-server@1.1.0
+npm install ebay-mcp@1.1.0
 
 # Using pnpm
-pnpm update ebay-api-mcp-server@1.1.0
+pnpm update ebay-mcp@1.1.0
 ```
 
 ## Contributing
@@ -548,8 +548,8 @@ When contributing to this project, please:
 
 ## Links
 
-- [GitHub Repository](https://github.com/YosefHayim/ebay-api-mcp-server)
-- [npm Package](https://www.npmjs.com/package/ebay-api-mcp-server)
-- [Issue Tracker](https://github.com/YosefHayim/ebay-api-mcp-server/issues)
+- [GitHub Repository](https://github.com/YosefHayim/ebay-mcp)
+- [npm Package](https://www.npmjs.com/package/ebay-mcp)
+- [Issue Tracker](https://github.com/YosefHayim/ebay-mcp/issues)
 - [eBay Developer Portal](https://developer.ebay.com)
 - [MCP Documentation](https://modelcontextprotocol.io)

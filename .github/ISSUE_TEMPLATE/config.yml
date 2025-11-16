@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: 💬 GitHub Discussions
-    url: https://github.com/YosefHayim/ebay-api-mcp-server/discussions
+    url: https://github.com/YosefHayim/ebay-mcp/discussions
     about: Ask questions, share ideas, and discuss with the community
   - name: 📖 Documentation
-    url: https://github.com/YosefHayim/ebay-api-mcp-server#readme
+    url: https://github.com/YosefHayim/ebay-mcp#readme
     about: Read the documentation and guides
   - name: 🔐 Security Vulnerability
-    url: https://github.com/YosefHayim/ebay-api-mcp-server/security/advisories/new
+    url: https://github.com/YosefHayim/ebay-mcp/security/advisories/new
     about: Report a security vulnerability privately

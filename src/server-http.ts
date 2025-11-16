@@ -116,7 +116,7 @@ async function createApp(): Promise<express.Application> {
     resourceServerUrl: serverUrl,
     authServerMetadata: getAuthServerMetadataUrl(),
     scopesSupported: CONFIG.oauth.requiredScopes,
-    resourceDocumentation: 'https://github.com/your-repo/ebay-api-mcp-server',
+    resourceDocumentation: 'https://github.com/YosefHayim/ebay-mcp',
     resourceName: 'eBay API MCP Server',
     ebayEnvironment: ebayConfig.environment,
     ebayScopes: getDefaultScopes(ebayConfig.environment),
@@ -178,7 +178,7 @@ async function createApp(): Promise<express.Application> {
 
     const server = new McpServer(
       {
-        name: 'ebay-api-mcp-server',
+        name: 'ebay-mcp',
         version: '1.4.0',
         title: 'eBay API MCP Server',
         websiteUrl: 'https://coming-soon.com',

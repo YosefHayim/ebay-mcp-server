@@ -60,7 +60,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the project maintainers responsible for enforcement at
-[GitHub Issues](https://github.com/YosefHayim/ebay-api-mcp-server/issues).
+[GitHub Issues](https://github.com/YosefHayim/ebay-mcp/issues).
 
 All complaints will be reviewed and investigated promptly and fairly.
 
@@ -135,7 +135,7 @@ For answers to common questions about this code of conduct, see the FAQ at
 ## Contact
 
 For questions or concerns about this Code of Conduct, please open an issue in
-the [GitHub issue tracker](https://github.com/YosefHayim/ebay-api-mcp-server/issues).
+the [GitHub issue tracker](https://github.com/YosefHayim/ebay-mcp/issues).
 
 ## License
 

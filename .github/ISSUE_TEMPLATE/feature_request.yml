@@ -19,7 +19,7 @@ body:
           required: true
         - label: This is a feature request, not a bug report (use bug template for bugs)
           required: true
-        - label: I have reviewed the [documentation](https://github.com/YosefHayim/ebay-api-mcp-server#readme) and this feature doesn't exist
+        - label: I have reviewed the [documentation](https://github.com/YosefHayim/ebay-mcp#readme) and this feature doesn't exist
           required: true
 
   - type: dropdown

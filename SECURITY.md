@@ -12,7 +12,7 @@ We actively support the following versions with security updates:
 
 ## Reporting a Vulnerability
 
-We take the security of ebay-api-mcp-server seriously. If you discover a security vulnerability, please report it responsibly:
+We take the security of ebay-mcp seriously. If you discover a security vulnerability, please report it responsibly:
 
 ### Reporting Process
 
@@ -270,4 +270,4 @@ npm audit
 
 ## License
 
-This security policy is part of the ebay-api-mcp-server project and is licensed under the MIT License.
+This security policy is part of the ebay-mcp project and is licensed under the MIT License.

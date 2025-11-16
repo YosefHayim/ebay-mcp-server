@@ -319,8 +319,8 @@ The README should clarify:
 **Description:**
 The README Quick Start shows:
 ```bash
-git clone https://github.com/YosefHayim/ebay-api-mcp-server.git
-cd ebay-api-mcp-server
+git clone https://github.com/YosefHayim/ebay-mcp.git
+cd ebay-mcp
 npm install  # ✅ Present
 ```
 

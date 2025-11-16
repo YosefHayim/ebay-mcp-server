@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![npm version](https://img.shields.io/npm/v/ebay-api-mcp-server)](https://www.npmjs.com/package/ebay-api-mcp-server)
-[![npm downloads](https://img.shields.io/npm/dm/ebay-api-mcp-server)](https://www.npmjs.com/package/ebay-api-mcp-server)
+[![npm version](https://img.shields.io/npm/v/ebay-mcp)](https://www.npmjs.com/package/ebay-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/ebay-mcp)](https://www.npmjs.com/package/ebay-mcp)
 [![Tests](https://img.shields.io/badge/tests-890%2B%20passing-brightgreen)](tests/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -91,14 +91,14 @@ For official eBay API support, please refer to the [eBay Developer Program](http
 **Option A: Install from npm (Recommended)**
 
 ```bash
-npm install -g ebay-api-mcp-server
+npm install -g ebay-mcp
 ```
 
 **Option B: Install from source**
 
 ```bash
-git clone https://github.com/YosefHayim/ebay-api-mcp-server.git
-cd ebay-api-mcp-server
+git clone https://github.com/YosefHayim/ebay-mcp.git
+cd ebay-mcp
 npm install
 npm run build
 ```
@@ -137,7 +137,7 @@ Add the server configuration:
   "mcpServers": {
     "ebay": {
       "command": "npx",
-      "args": ["-y", "ebay-api-mcp-server"],
+      "args": ["-y", "ebay-mcp"],
       "env": {
         "EBAY_CLIENT_ID": "your_client_id",
         "EBAY_CLIENT_SECRET": "your_client_secret",
@@ -158,7 +158,7 @@ If you installed from source:
   "mcpServers": {
     "ebay": {
       "command": "node",
-      "args": ["/absolute/path/to/ebay-api-mcp-server/build/index.js"],
+      "args": ["/absolute/path/to/ebay-mcp/build/index.js"],
       "env": {
         "EBAY_CLIENT_ID": "your_client_id",
         "EBAY_CLIENT_SECRET": "your_client_secret",
@@ -225,7 +225,7 @@ While not specifically tested, the server should work with any MCP-compliant cli
 - Other editors with MCP support
 - Custom implementations
 
-If you successfully use this server with another MCP client, please let us know by [opening a discussion](https://github.com/YosefHayim/ebay-api-mcp-server/discussions)!
+If you successfully use this server with another MCP client, please let us know by [opening a discussion](https://github.com/YosefHayim/ebay-mcp/discussions)!
 
 ### Rate Limiting
 
@@ -343,8 +343,8 @@ Here are some common tasks you can accomplish with the eBay MCP server:
 
 ```bash
 # Fork and clone the repository
-git clone https://github.com/YOUR_USERNAME/ebay-api-mcp-server.git
-cd ebay-api-mcp-server
+git clone https://github.com/YOUR_USERNAME/ebay-mcp.git
+cd ebay-mcp
 
 # Install dependencies
 npm install
@@ -437,7 +437,7 @@ npm run start:http
 ### Project Structure
 
 ```
-ebay-api-mcp-server/
+ebay-mcp/
 ├── src/
 │   ├── index.ts           # MCP server entry point
 │   ├── api/               # eBay API implementations
@@ -541,8 +541,8 @@ The diagnostic tool checks:
 
 If you're still experiencing issues:
 
-1. Check existing [GitHub Issues](https://github.com/YosefHayim/ebay-api-mcp-server/issues)
-2. Review [GitHub Discussions](https://github.com/YosefHayim/ebay-api-mcp-server/discussions)
+1. Check existing [GitHub Issues](https://github.com/YosefHayim/ebay-mcp/issues)
+2. Review [GitHub Discussions](https://github.com/YosefHayim/ebay-mcp/discussions)
 3. Create a new issue with:
    - Your diagnostic report (`npm run diagnose:export`)
    - Steps to reproduce the problem
@@ -563,8 +563,8 @@ If you're still experiencing issues:
 
 ### Support
 
-- [GitHub Discussions](https://github.com/YosefHayim/ebay-api-mcp-server/discussions) - Community Q&A and general discussions
-- [Issue Tracker](https://github.com/YosefHayim/ebay-api-mcp-server/issues) - Bug reports and feature requests
+- [GitHub Discussions](https://github.com/YosefHayim/ebay-mcp/discussions) - Community Q&A and general discussions
+- [Issue Tracker](https://github.com/YosefHayim/ebay-mcp/issues) - Bug reports and feature requests
 - [Bug Report Template](BUG_REPORT.md) - Detailed bug reporting guide
 
 ## License
@@ -575,7 +575,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [eBay Developers Program](https://developer.ebay.com/) for API access
 - [Model Context Protocol](https://modelcontextprotocol.io/) for the MCP specification
-- All [contributors](https://github.com/YosefHayim/ebay-api-mcp-server/graphs/contributors) who have helped improve this project
+- All [contributors](https://github.com/YosefHayim/ebay-mcp/graphs/contributors) who have helped improve this project
 
 ---
 

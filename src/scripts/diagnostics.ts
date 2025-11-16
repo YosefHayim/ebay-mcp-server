@@ -375,7 +375,7 @@ async function runDiagnostics(exportReport = false): Promise<void> {
   console.log(chalk.bold.green('✅ Diagnostics complete!\n'));
   console.log(chalk.gray('For more help, visit:'));
   console.log(
-    chalk.blue.underline('  https://github.com/YosefHayim/ebay-api-mcp-server#troubleshooting\n')
+    chalk.blue.underline('  https://github.com/YosefHayim/ebay-mcp#troubleshooting\n')
   );
 }
 

@@ -17,7 +17,7 @@ body:
       options:
         - label: I have searched existing issues to avoid duplicates
           required: true
-        - label: I have reviewed the [documentation](https://github.com/YosefHayim/ebay-api-mcp-server#readme)
+        - label: I have reviewed the [documentation](https://github.com/YosefHayim/ebay-mcp#readme)
           required: true
         - label: I am using the latest version of the package
           required: false
@@ -26,7 +26,7 @@ body:
     id: version
     attributes:
       label: Package Version
-      description: What version of ebay-api-mcp-server are you using?
+      description: What version of ebay-mcp are you using?
       placeholder: "e.g., 1.1.4"
     validations:
       required: true

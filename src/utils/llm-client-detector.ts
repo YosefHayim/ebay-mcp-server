@@ -251,7 +251,7 @@ export function configureContinue(projectRoot: string): boolean {
 
     // Check if eBay server already exists
     const existingIndex = mcpServers.findIndex(
-      (server) => server.command === 'node' && server.args?.[0]?.includes('ebay-api-mcp-server')
+      (server) => server.command === 'node' && server.args?.[0]?.includes('ebay-mcp')
     );
 
     const serverConfig: MCPServerConfig = {

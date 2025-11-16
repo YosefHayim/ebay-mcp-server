@@ -14,7 +14,7 @@ Your ebay-mcp server is a **Local Server (Containerized)** which means it:
 
 - [x] Dockerfile exists at repository root
 - [x] MIT License (compatible with registry)
-- [x] GitHub repository: https://github.com/YosefHayim/ebay-api-mcp-server
+- [x] GitHub repository: https://github.com/YosefHayim/ebay-mcp
 - [x] Well-documented README
 - [ ] Go v1.24+ installed on your machine
 - [ ] Docker Desktop installed
@@ -55,14 +55,14 @@ task wizard
 ```
 
 This will prompt you for:
-- GitHub repository URL: `https://github.com/YosefHayim/ebay-api-mcp-server`
+- GitHub repository URL: `https://github.com/YosefHayim/ebay-mcp`
 - Category: Choose `e-commerce` or `api`
 - Environment variables and secrets (see below)
 
 **Option B: Use Task Create Command**
 
 ```bash
-task create -- --category e-commerce https://github.com/YosefHayim/ebay-api-mcp-server \
+task create -- --category e-commerce https://github.com/YosefHayim/ebay-mcp \
   -e EBAY_CLIENT_ID=example-client-id \
   -e EBAY_CLIENT_SECRET=example-client-secret \
   -e EBAY_REDIRECT_URI=example-redirect-uri \
@@ -85,11 +85,11 @@ task create -- --category e-commerce https://github.com/YosefHayim/ebay-api-mcp-
 
 ### 5. Expected server.yaml Structure
 
-The wizard will create a file at `servers/ebay-api-mcp-server/server.yaml`:
+The wizard will create a file at `servers/ebay-mcp/server.yaml`:
 
 ```yaml
-name: ebay-api-mcp-server
-image: mcp/ebay-api-mcp-server
+name: ebay-mcp
+image: mcp/ebay-mcp
 type: server
 meta:
   category: e-commerce
@@ -104,27 +104,27 @@ about:
   description: MCP server providing comprehensive access to eBay's Sell APIs with 230+ tools for inventory management, order fulfillment, marketing campaigns, and analytics. Supports OAuth 2.0 with automatic token refresh.
   icon: https://avatars.githubusercontent.com/u/182288589?s=200&v=4
 source:
-  project: https://github.com/YosefHayim/ebay-api-mcp-server
+  project: https://github.com/YosefHayim/ebay-mcp
   commit: <will-be-auto-filled>
 config:
   description: Configure eBay API credentials and environment
   secrets:
-    - name: ebay-api-mcp-server.ebay_client_id
+    - name: ebay-mcp.ebay_client_id
       env: EBAY_CLIENT_ID
       example: your-client-id
-    - name: ebay-api-mcp-server.ebay_client_secret
+    - name: ebay-mcp.ebay_client_secret
       env: EBAY_CLIENT_SECRET
       example: your-client-secret
-    - name: ebay-api-mcp-server.ebay_redirect_uri
+    - name: ebay-mcp.ebay_redirect_uri
       env: EBAY_REDIRECT_URI
       example: your-runame
-    - name: ebay-api-mcp-server.ebay_user_refresh_token
+    - name: ebay-mcp.ebay_user_refresh_token
       env: EBAY_USER_REFRESH_TOKEN
       example: <optional-for-higher-rate-limits>
   env:
     - name: EBAY_ENVIRONMENT
       example: sandbox
-      value: '{{ebay-api-mcp-server.ebay_environment}}'
+      value: '{{ebay-mcp.ebay_environment}}'
   parameters:
     type: object
     properties:
@@ -144,19 +144,19 @@ Since your server can list tools dynamically, you can either:
 
 I've prepared a sample tools.json based on your server's capabilities (see DOCKER_MCP_TOOLS.json in this repo).
 
-Place this file as: `servers/ebay-api-mcp-server/tools.json`
+Place this file as: `servers/ebay-mcp/tools.json`
 
 ### 7. Test Locally
 
 ```bash
 # Build the Docker image (if not providing your own)
-task build -- --tools ebay-api-mcp-server
+task build -- --tools ebay-mcp
 
 # Generate catalog
-task catalog -- ebay-api-mcp-server
+task catalog -- ebay-mcp
 
 # Import into Docker Desktop
-docker mcp catalog import $PWD/catalogs/ebay-api-mcp-server/catalog.yaml
+docker mcp catalog import $PWD/catalogs/ebay-mcp/catalog.yaml
 
 # Test in Docker Desktop MCP Toolkit
 # Configure the server with your credentials
@@ -172,7 +172,7 @@ docker mcp catalog reset
 
 **Solution:** Provide a `tools.json` file manually. The build process will use this file instead of trying to run the server.
 
-Place the file at: `servers/ebay-api-mcp-server/tools.json`
+Place the file at: `servers/ebay-mcp/tools.json`
 
 **Issue: Missing Go or Task CLI**
 
@@ -184,7 +184,7 @@ Once testing is successful:
 
 ```bash
 # Commit your changes
-git add servers/ebay-api-mcp-server/
+git add servers/ebay-mcp/
 git commit -m "feat: add eBay API MCP Server"
 
 # Push to your fork
@@ -208,8 +208,8 @@ Adds the eBay API MCP Server to the registry. This server provides comprehensive
 - **Type:** Local (Containerized)
 - **Category:** E-commerce
 - **License:** MIT
-- **Repository:** https://github.com/YosefHayim/ebay-api-mcp-server
-- **Docker Image:** Will be built by Docker (mcp/ebay-api-mcp-server)
+- **Repository:** https://github.com/YosefHayim/ebay-mcp
+- **Docker Image:** Will be built by Docker (mcp/ebay-mcp)
 
 ## Features
 - 230+ eBay API tools
