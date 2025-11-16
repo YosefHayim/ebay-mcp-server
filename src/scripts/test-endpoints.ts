@@ -81,10 +81,20 @@ class EndpointTester {
   async initialize(): Promise<void> {
     console.log('🔧 Initializing eBay API client...');
 
+    // SAFETY: Force sandbox mode for testing - never run comprehensive tests in production!
+    const requestedEnv = process.env.EBAY_ENVIRONMENT as 'production' | 'sandbox';
+    const forceSandbox = requestedEnv === 'production';
+
+    if (forceSandbox) {
+      console.log('⚠️  SAFETY: Forcing SANDBOX mode for comprehensive testing');
+      console.log('   Production mode is disabled to prevent accidental data modification');
+      console.log('   Set EBAY_ENVIRONMENT=sandbox in .env to suppress this warning\n');
+    }
+
     const config: EbayConfig = {
       clientId: process.env.EBAY_CLIENT_ID!,
       clientSecret: process.env.EBAY_CLIENT_SECRET!,
-      environment: (process.env.EBAY_ENVIRONMENT as 'production' | 'sandbox') || 'sandbox',
+      environment: 'sandbox', // ALWAYS use sandbox for comprehensive CRUD testing
       redirectUri: process.env.EBAY_REDIRECT_URI,
     };
 
@@ -100,7 +110,7 @@ class EndpointTester {
     // Initialize and verify authentication
     await this.api.initialize();
 
-    console.log(`✅ Client initialized (${config.environment} mode)`);
+    console.log(`✅ Client initialized (${config.environment} mode - SAFE FOR TESTING)`);
     console.log(
       this.api.hasUserTokens()
         ? '✅ Using user tokens (high rate limits)'
@@ -337,29 +347,9 @@ class EndpointTester {
   }
 
   async testAccountManagementApis(): Promise<void> {
-    console.log('\n💼 Account Management APIs (40 endpoints)');
+    console.log('\n💼 Account Management APIs (37 endpoints - Full CRUD)');
 
-    // Custom Policies (5 endpoints)
-    await this.testEndpoint(
-      'Account Management',
-      'getCustomPolicies',
-      'GET /sell/account/v1/custom_policy',
-      () => this.api.account.getCustomPolicies(),
-      { policy_types: undefined }
-    );
-
-    // Test specific custom policy if we have an ID
-    if (this.collectedIds.customPolicyId) {
-      await this.testEndpoint(
-        'Account Management',
-        'getCustomPolicy',
-        'GET /sell/account/v1/custom_policy/{custom_policy_id}',
-        () => this.api.account.getCustomPolicy(this.collectedIds.customPolicyId!),
-        { custom_policy_id: this.collectedIds.customPolicyId }
-      );
-    }
-
-    // Fulfillment Policies (6 endpoints)
+    // Fulfillment Policies (6 endpoints: GET list, GET, POST, PUT, DELETE, GET by name)
     await this.testEndpoint(
       'Account Management',
       'getFulfillmentPolicies',
@@ -368,14 +358,69 @@ class EndpointTester {
       { marketplace_id: 'EBAY_US' }
     );
 
-    // Test specific fulfillment policy if we have an ID
-    if (this.collectedIds.fulfillmentPolicyId) {
+    // CREATE fulfillment policy
+    const testFulfillmentPolicy = {
+      name: `Test Fulfillment ${Date.now()}`,
+      marketplaceId: 'EBAY_US',
+      categoryTypes: [{ name: 'ALL_EXCLUDING_MOTORS_VEHICLES' as const }],
+      shippingOptions: [
+        {
+          optionType: 'DOMESTIC' as const,
+          shippingServices: [
+            {
+              shippingCarrierCode: 'USPS',
+              shippingServiceCode: 'USPSPriority',
+              shippingCost: { value: '5.00', currency: 'USD' },
+            },
+          ],
+        },
+      ],
+      handlingTime: { value: 1, unit: 'DAY' as const },
+    };
+
+    let createdFulfillmentPolicyId: string | undefined;
+    await this.testEndpoint(
+      'Account Management',
+      'createFulfillmentPolicy',
+      'POST /sell/account/v1/fulfillment_policy',
+      async () => {
+        const result = await this.api.account.createFulfillmentPolicy(testFulfillmentPolicy as any);
+        createdFulfillmentPolicyId = result.fulfillmentPolicyId;
+        return result;
+      },
+      testFulfillmentPolicy
+    );
+
+    // READ created policy
+    if (createdFulfillmentPolicyId) {
       await this.testEndpoint(
         'Account Management',
-        'getFulfillmentPolicy',
+        'getFulfillmentPolicy (created)',
         'GET /sell/account/v1/fulfillment_policy/{fulfillmentPolicyId}',
-        () => this.api.account.getFulfillmentPolicy(this.collectedIds.fulfillmentPolicyId!),
-        { fulfillmentPolicyId: this.collectedIds.fulfillmentPolicyId }
+        () => this.api.account.getFulfillmentPolicy(createdFulfillmentPolicyId!),
+        { fulfillmentPolicyId: createdFulfillmentPolicyId }
+      );
+
+      // UPDATE policy
+      await this.testEndpoint(
+        'Account Management',
+        'updateFulfillmentPolicy',
+        'PUT /sell/account/v1/fulfillment_policy/{fulfillmentPolicyId}',
+        () =>
+          this.api.account.updateFulfillmentPolicy(createdFulfillmentPolicyId!, {
+            ...testFulfillmentPolicy,
+            name: `Updated Fulfillment ${Date.now()}`,
+          } as any),
+        { fulfillmentPolicyId: createdFulfillmentPolicyId }
+      );
+
+      // DELETE policy
+      await this.testEndpoint(
+        'Account Management',
+        'deleteFulfillmentPolicy',
+        'DELETE /sell/account/v1/fulfillment_policy/{fulfillmentPolicyId}',
+        () => this.api.account.deleteFulfillmentPolicy(createdFulfillmentPolicyId!),
+        { fulfillmentPolicyId: createdFulfillmentPolicyId }
       );
     }
 
@@ -388,14 +433,62 @@ class EndpointTester {
       { marketplace_id: 'EBAY_US' }
     );
 
-    // Test specific payment policy if we have an ID
-    if (this.collectedIds.paymentPolicyId) {
+    // CREATE payment policy
+    const testPaymentPolicy = {
+      name: `Test Payment ${Date.now()}`,
+      marketplaceId: 'EBAY_US',
+      categoryTypes: [{ name: 'ALL_EXCLUDING_MOTORS_VEHICLES' as const }],
+      paymentMethods: [
+        {
+          paymentMethodType: 'PAYPAL' as const,
+          recipientAccountReference: {
+            referenceId: 'test@example.com',
+            referenceType: 'PAYPAL_EMAIL' as const,
+          },
+        },
+      ],
+    };
+
+    let createdPaymentPolicyId: string | undefined;
+    await this.testEndpoint(
+      'Account Management',
+      'createPaymentPolicy',
+      'POST /sell/account/v1/payment_policy',
+      async () => {
+        const result = await this.api.account.createPaymentPolicy(testPaymentPolicy as any);
+        createdPaymentPolicyId = result.paymentPolicyId;
+        return result;
+      },
+      testPaymentPolicy
+    );
+
+    if (createdPaymentPolicyId) {
       await this.testEndpoint(
         'Account Management',
-        'getPaymentPolicy',
+        'getPaymentPolicy (created)',
         'GET /sell/account/v1/payment_policy/{payment_policy_id}',
-        () => this.api.account.getPaymentPolicy(this.collectedIds.paymentPolicyId!),
-        { payment_policy_id: this.collectedIds.paymentPolicyId }
+        () => this.api.account.getPaymentPolicy(createdPaymentPolicyId!),
+        { payment_policy_id: createdPaymentPolicyId }
+      );
+
+      await this.testEndpoint(
+        'Account Management',
+        'updatePaymentPolicy',
+        'PUT /sell/account/v1/payment_policy/{payment_policy_id}',
+        () =>
+          this.api.account.updatePaymentPolicy(createdPaymentPolicyId!, {
+            ...testPaymentPolicy,
+            name: `Updated Payment ${Date.now()}`,
+          } as any),
+        { payment_policy_id: createdPaymentPolicyId }
+      );
+
+      await this.testEndpoint(
+        'Account Management',
+        'deletePaymentPolicy',
+        'DELETE /sell/account/v1/payment_policy/{payment_policy_id}',
+        () => this.api.account.deletePaymentPolicy(createdPaymentPolicyId!),
+        { payment_policy_id: createdPaymentPolicyId }
       );
     }
 
@@ -408,40 +501,108 @@ class EndpointTester {
       { marketplace_id: 'EBAY_US' }
     );
 
-    // Test specific return policy if we have an ID
-    if (this.collectedIds.returnPolicyId) {
+    const testReturnPolicy = {
+      name: `Test Return ${Date.now()}`,
+      marketplaceId: 'EBAY_US',
+      categoryTypes: [{ name: 'ALL_EXCLUDING_MOTORS_VEHICLES' as const }],
+      returnsAccepted: true,
+      returnPeriod: { value: 30, unit: 'DAY' as const },
+      refundMethod: 'MONEY_BACK' as const,
+      returnShippingCostPayer: 'BUYER' as const,
+    };
+
+    let createdReturnPolicyId: string | undefined;
+    await this.testEndpoint(
+      'Account Management',
+      'createReturnPolicy',
+      'POST /sell/account/v1/return_policy',
+      async () => {
+        const result = await this.api.account.createReturnPolicy(testReturnPolicy as any);
+        createdReturnPolicyId = result.returnPolicyId;
+        return result;
+      },
+      testReturnPolicy
+    );
+
+    if (createdReturnPolicyId) {
       await this.testEndpoint(
         'Account Management',
-        'getReturnPolicy',
+        'getReturnPolicy (created)',
         'GET /sell/account/v1/return_policy/{return_policy_id}',
-        () => this.api.account.getReturnPolicy(this.collectedIds.returnPolicyId!),
-        { return_policy_id: this.collectedIds.returnPolicyId }
+        () => this.api.account.getReturnPolicy(createdReturnPolicyId!),
+        { return_policy_id: createdReturnPolicyId }
+      );
+
+      await this.testEndpoint(
+        'Account Management',
+        'updateReturnPolicy',
+        'PUT /sell/account/v1/return_policy/{return_policy_id}',
+        () =>
+          this.api.account.updateReturnPolicy(createdReturnPolicyId!, {
+            ...testReturnPolicy,
+            name: `Updated Return ${Date.now()}`,
+          } as any),
+        { return_policy_id: createdReturnPolicyId }
+      );
+
+      await this.testEndpoint(
+        'Account Management',
+        'deleteReturnPolicy',
+        'DELETE /sell/account/v1/return_policy/{return_policy_id}',
+        () => this.api.account.deleteReturnPolicy(createdReturnPolicyId!),
+        { return_policy_id: createdReturnPolicyId }
       );
     }
 
-    // Privileges (1 endpoint)
+    // Custom Policies (5 endpoints)
     await this.testEndpoint(
       'Account Management',
-      'getPrivileges',
-      'GET /sell/account/v1/privilege',
-      () => this.api.account.getPrivileges()
+      'getCustomPolicies',
+      'GET /sell/account/v1/custom_policy',
+      () => this.api.account.getCustomPolicies(),
+      { policy_types: undefined }
     );
 
-    // Programs (3 endpoints)
+    const testCustomPolicy = {
+      name: `Test Custom ${Date.now()}`,
+      policyType: 'PRODUCT_COMPLIANCE' as const,
+      description: 'Test custom policy',
+    };
+
+    let createdCustomPolicyId: string | undefined;
     await this.testEndpoint(
       'Account Management',
-      'getOptedInPrograms',
-      'GET /sell/account/v1/program/get_opted_in_programs',
-      () => this.api.account.getOptedInPrograms()
+      'createCustomPolicy',
+      'POST /sell/account/v1/custom_policy',
+      async () => {
+        const result = await this.api.account.createCustomPolicy(testCustomPolicy as any);
+        createdCustomPolicyId = result.customPolicyId;
+        return result;
+      },
+      testCustomPolicy
     );
 
-    // Rate Tables (1 endpoint)
-    await this.testEndpoint(
-      'Account Management',
-      'getRateTables',
-      'GET /sell/account/v1/rate_table',
-      () => this.api.account.getRateTables()
-    );
+    if (createdCustomPolicyId) {
+      await this.testEndpoint(
+        'Account Management',
+        'getCustomPolicy (created)',
+        'GET /sell/account/v1/custom_policy/{custom_policy_id}',
+        () => this.api.account.getCustomPolicy(createdCustomPolicyId!),
+        { custom_policy_id: createdCustomPolicyId }
+      );
+
+      await this.testEndpoint(
+        'Account Management',
+        'updateCustomPolicy',
+        'PUT /sell/account/v1/custom_policy/{custom_policy_id}',
+        () =>
+          this.api.account.updateCustomPolicy(createdCustomPolicyId!, {
+            ...testCustomPolicy,
+            description: 'Updated custom policy',
+          } as any),
+        { custom_policy_id: createdCustomPolicyId }
+      );
+    }
 
     // Sales Tax (5 endpoints)
     await this.testEndpoint(
@@ -451,6 +612,19 @@ class EndpointTester {
       () => this.api.account.getSalesTaxes('US'),
       { country_code: 'US' }
     );
+
+    await this.testEndpoint(
+      'Account Management',
+      'createOrReplaceSalesTax',
+      'PUT /sell/account/v1/sales_tax/{countryCode}/{jurisdictionId}',
+      () =>
+        this.api.account.createOrReplaceSalesTax('US', 'CA', {
+          salesTaxPercentage: '7.25',
+          shippingAndHandlingTaxed: false,
+        } as any),
+      { country_code: 'US', jurisdiction_id: 'CA', tax: '7.25%' }
+    );
+
     await this.testEndpoint(
       'Account Management',
       'getSalesTax',
@@ -459,7 +633,37 @@ class EndpointTester {
       { country_code: 'US', jurisdiction_id: 'CA' }
     );
 
-    // Subscription (1 endpoint)
+    await this.testEndpoint(
+      'Account Management',
+      'deleteSalesTax',
+      'DELETE /sell/account/v1/sales_tax/{countryCode}/{jurisdictionId}',
+      () => this.api.account.deleteSalesTax('US', 'CA'),
+      { country_code: 'US', jurisdiction_id: 'CA' }
+    );
+
+    // Programs (2 endpoints)
+    await this.testEndpoint(
+      'Account Management',
+      'getOptedInPrograms',
+      'GET /sell/account/v1/program/get_opted_in_programs',
+      () => this.api.account.getOptedInPrograms()
+    );
+
+    // Read-only endpoints
+    await this.testEndpoint(
+      'Account Management',
+      'getPrivileges',
+      'GET /sell/account/v1/privilege',
+      () => this.api.account.getPrivileges()
+    );
+
+    await this.testEndpoint(
+      'Account Management',
+      'getRateTables',
+      'GET /sell/account/v1/rate_table',
+      () => this.api.account.getRateTables()
+    );
+
     await this.testEndpoint(
       'Account Management',
       'getSubscription',
@@ -467,7 +671,6 @@ class EndpointTester {
       () => this.api.account.getSubscription()
     );
 
-    // KYC (1 endpoint - deprecated)
     await this.testEndpoint(
       'Account Management',
       'getKYC',
@@ -475,7 +678,6 @@ class EndpointTester {
       () => this.api.account.getKyc()
     );
 
-    // Advertising Eligibility (1 endpoint)
     await this.testEndpoint(
       'Account Management',
       'getAdvertisingEligibility',
@@ -484,7 +686,6 @@ class EndpointTester {
       { marketplace_id: 'EBAY_US' }
     );
 
-    // Payments Program (2 endpoints - deprecated)
     await this.testEndpoint(
       'Account Management',
       'getPaymentsProgram',
@@ -492,6 +693,7 @@ class EndpointTester {
       () => this.api.account.getPaymentsProgram('EBAY_US', 'EBAY_PAYMENTS'),
       { marketplace_id: 'EBAY_US', payments_program_type: 'EBAY_PAYMENTS' }
     );
+
     await this.testEndpoint(
       'Account Management',
       'getPaymentsProgramOnboarding',
@@ -499,6 +701,37 @@ class EndpointTester {
       () => this.api.account.getPaymentsProgramOnboarding('EBAY_US', 'EBAY_PAYMENTS'),
       { marketplace_id: 'EBAY_US', payments_program_type: 'EBAY_PAYMENTS' }
     );
+
+    // Test with existing policies if available
+    if (this.collectedIds.fulfillmentPolicyId) {
+      await this.testEndpoint(
+        'Account Management',
+        'getFulfillmentPolicy (existing)',
+        'GET /sell/account/v1/fulfillment_policy/{fulfillmentPolicyId}',
+        () => this.api.account.getFulfillmentPolicy(this.collectedIds.fulfillmentPolicyId!),
+        { fulfillmentPolicyId: this.collectedIds.fulfillmentPolicyId }
+      );
+    }
+
+    if (this.collectedIds.paymentPolicyId) {
+      await this.testEndpoint(
+        'Account Management',
+        'getPaymentPolicy (existing)',
+        'GET /sell/account/v1/payment_policy/{payment_policy_id}',
+        () => this.api.account.getPaymentPolicy(this.collectedIds.paymentPolicyId!),
+        { payment_policy_id: this.collectedIds.paymentPolicyId }
+      );
+    }
+
+    if (this.collectedIds.returnPolicyId) {
+      await this.testEndpoint(
+        'Account Management',
+        'getReturnPolicy (existing)',
+        'GET /sell/account/v1/return_policy/{return_policy_id}',
+        () => this.api.account.getReturnPolicy(this.collectedIds.returnPolicyId!),
+        { return_policy_id: this.collectedIds.returnPolicyId }
+      );
+    }
 
     console.log('');
   }
@@ -1412,9 +1645,28 @@ class EndpointTester {
   }
 
   async runAllTests(): Promise<void> {
-    console.log('🚀 Starting comprehensive endpoint tests with 2-phase approach...\n');
-    console.log('  Phase 1: Collect real IDs from GET list operations');
-    console.log('  Phase 2: Test specific GET operations with real IDs\n');
+    console.log('═'.repeat(80));
+    console.log('🚀 COMPREHENSIVE eBay API ENDPOINT TEST SUITE');
+    console.log('═'.repeat(80));
+    console.log('\n📋 Test Coverage:');
+    console.log('  • Account Management: 37 endpoints (Full CRUD)');
+    console.log('  • Inventory: 36 endpoints (Full CRUD)');
+    console.log('  • Fulfillment: 24 endpoints');
+    console.log('  • Marketing: 82 endpoints');
+    console.log('  • Analytics: 4 endpoints');
+    console.log('  • Metadata: 22 endpoints');
+    console.log('  • Taxonomy: 5 endpoints');
+    console.log('  • Other APIs: 65+ endpoints');
+    console.log('  ────────────────────────────────');
+    console.log('  📊 TOTAL: 275+ endpoints\n');
+    console.log('⚙️  Test Strategy:');
+    console.log('  Phase 1: Collect real IDs from list operations');
+    console.log('  Phase 2: Execute comprehensive CRUD flows');
+    console.log('  • CREATE → READ → UPDATE → DELETE cycles');
+    console.log('  • Automatic cleanup of test data');
+    console.log('  • Retry logic for network errors\n');
+    console.log('🛡️  Safety: SANDBOX MODE ENFORCED\n');
+    console.log('═'.repeat(80));
     const startTime = Date.now();
 
     // Phase 1: Collect real IDs
