@@ -185,10 +185,11 @@ describe('Scope Validation', () => {
       const ruMatch = /ru=([^&]+)/.exec(url);
       expect(ruMatch).not.toBeNull();
       const decodedRu = decodeURIComponent(ruMatch![1]);
-      expect(decodedRu).toContain('https://auth.ebay.com/oauth2/authorize');
+      expect(decodedRu).toContain('https://auth2.ebay.com/oauth2/authorize');
       expect(decodedRu).toContain(`client_id=${clientId}`);
       expect(decodedRu).toContain(`redirect_uri=${encodeURIComponent(redirectUri)}`);
       expect(decodedRu).toContain('response_type=code');
+      expect(decodedRu).toContain('hd=');
     });
 
     it('should generate valid OAuth URL for sandbox', () => {
@@ -201,10 +202,11 @@ describe('Scope Validation', () => {
       const ruMatch = /ru=([^&]+)/.exec(url);
       expect(ruMatch).not.toBeNull();
       const decodedRu = decodeURIComponent(ruMatch![1]);
-      expect(decodedRu).toContain('https://auth.sandbox.ebay.com/oauth2/authorize');
+      expect(decodedRu).toContain('https://auth2.sandbox.ebay.com/oauth2/authorize');
       expect(decodedRu).toContain(`client_id=${clientId}`);
       expect(decodedRu).toContain(`redirect_uri=${encodeURIComponent(redirectUri)}`);
       expect(decodedRu).toContain('response_type=code');
+      expect(decodedRu).toContain('hd=');
     });
 
     it('should include default scopes when no scopes provided', () => {
@@ -240,7 +242,7 @@ describe('Scope Validation', () => {
     it('should include state parameter when provided', () => {
       const state = 'random_state_12345';
 
-      const url = getOAuthAuthorizationUrl(clientId, redirectUri, 'production', undefined, state);
+      const url = getOAuthAuthorizationUrl(clientId, redirectUri, 'production', undefined, undefined, state);
 
       // Decode the ru parameter to check state
       const ruMatch = /ru=([^&]+)/.exec(url);
@@ -249,14 +251,14 @@ describe('Scope Validation', () => {
       expect(decodedRu).toContain(`state=${state}`);
     });
 
-    it('should not include state parameter when not provided', () => {
+    it('should include empty state parameter when not provided', () => {
       const url = getOAuthAuthorizationUrl(clientId, redirectUri, 'production');
 
-      // Decode the ru parameter to check state is not present
+      // Decode the ru parameter to check state is present but empty
       const ruMatch = /ru=([^&]+)/.exec(url);
       expect(ruMatch).not.toBeNull();
       const decodedRu = decodeURIComponent(ruMatch![1]);
-      expect(decodedRu).not.toContain('state=');
+      expect(decodedRu).toContain('state=');
     });
 
     it('should properly encode special characters in redirect URI', () => {
