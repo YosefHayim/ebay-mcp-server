@@ -13,8 +13,51 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server providi
 
 </div>
 
+---
+
+## ⚠️ Disclaimer
+
+**IMPORTANT: Please read this disclaimer carefully before using this software.**
+
+This is an **open-source project** provided "as is" without warranty of any kind, either express or implied. By using this software, you acknowledge and agree to the following:
+
+- **No Liability:** The authors, contributors, and maintainers of this project accept **NO responsibility or liability** for any damages, losses, or issues that may arise from using this software, including but not limited to:
+  - Data loss or corruption
+  - Financial losses
+  - Service disruptions
+  - eBay account suspension or termination
+  - Violations of eBay's Terms of Service or API usage policies
+  - Any other direct or indirect damages
+
+- **eBay API Usage:** This project is an unofficial third-party implementation and is **NOT affiliated with, endorsed by, or sponsored by eBay Inc.** You are solely responsible for:
+  - Complying with [eBay's API Terms of Use](https://developer.ebay.com/join/api_license_agreement)
+  - Ensuring your usage stays within eBay's rate limits and policies
+  - Managing your eBay Developer credentials securely
+  - Any actions performed through the API
+
+- **Use at Your Own Risk:** This software is provided for educational and development purposes. Users must:
+  - Test thoroughly in eBay's sandbox environment before production use
+  - Understand the API calls being made on their behalf
+  - Maintain backups of critical data
+  - Monitor their API usage and account status
+
+- **Security:** You are responsible for:
+  - Keeping your API credentials secure
+  - Properly configuring environment variables
+  - Understanding the security implications of MCP server usage
+  - Following security best practices
+
+- **No Warranty:** This software is provided without any guarantees of functionality, reliability, or fitness for a particular purpose.
+
+**By using this software, you accept all risks and agree to hold harmless the authors, contributors, and maintainers from any claims, damages, or liabilities.**
+
+For official eBay API support, please refer to the [eBay Developer Program](https://developer.ebay.com/).
+
+---
+
 ## Table of Contents
 
+- [⚠️ Disclaimer](#️-disclaimer)
 - [Features](#features)
 - [Quick Start](#quick-start)
 - [Configuration](#configuration)
