@@ -27,6 +27,7 @@
 		"test:watch": "vitest",
 		"test:ui": "vitest --ui",
 		"test:coverage": "vitest run --coverage",
+		"test:integration": "vitest run tests/integration",
 		"download:specs": "tsx src/scripts/download-specs.ts",
 		"test:endpoints": "tsx src/scripts/test-endpoints.ts",
 		"generate:types": "bash src/scripts/generate-types.sh",
