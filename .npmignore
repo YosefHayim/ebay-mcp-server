@@ -26,8 +26,17 @@ eslint.config.js
 # Build artifacts to exclude
 build/**/*.map
 build/**/*.d.ts.map
-build/types/ebay/
-build/types/openapi-schemas/
+
+# Exclude large OpenAPI type folders (saves ~2.6 MB)
+build/types/sell-apps
+build/types/application-settings
+
+# TypeScript declarations (users don't need these for runtime - saves ~200 KB)
+build/**/*.d.ts
+
+# Keep only essential types
+!build/index.d.ts
+!build/server-http.d.ts
 
 # IDE
 .vscode/
@@ -70,5 +79,18 @@ temp/
 
 # Other
 CHANGELOG.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+BUG_REPORT.md
+DOCKER_MCP_REGISTRY_GUIDE.md
 LICENSE
 *.md.backup
+
+# Images and media
+*.gif
+*.png
+*.jpg
+*.jpeg
+*.svg
+icons/

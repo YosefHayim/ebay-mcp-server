@@ -60,7 +60,9 @@
 	"author": "Yosef Hayim Sabag",
 	"license": "MIT",
 	"files": [
-		"build",
+		"build/**/*.js",
+		"build/index.d.ts",
+		"build/server-http.d.ts",
 		"README.md"
 	],
 	"repository": {
