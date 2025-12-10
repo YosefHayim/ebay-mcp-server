@@ -129,6 +129,7 @@ Add this server to your MCP client configuration:
 **Claude Desktop:**
 
 Edit your Claude Desktop config file:
+
 - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 - Linux: `~/.config/Claude/claude_desktop_config.json`
@@ -178,6 +179,8 @@ Restart your MCP client (Claude Desktop, etc.) and start using eBay tools throug
 
 ## Configuration
 
+> 📖 **For a comprehensive configuration guide with detailed explanations of all environment variables, OAuth flow steps, and troubleshooting, see [Configuration Documentation](docs/auth/CONFIGURATION.md).**
+
 ### Environment Variables
 
 Create a `.env` file with your eBay credentials:
@@ -195,28 +198,32 @@ EBAY_USER_REFRESH_TOKEN=your_refresh_token
 ### OAuth Authentication
 
 **Client Credentials (Automatic):**
+
 - Default authentication method
 - 1,000 requests/day
 - No setup required beyond client ID and secret
 
 **User Tokens (Recommended for Production):**
+
 - 10,000-50,000 requests/day
 - Use `ebay_get_oauth_url` tool to generate authorization URL
 - Add `EBAY_USER_REFRESH_TOKEN` to `.env` after OAuth flow
 - Tokens refresh automatically
 
-For detailed OAuth setup, see the [OAuth documentation](docs/auth/).
+For detailed OAuth setup and comprehensive configuration guide, see the [Configuration Documentation](docs/auth/CONFIGURATION.md).
 
 ### MCP Client Compatibility
 
 This server is compatible with any MCP client that supports STDIO transport:
 
 **Tested and Supported:**
+
 - ✅ **Claude Desktop** (macOS, Windows, Linux) - Full support
 - ✅ **MCP Inspector** - For development and testing
 - ✅ **Custom MCP Clients** - Via STDIO or HTTP transport
 
 **Configuration Requirements:**
+
 - MCP Protocol version: 1.0+
 - Transport: STDIO (default) or HTTP
 - Node.js runtime: 18.0.0 or higher
@@ -224,6 +231,7 @@ This server is compatible with any MCP client that supports STDIO transport:
 **Other MCP Clients:**
 
 While not specifically tested, the server should work with any MCP-compliant client including:
+
 - Continue.dev
 - Other editors with MCP support
 - Custom implementations
@@ -235,21 +243,25 @@ If you successfully use this server with another MCP client, please let us know 
 Understanding eBay API rate limits is crucial for production use:
 
 **Client Credentials (Default):**
+
 - **Daily Limit:** 1,000 requests per day
 - **Best For:** Development, testing, low-volume operations
 - **Setup:** Automatic with just Client ID and Secret
 
 **User Token (Recommended):**
+
 - **Daily Limit:** 10,000-50,000 requests per day (varies by account type)
 - **Best For:** Production, high-volume operations
 - **Setup:** Requires OAuth flow (use `ebay_get_oauth_url` tool)
 
 **Rate Limit Tiers by Account Type:**
+
 - Individual Developer: 10,000 requests/day
 - Commercial Developer: 25,000 requests/day
 - Enterprise: 50,000+ requests/day (custom limits)
 
 **Rate Limit Best Practices:**
+
 1. Use user tokens for production workloads
 2. Implement exponential backoff on rate limit errors
 3. Cache responses when possible
@@ -260,6 +272,7 @@ Understanding eBay API rate limits is crucial for production use:
 **Handling Rate Limits:**
 
 When you hit a rate limit, the API returns a 429 status code. The server will:
+
 - Automatically retry with exponential backoff
 - Inform you of rate limit errors
 - Suggest upgrading to user token authentication
@@ -282,6 +295,7 @@ The server provides 230+ tools organized into the following categories:
 - **Token Management** - OAuth URL generation, token management
 
 **Example Tools:**
+
 - `ebay_get_inventory_items` - List all inventory items
 - `ebay_get_orders` - Retrieve seller orders
 - `ebay_create_offer` - Create new listing offer
@@ -405,6 +419,7 @@ docker-compose up -d
 Environment variables should be configured in `.env` file before running Docker commands. The container will automatically use your `.env` configuration.
 
 **Use Cases for Docker:**
+
 - Production deployments
 - Consistent development environments
 - CI/CD pipelines
@@ -423,6 +438,7 @@ npm run start:http
 ```
 
 **HTTP Mode Features:**
+
 - RESTful API endpoints for all tools
 - Interactive API documentation
 - Useful for testing tools without an MCP client
@@ -430,6 +446,7 @@ npm run start:http
 - Helmet security headers
 
 **When to Use HTTP Mode:**
+
 - Testing individual tools during development
 - Building custom integrations
 - Debugging API responses
@@ -467,6 +484,7 @@ Contributions are welcome! Here's how to get started:
 6. Push to your fork and open a Pull Request
 
 **Before submitting:**
+
 - Ensure all tests pass
 - Follow TypeScript best practices
 - Update documentation as needed
@@ -483,6 +501,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 **Problem:** The eBay MCP server doesn't show up in your MCP client.
 
 **Solutions:**
+
 1. Verify the config file path is correct for your OS
 2. Check JSON syntax is valid (use a JSON validator)
 3. Ensure environment variables are properly set
@@ -494,6 +513,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 **Problem:** "Invalid credentials" or "Authentication failed" errors.
 
 **Solutions:**
+
 1. Verify your `EBAY_CLIENT_ID` and `EBAY_CLIENT_SECRET` are correct
 2. Ensure you're using the right environment (sandbox vs production)
 3. Check if your app keys are active in the eBay Developer Portal
@@ -505,6 +525,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 **Problem:** "Rate limit exceeded" errors.
 
 **Solutions:**
+
 1. Upgrade to user token authentication (10k-50k requests/day)
 2. Implement request throttling in your usage
 3. Check your current rate limit in the Developer Portal
@@ -515,6 +536,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 **Problem:** Tools return unexpected errors or empty results.
 
 **Solutions:**
+
 1. Verify you're using the correct environment (sandbox vs production)
 2. Ensure you have proper permissions/scopes for the operation
 3. Check eBay API status: https://developer.ebay.com/support/api-status
@@ -534,6 +556,7 @@ npm run diagnose:export
 ```
 
 The diagnostic tool checks:
+
 - Environment variable configuration
 - eBay API connectivity
 - Authentication status
