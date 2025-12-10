@@ -561,6 +561,7 @@ If you're still experiencing issues:
 - [eBay Data Handling Requirements](https://developer.ebay.com/api-docs/static/data-handling-update.html) - Important data protection and privacy guidelines
 - [eBay API Status](https://developer.ebay.com/support/api-status) - Real-time API health and status
 - [MCP Documentation](https://modelcontextprotocol.io/) - Model Context Protocol specification
+- [OAuth Quick Reference](docs/auth/OAUTH_QUICK_REFERENCE.md) - **Complete OAuth authentication guide with scopes, troubleshooting, and examples**
 - [OAuth Setup Guide](docs/auth/) - Detailed authentication configuration
 - [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to this project
 - [Code of Conduct](CODE_OF_CONDUCT.md) - Community guidelines and expectations

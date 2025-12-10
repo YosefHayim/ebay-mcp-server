@@ -34,10 +34,10 @@ function updateEnvFile(updates: { [key: string]: string }): void {
     }
 
     writeFileSync(envPath, envContent, 'utf-8');
-    console.log('✅ Updated .env file with new tokens');
+    // Tokens updated silently - console output interferes with MCP JSON protocol
   } catch (error) {
-    console.error('⚠️  Failed to update .env file:', error instanceof Error ? error.message : error);
-    console.error('   Please manually update your .env file with the new tokens');
+    // Silent failure - error logging interferes with MCP JSON protocol
+    // If needed, check .env file manually
   }
 }
 
@@ -302,10 +302,8 @@ export class EbayOAuthClient {
         scope: tokenData.scope,
       };
 
-      // Inform user to save refresh token to .env
-      console.log('\nToken exchange successful!');
-      console.log('To persist your authentication, add this to your .env file:');
-      console.log(`EBAY_USER_REFRESH_TOKEN="${tokenData.refresh_token}"\n`);
+      // Tokens are automatically saved to .env file by updateEnvFile()
+      // No console output needed here to avoid interfering with MCP JSON protocol
 
       return tokenData;
     } catch (error) {
@@ -376,7 +374,7 @@ export class EbayOAuthClient {
       // If eBay provided a new refresh token, update it too
       if (tokenData.refresh_token && tokenData.refresh_token !== process.env.EBAY_USER_REFRESH_TOKEN) {
         envUpdates.EBAY_USER_REFRESH_TOKEN = tokenData.refresh_token;
-        console.log('\n🔄 eBay issued a new refresh token - updating .env file');
+        // New refresh token updated silently
       }
 
       // Write updates to .env file

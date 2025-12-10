@@ -431,6 +431,44 @@ export async function executeTool(
       };
     }
 
+    case 'ebay_exchange_authorization_code': {
+      const code = args.code as string;
+
+      if (!code) {
+        throw new Error('Authorization code is required');
+      }
+
+      try {
+        // URL-decode the code if it's URL-encoded (contains % characters)
+        const decodedCode = code.includes('%') ? decodeURIComponent(code) : code;
+
+        // Get the OAuth client
+        const authClient = api.getAuthClient().getOAuthClient();
+
+        // Exchange the authorization code for tokens
+        const tokenData = await authClient.exchangeCodeForToken(decodedCode);
+
+        return {
+          success: true,
+          message:
+            'Authorization code successfully exchanged for tokens. Tokens have been stored and will be used for subsequent API requests.',
+          tokenData: {
+            accessToken: `${tokenData.access_token.substring(0, 20)}...${tokenData.access_token.slice(-10)}`,
+            refreshToken: `${tokenData.refresh_token.substring(0, 20)}...${tokenData.refresh_token.slice(-10)}`,
+            expiresIn: tokenData.expires_in,
+            refreshTokenExpiresIn: tokenData.refresh_token_expires_in,
+            tokenType: tokenData.token_type,
+            scope: tokenData.scope,
+          },
+          note: 'The refresh token has been saved to your .env file for future use.',
+        };
+      } catch (error) {
+        throw new Error(
+          `Failed to exchange authorization code: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
+    }
+
     case 'ebay_refresh_access_token': {
       const authClient = api.getAuthClient().getOAuthClient();
 

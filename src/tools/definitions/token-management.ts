@@ -41,7 +41,27 @@ export const tokenManagementTools: ToolDefinition[] = [
   {
     name: 'ebay_get_oauth_url',
     description:
-      'Generate the eBay OAuth authorization URL for user consent. The user should open this URL in a browser to grant permissions to the application. This supports the OAuth 2.0 Authorization Code grant flow. The redirect URI can be provided as a parameter or will be read from EBAY_REDIRECT_URI environment variable.\n\nIMPORTANT: eBay has different OAuth scopes available for production vs sandbox environments:\n- Sandbox includes additional Buy API scopes (e.g., buy.order.readonly, buy.guest.order, buy.shopping.cart) and extended Identity scopes\n- Production includes sell.edelivery, commerce.message (explicit), and commerce.shipping scopes not available in sandbox\n- If you provide custom scopes, they will be validated against the current environment (set via EBAY_ENVIRONMENT). Any scopes not valid for the environment will generate warnings.',
+      'Generate the eBay OAuth authorization URL for user consent. The user should open this URL in a browser to grant permissions to the application. This supports the OAuth 2.0 Authorization Code grant flow. The redirect URI can be provided as a parameter or will be read from EBAY_REDIRECT_URI environment variable.\n\n' +
+      'IMPORTANT: eBay has different OAuth scopes available for production vs sandbox environments:\n' +
+      '- Sandbox includes additional Buy API scopes (e.g., buy.order.readonly, buy.guest.order, buy.shopping.cart) and extended Identity scopes\n' +
+      '- Production includes sell.edelivery, commerce.message (explicit), and commerce.shipping scopes not available in sandbox\n' +
+      '- If you provide custom scopes, they will be validated against the current environment (set via EBAY_ENVIRONMENT). Any scopes not valid for the environment will generate warnings.\n\n' +
+      'OAUTH FLOW INSTRUCTIONS:\n' +
+      '1. Generate OAuth URL with this tool (optionally specify scopes)\n' +
+      '2. User opens URL in browser, authorizes, and gets redirected with a code parameter\n' +
+      '3. Use ebay_exchange_authorization_code tool with the code (URL-encoded format accepted)\n' +
+      '4. Tokens are automatically stored and will auto-refresh every 2 hours\n\n' +
+      'COMMON SCOPES:\n' +
+      '- Basic (always included): https://api.ebay.com/oauth/api_scope\n' +
+      '- Inventory: https://api.ebay.com/oauth/api_scope/sell.inventory\n' +
+      '- Inventory (readonly): https://api.ebay.com/oauth/api_scope/sell.inventory.readonly\n' +
+      '- Account: https://api.ebay.com/oauth/api_scope/sell.account\n' +
+      '- Fulfillment: https://api.ebay.com/oauth/api_scope/sell.fulfillment\n\n' +
+      'TROUBLESHOOTING:\n' +
+      '- Authorization codes expire in ~5 minutes - get fresh code if "invalid grant" error\n' +
+      '- "Insufficient permissions" errors mean you need to re-authorize with additional scopes\n' +
+      '- OAuth URL format: Use + to separate scopes (e.g., scope=scope1+scope2), not %2B\n' +
+      '- Refresh tokens last 18 months and are saved to .env file for persistence',
     inputSchema: {
       redirectUri: z
         .string()
@@ -151,6 +171,34 @@ export const tokenManagementTools: ToolDefinition[] = [
       type: 'object',
       properties: {},
       description: 'Success response',
+    } as OutputArgs,
+  },
+  {
+    name: 'ebay_exchange_authorization_code',
+    description:
+      'Exchange an OAuth authorization code for access and refresh tokens. This completes the OAuth 2.0 Authorization Code grant flow. After the user authorizes the application using the URL from ebay_get_oauth_url, eBay redirects back with an authorization code in the URL. Use this tool to exchange that code for tokens that can be used to make API calls. The tokens will be automatically stored and used for subsequent API requests.\n\n' +
+      'IMPORTANT NOTES:\n' +
+      '- Authorization codes expire in ~5 minutes - if you get "invalid grant" error, get a fresh code\n' +
+      '- Codes can be URL-encoded (e.g., v%5E1.1%23...) - this tool automatically decodes them\n' +
+      '- Extract the code parameter from the redirect URL: https://auth2.ebay.com/...&code=YOUR_CODE&expires_in=299\n' +
+      '- Tokens are saved to .env file and will auto-refresh every 2 hours\n' +
+      '- Refresh tokens last 18 months before requiring re-authorization\n\n' +
+      'COMMON ERRORS:\n' +
+      '- "invalid or was issued to another client": Code expired, get fresh code\n' +
+      '- "Insufficient permissions": Re-run OAuth flow with additional scopes in ebay_get_oauth_url\n\n' +
+      'For complete OAuth guide with scopes, troubleshooting, and examples, see: docs/auth/OAUTH_QUICK_REFERENCE.md',
+    inputSchema: {
+      code: z
+        .string()
+        .min(1)
+        .describe(
+          'The authorization code received from eBay after user authorization. This is the "code" parameter in the redirect URL.'
+        ),
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {},
+      description: 'Token exchange response including access token, refresh token, and expiry times',
     } as OutputArgs,
   },
 ];
