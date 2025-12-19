@@ -1,4 +1,5 @@
 # eBay API MCP Server
+
 <div align="center">
 
 [![npm version](https://img.shields.io/npm/v/ebay-mcp)](https://www.npmjs.com/package/ebay-mcp)
