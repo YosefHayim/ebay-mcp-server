@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.6] - 2025-01-19
+
+### Added
+- **New OAuth Tool: `ebay_exchange_authorization_code`** - Exchange eBay authorization code for access and refresh tokens
+  - Automatically URL-decodes authorization codes when needed
+  - Returns masked token data for security
+  - Stores tokens for subsequent API requests
+  - Includes comprehensive unit tests (5 new tests)
+
+### Changed
+- **README Updated** - Updated tool count from 230+ to 275+ tools
+
 ## [1.4.2] - 2025-01-16
 
 ### Fixed

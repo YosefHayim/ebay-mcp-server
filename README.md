@@ -9,7 +9,7 @@
 [![MseeP.ai Security Assessment Badge](https://mseep.net/pr/yosefhayim-ebay-api-mcp-server-badge.png)](https://mseep.ai/app/yosefhayim-ebay-api-mcp-server)
 <a href="https://www.buymeacoffee.com/yosefhayim" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server providing AI assistants with comprehensive access to eBay's Sell APIs. Includes 230+ tools for inventory management, order fulfillment, marketing campaigns, analytics, and more.
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server providing AI assistants with comprehensive access to eBay's Sell APIs. Includes 275+ tools for inventory management, order fulfillment, marketing campaigns, analytics, and more.
 
 **API Coverage:** 99.1% (~110 of 111 eBay Sell API endpoints)
 
@@ -74,7 +74,7 @@ For official eBay API support, please refer to the [eBay Developer Program](http
 
 ## Features
 
-- **230+ eBay API Tools** - Comprehensive coverage of eBay Sell APIs across inventory, orders, marketing, analytics, and more
+- **275+ eBay API Tools** - Comprehensive coverage of eBay Sell APIs across inventory, orders, marketing, analytics, and more
 - **OAuth 2.0 Support** - Full user token management with automatic refresh
 - **Type Safety** - Built with TypeScript, Zod validation, and OpenAPI-generated types
 - **MCP Integration** - STDIO transport for direct integration with AI assistants
@@ -283,7 +283,7 @@ Monitor your API usage in the [eBay Developer Portal](https://developer.ebay.com
 
 ## Available Tools
 
-The server provides 230+ tools organized into the following categories:
+The server provides 275+ tools organized into the following categories:
 
 - **Account Management** - Policies, programs, subscriptions, sales tax
 - **Inventory Management** - Items, offers, locations, bulk operations
